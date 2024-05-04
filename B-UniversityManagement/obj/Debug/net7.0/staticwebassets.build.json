@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "W7EQzRrfxyvpS/LFxhDDkkkq+/u5/Fml+PvHH3aAkCY=",
+  "Source": "B-UniversityManagement",
+  "BasePath": "_content/B-UniversityManagement",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "B-UniversityManagement\\wwwroot",
+      "Source": "B-UniversityManagement",
+      "ContentRoot": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\",
+      "BasePath": "_content/B-UniversityManagement",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}
