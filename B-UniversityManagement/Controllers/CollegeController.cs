@@ -10,6 +10,7 @@ using B_UniversityManagement.Models;
 using B_UniversityManagement.IRepository;
 using B_UniversityManagement.Services;
 using B_UniversityManagement.DTOs;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace B_UniversityManagement.Controllers
 {
@@ -19,11 +20,13 @@ namespace B_UniversityManagement.Controllers
     {
         private readonly ICollegeRepo collegeRepo;
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IFileService fileService;
 
-        public CollegeController(ICollegeRepo collegeRepo , IWebHostEnvironment webHostEnvironment)
+        public CollegeController(ICollegeRepo collegeRepo , IWebHostEnvironment webHostEnvironment , IFileService fileService)
         {
             this.collegeRepo = collegeRepo;
             this.webHostEnvironment = webHostEnvironment;
+            this.fileService = fileService;
         }
 
         // GET: api/College
@@ -69,11 +72,24 @@ namespace B_UniversityManagement.Controllers
         // POST: api/College
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<College>> PostCollege(CollegeDTO collegeDto)
+        public async Task<ActionResult<College>> PostCollege([FromForm]CollegeDTO collegeDto)
         {
-            College college = TransferCollege.TransferDtoToCollege(collegeDto);
-            collegeRepo.Create(college);
-            return Ok(collegeDto);
+            if (ModelState.IsValid)
+            {
+                if (collegeDto.ImageFile != null)
+                {
+                    var fileResult = fileService.SaveImage(collegeDto.ImageFile);
+                    if (fileResult.Item1 == 1)
+                    {
+                        collegeDto.Img = fileResult.Item2; // geting name of image
+                    }
+                    College college = TransferCollege.TransferDtoToCollege(collegeDto);
+                    collegeRepo.Create(college);
+                    return Ok(collegeDto);
+                }
+            }
+            return BadRequest();
+            
         }
 
         // DELETE: api/College/5
@@ -88,50 +104,53 @@ namespace B_UniversityManagement.Controllers
             }
             return NoContent();
         }
-        
-        [HttpPost("UploadImage")]
-        public async Task<IActionResult> UploadImage()
-        {
-            bool result = false;
-            try
-            {
-                var uploadFiles = Request.Form.Files;
-                foreach (IFormFile source in uploadFiles)
-                {
-                    string originalFileName = source.FileName;
-                    string filePath = GetFilePath(originalFileName);
-                    var fileExtension = Path.GetExtension(originalFileName);
-                    if (!Directory.Exists(filePath))
-                    {
-                        Directory.CreateDirectory(filePath);
-                    }
-                    var uploadedFilePath = Path.Combine(filePath, $"image{fileExtension}");
 
-                    if (System.IO.File.Exists(uploadedFilePath))
-                    {
-                        System.IO.File.Delete(uploadedFilePath);
-                    }
-                    using(FileStream stream=System.IO.File.Create(uploadedFilePath))
-                    {
-                        await source.CopyToAsync(stream);
-                        result = true;
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
 
-            }
-            return Ok(result);
 
-        }
-        
-        [NonAction]
-        private string GetFilePath(string collegeCode)
-        {
-            // Use the `IWebHostEnvironment` interface instead of `this.webHostEnvironment`
-            var webRootPath = webHostEnvironment.WebRootPath;
-            return Path.Combine(webRootPath, "Uploads", "Colleges", collegeCode);
-        }
+
+        //[HttpPost("UploadImage")]
+        //public async Task<IActionResult> UploadImage()
+        //{
+        //    bool result = false;
+        //    try
+        //    {
+        //        var uploadFiles = Request.Form.Files;
+        //        foreach (IFormFile source in uploadFiles)
+        //        {
+        //            string originalFileName = source.FileName;
+        //            string filePath = GetFilePath(originalFileName);
+        //            var fileExtension = Path.GetExtension(originalFileName);
+        //            if (!Directory.Exists(filePath))
+        //            {
+        //                Directory.CreateDirectory(filePath);
+        //            }
+        //            var uploadedFilePath = Path.Combine(filePath, $"image{fileExtension}");
+
+        //            if (System.IO.File.Exists(uploadedFilePath))
+        //            {
+        //                System.IO.File.Delete(uploadedFilePath);
+        //            }
+        //            using (FileStream stream = System.IO.File.Create(uploadedFilePath))
+        //            {
+        //                await source.CopyToAsync(stream);
+        //                result = true;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //    return Ok(result);
+
+        //}
+
+        //[NonAction]
+        //private string GetFilePath(string collegeCode)
+        //{
+        //    // Use the `IWebHostEnvironment` interface instead of `this.webHostEnvironment`
+        //    var webRootPath = webHostEnvironment.WebRootPath;
+        //    return Path.Combine(webRootPath, "Uploads", "Colleges", collegeCode);
+        //}
     }
 }

@@ -28,7 +28,6 @@ export class CollegeApiService {
   }
 
 
-
  updateCollege(college : College ){
   this.http.put(this.url + '/' + college.id , college).subscribe({
     next : response => {
@@ -42,9 +41,12 @@ export class CollegeApiService {
  }
 
  createCollege(college : College){
-  this.http.post(this.url,college).subscribe({
+  let formData = new FormData();
+  formData.append("collegeName",college.name);
+  formData.append("collegeDesc" , college.description);
+  formData.append("imageFile" , college.imageFile);
+  this.http.post(this.url,formData).subscribe({
     next : response =>{
-      
       this.getColleges()
       this.toastr.success('College Are Added' , 'Success')
     }, error : err =>{

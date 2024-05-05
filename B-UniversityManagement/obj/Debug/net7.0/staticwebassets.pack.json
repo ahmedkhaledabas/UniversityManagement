@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\5cad74b4-20cd-4d76-991b-65ecf54a164f.png",
+      "PackagePath": "staticwebassets\\Uploads\\5cad74b4-20cd-4d76-991b-65ecf54a164f.png"
+    },
+    {
+      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Colleges\\8c7815a8-7b48-4ca1-824b-eadc9cbbce78.png",
+      "PackagePath": "staticwebassets\\Uploads\\Colleges\\8c7815a8-7b48-4ca1-824b-eadc9cbbce78.png"
+    },
+    {
+      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\d5c5af0d-af1e-4d58-9d02-4d5394ed15b2.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\d5c5af0d-af1e-4d58-9d02-4d5394ed15b2.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.B-UniversityManagement.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.build.B-UniversityManagement.props",
+      "PackagePath": "build\\B-UniversityManagement.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.B-UniversityManagement.props",
+      "PackagePath": "buildMultiTargeting\\B-UniversityManagement.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildTransitive.B-UniversityManagement.props",
+      "PackagePath": "buildTransitive\\B-UniversityManagement.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

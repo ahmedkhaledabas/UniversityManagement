@@ -1,97 +1,96 @@
 
 <main id="main" class="main">
   
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-body">
-              
-             <form [formGroup]="form" (ngSubmit)="submit()" [class.submited] = "service.formSubmited" novalidate autocomplete="off">
-              <!-- Table with stripped rows -->
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Image</th>
-                    <th>
-                      <button type="button" title="Add New College" class="btn btn-primary" (click)="addCollege()" >
-                      <i class="bi bi-plus"></i>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          
+        
+          <!-- Table with stripped rows -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Image</th>
+                <th>
+                  <button type="button" title="Add New College" class="btn btn-primary" (click)="addCollege()" >
+                  <i class="bi bi-plus"></i>
+                </button>
+                </th>
+                <!--<th data-type="date" data-format="YYYY/DD/MM">Start Date</th>-->
+              </tr>
+            </thead>
+
+           <tbody *ngIf="service.colleges">
+            <ng-container *ngFor="let college of service.colleges">
+
+              <!--if not selected-->
+              <tr *ngIf="collegeSelected != college" (click)="selectCollege(college)">
+                <td>{{college.name}}</td>
+                <td>{{college.description}}</td>
+                <td>{{college.imageFile}}</td>
+                <button class="btn btn-danger btn-sm mx-1" title="Delete College" type="button" (click)="openModal()">
+                <i class=" bi bi-trash"></i>
+              </button>
+</tr> <form [formGroup]="form" (ngSubmit)="submit()" [class.submited] = "service.formSubmited" novalidate autocomplete="off">
+              <!--if selected open to edit-->
+              <tr *ngIf="collegeSelected == college" class="table-primary">
+                <td>
+                    <input type="text" class="form-control" placeholder="College Name" formControlName="collegeName" [value]="college.name" title="Name"
+                    required minlength="4" />
+                </td>
+                <td>
+                  <textarea type="text" class="form-control" placeholder="Description" formControlName="collegeDesc" [value]="college.description" title="Desc" 
+                  required minlength="4"></textarea>
+                </td>
+                <td>
+                  <input type="file" class="form-control" formControlName="imageFile">
+                </td>
+                <td>             
+                  <button class="btn btn-primary btn-sm mx-1" title="update" type="submit" [disabled]="form.invalid" >
+                      <i class="bi bi-lightning"></i>
                     </button>
-                    </th>
-                    <!--<th data-type="date" data-format="YYYY/DD/MM">Start Date</th>-->
-                  </tr>
-                </thead>
+          
+                    <button class="btn btn-danger btn-sm mx-1" title="Cancel Changes" type="button" (click)="cancel()">
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </td>
+              </tr>
 
-               <tbody *ngIf="service.colleges">
-                <ng-container *ngFor="let college of service.colleges">
-
-                  <!--if not selected-->
-                  <tr *ngIf="collegeSelected != college" (click)="selectCollege(college)">
-                    <td>{{college.name}}</td>
-                    <td>{{college.description}}</td>
-                    <td>{{college.img}}</td>
-                    <button class="btn btn-danger btn-sm mx-1" title="Delete College" type="button" (click)="openModal()">
-                    <i class=" bi bi-trash"></i>
-                  </button>
-</tr>
-                  <!--if selected open to edit-->
-                  <tr *ngIf="collegeSelected == college" class="table-primary">
-                    <td>
-                        <input type="text" class="form-control" placeholder="College Name" formControlName="Name" [value]="college.name" title="Name"
-                        required minlength="4" />
-                    </td>
-                    <td>
-                      <textarea type="text" class="form-control" placeholder="Description" formControlName="Desc" [value]="college.description" title="Desc" 
-                      required minlength="4"></textarea>
-                    </td>
-                    <td>
-                      <input type="file" class="form-control" formControlName="Img" title="Img"
-                      required />
-                    </td>
-                    <td>             
-                      <button class="btn btn-primary btn-sm mx-1" title="update" type="submit" [disabled]="form.invalid" >
-                          <i class="bi bi-lightning"></i>
-                        </button>
-              
-                        <button class="btn btn-danger btn-sm mx-1" title="Cancel Changes" type="button" (click)="cancel()">
-                          <i class="bi bi-x-lg"></i>
-                        </button>
-                      </td>
-                  </tr>
-
- <!-- Modal -->
- <div class="modal" id="exampleModal" >
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure !?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="closeModal()" data-bs-dismiss="modal">No</button>
-        <button type="button" class="btn btn-success" (click)="deleteCollege(collegeSelected.id)">Yes</button>
-      </div>
-    </div>
+<!-- Modal -->
+<div class="modal" id="exampleModal" >
+<div class="modal-dialog">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+  </div>
+  <div class="modal-body">
+    Are you sure !?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="closeModal()" data-bs-dismiss="modal">No</button>
+    <button type="button" class="btn btn-success" (click)="deleteCollege(collegeSelected.id)">Yes</button>
   </div>
 </div>
-
-                </ng-container>
-                </tbody>
-              </table>
+</div>
+</div>
 </form>
-              <button class="btn btn-danger btn-sm mx-1" title="Cancel Changes" type="button" (click)="cancel()">
-                Discard <i class="bi bi-x-lg"></i>
-              </button>
-              <!-- End Table with stripped rows -->
+            </ng-container>
+            </tbody>
+          </table>
 
-            </div>
-          </div>
+          <button class="btn btn-danger btn-sm mx-1" title="Cancel Changes" type="button" (click)="cancel()">
+            Discard <i class="bi bi-x-lg"></i>
+          </button>
+          <!-- End Table with stripped rows -->
 
         </div>
       </div>
-  </main><!-- End #main -->
+
+    </div>
+  </div>
+</main><!-- End #main -->
 

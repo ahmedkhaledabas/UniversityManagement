@@ -36,6 +36,9 @@ namespace B_UniversityManagement
             builder.Services.AddDbContext<UniversityDbContext>(
                option => option.UseSqlServer(builder.Configuration.GetConnectionString("name=ConnectionStrings:Default")));
             builder.Services.AddScoped<ICollegeRepo , CollegeRepo>();
+            builder.Services.AddScoped<ICourseRepo, CourseRepo>();
+            builder.Services.AddScoped<IDepartmentRepo , DepartmentRepo>();
+            builder.Services.AddTransient<IFileService , FileService>();
 
             var app = builder.Build();
 

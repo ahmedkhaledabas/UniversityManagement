@@ -2,7 +2,6 @@ import { College } from './../Shared/college-detail-model';
 import { Component, OnInit } from '@angular/core';
 import { CollegeApiService } from '../Services/college-api.service';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { valueOrDefault } from 'src/assets/admin/vendor/chart.js/helpers';
 
 
 @Component({
@@ -13,20 +12,25 @@ import { valueOrDefault } from 'src/assets/admin/vendor/chart.js/helpers';
 export class CollegeAdminComponent implements OnInit{
   updatedCollege : College ={} as College;
  collegeSelected: College = {} as College;
-
-
+ frm!:FormGroup;
 constructor(public service : CollegeApiService,private formBuilder: FormBuilder ) { }
 
   ngOnInit(): void {
+
      this.service.getColleges();
+     this.frm = this.formBuilder.group({
+      'id':[0],
+      'collegeName':[''],
+      'collegeDesc':[''],
+      'imageFile' :[]
+     })
   }
  
 form = this.formBuilder.group({
-    Name: ['', [Validators.required]],
-    Desc: ['', [Validators.required]],
-    Img :['' , [Validators.required]]
+  collegeName: ['', [Validators.required]],
+  collegeDesc: ['', [Validators.required]],
+  imageFile:[]
  });
-
 
 
  selectCollege(college: College) {
@@ -35,15 +39,14 @@ form = this.formBuilder.group({
        this.collegeSelected = college;
  
        this.form.patchValue({
-         Name: college.name,
-         Desc: college.description,
-         Img: college.img
+        collegeName: college.name,
+        collegeDesc: college.description,
        })
      }
    }
 
    addCollege(){
-    this.service.colleges.unshift(new College)
+    this.service.colleges.unshift()
     this.collegeSelected = this.service.colleges[0];
    }
 
@@ -64,9 +67,8 @@ this.service.getColleges();
       if(this.collegeSelected.id != 0){
     this.service.updateCollege({
      id : this.collegeSelected.id,
-     name : this.form.value.Name,
-     description :  this.form.value.Desc,
-     img : this.form.value.Img
+     name : this.form.value.collegeName,
+     description :  this.form.value.collegeDesc
     } as College)
     // clean up
     this.collegeSelected = {} as College;
@@ -75,10 +77,9 @@ this.service.getColleges();
 // add new college
 else{
   this.service.createCollege({
-    name : this.form.value.Name,
-    description :  this.form.value.Desc,
-    img : this.form.value.Img
-   } as College );
+    name : this.form.value.collegeName,
+    description :  this.form.value.collegeDesc,
+   } as College)
    // clean up
    this.collegeSelected = {} as College;
    this.form.reset(); 

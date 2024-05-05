@@ -17,9 +17,12 @@ import { CollegeAdminComponent } from './college-admin/college-admin.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HomeAdminComponent } from './home-admin/home-admin.component';
 import {HttpClientModule} from '@angular/common/http'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { CollegComponent } from './Component/Admin/colleg/colleg.component';
+import { CourseComponent } from './Component/Admin/course/course.component';
+import { DepartmentComponent } from './Component/Admin/department/department.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +39,10 @@ import { ToastrModule } from 'ngx-toastr';
     CollegeComponent,
     CollegeAdminComponent,
     SidebarComponent,
-    HomeAdminComponent
+    HomeAdminComponent,
+    CollegComponent,
+    CourseComponent,
+    DepartmentComponent
   ],
   imports: [
     BrowserModule,

@@ -8,6 +8,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { CollegeComponent } from './college/college.component';
 import { HomeAdminComponent } from './home-admin/home-admin.component';
 import { CollegeAdminComponent } from './college-admin/college-admin.component';
+import { DepartmentComponent } from './Component/Admin/department/department.component';
 
 const routes: Routes = [
   {path : 'home' , component : HomeComponent},
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path : 'college' , component : CollegeComponent},
   {path : 'admin/home' , component : HomeAdminComponent},
   {path : 'admin/college' , component : CollegeAdminComponent},
+  {path : 'admin/department' , component : DepartmentComponent}
 ];
 
 @NgModule({

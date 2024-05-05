@@ -1,33 +1,41 @@
-﻿using B_UniversityManagement.IRepository;
+﻿using B_UniversityManagement.Data;
+using B_UniversityManagement.IRepository;
 using B_UniversityManagement.Models;
 
 namespace B_UniversityManagement.Repository
 {
     public class DepartmentRepo : IDepartmentRepo
     {
+        private readonly UniversityDbContext context;
+
+        public DepartmentRepo(UniversityDbContext context)
+        {
+            this.context = context;
+        }
+
         public void Create(Department department)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Department department)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Department> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Department GetById(int id)
-        {
-            throw new NotImplementedException();
+            context.Add(department);
+            context.SaveChanges();
         }
 
         public void Update(Department department)
         {
-            throw new NotImplementedException();
+            context.Update(department);
+            context.SaveChanges();
+        }
+
+        public void Delete(Department department)
+        {
+            context.Remove(department);
+            context.SaveChanges();
+        }
+
+        public List<Department> GetAll() => context.Departments.ToList();
+
+        public Department GetById(int id)
+        {
+            return context.Departments.Find(id);
         }
     }
 }

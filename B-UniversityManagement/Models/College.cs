@@ -1,4 +1,6 @@
-﻿namespace B_UniversityManagement.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace B_UniversityManagement.Models
 {
     public class College : BaseProperties
     {
@@ -9,6 +11,9 @@
         public List<Employee> Employees { get; set; } = new List<Employee> { };
         public Library? Library {  get; set; }
         public List<Professor> Professors { get; set; } = new List<Professor> { };
+
+        [NotMapped]
+        public IFormFile? ImageFile {  get; set; }
         // img , 
     }
 }

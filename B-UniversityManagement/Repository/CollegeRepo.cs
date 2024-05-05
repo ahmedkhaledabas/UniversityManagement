@@ -19,13 +19,8 @@ namespace B_UniversityManagement.Repository
 
         public void Delete(College college)
         {
-            var collegeFinded = context.Colleges.Find(college.Id);
-            if(collegeFinded != null)
-            {
-                context.Colleges.Remove(collegeFinded);
+                context.Colleges.Remove(college);
                 context.SaveChanges();
-            }
-            throw new NullReferenceException();
         }
 
         public List<College> GetAll() => context.Colleges.ToList();
