@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace B_UniversityManagement.Migrations
 {
     [DbContext(typeof(UniversityDbContext))]
-    [Migration("20240505155215_init")]
+    [Migration("20240514143805_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -64,11 +64,8 @@ namespace B_UniversityManagement.Migrations
 
             modelBuilder.Entity("B_UniversityManagement.Models.College", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -93,8 +90,8 @@ namespace B_UniversityManagement.Migrations
 
             modelBuilder.Entity("B_UniversityManagement.Models.CollegeProfessor", b =>
                 {
-                    b.Property<int>("CollegeId")
-                        .HasColumnType("int");
+                    b.Property<string>("CollegeId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProfessorsId")
                         .HasColumnType("nvarchar(450)");
@@ -162,8 +159,9 @@ namespace B_UniversityManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CollegeId")
-                        .HasColumnType("int");
+                    b.Property<string>("CollegeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -223,8 +221,9 @@ namespace B_UniversityManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CollegeId")
-                        .HasColumnType("int");
+                    b.Property<string>("CollegeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -557,8 +556,9 @@ namespace B_UniversityManagement.Migrations
                 {
                     b.HasBaseType("B_UniversityManagement.Models.User");
 
-                    b.Property<int>("CollegeId")
-                        .HasColumnType("int");
+                    b.Property<string>("CollegeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal?>("EmpSalary")
                         .HasColumnType("decimal(18,2)");

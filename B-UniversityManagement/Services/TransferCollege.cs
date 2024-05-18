@@ -9,6 +9,7 @@ namespace B_UniversityManagement.Services
         public static CollegeDTO TransferCollegeToDto(College college)
         {
             return new CollegeDTO(){
+                Id = college.Id,
                 Name = college.Name,
                 Description = college.Description,
                 Img = college.Img
@@ -31,6 +32,7 @@ namespace B_UniversityManagement.Services
         {
             return new College()
             {
+                Id = collegeDto.Id,
                 Name = collegeDto.Name,
                 Description = collegeDto.Description,
                 Img = collegeDto.Img

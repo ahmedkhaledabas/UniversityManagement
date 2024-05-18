@@ -2,18 +2,24 @@
 
 namespace B_UniversityManagement.Models
 {
-    public class College : BaseProperties
+    public class College 
     {
+        public string Id { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
-        public string? Img { get; set; }
+
+        public string? Img { get; set; } = "http://localhost:5278//Uploads/Common/default.png";
+
         public List<Department> Departments { get; set; } = new List<Department> { };
         public List<Employee> Employees { get; set; } = new List<Employee> { };
-        public Library? Library {  get; set; }
+        public Library? Library { get; set; }
         public List<Professor> Professors { get; set; } = new List<Professor> { };
 
-        [NotMapped]
-        public IFormFile? ImageFile {  get; set; }
-        // img , 
-    }
+        //
+        // public IFormFile? ImageFile {  get; set; }
+        // img
+        
+    } 
 }

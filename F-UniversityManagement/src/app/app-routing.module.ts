@@ -7,8 +7,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CollegeComponent } from './college/college.component';
 import { HomeAdminComponent } from './home-admin/home-admin.component';
-import { CollegeAdminComponent } from './college-admin/college-admin.component';
 import { DepartmentComponent } from './Component/Admin/department/department.component';
+import { CollegComponent } from './Component/Admin/colleg/colleg.component';
+import { StudentComponent } from './Component/Admin/student/student.component';
+import { ProfessorComponent } from './Component/Admin/professor/professor.component';
+import { CourseComponent } from './Component/Admin/course/course.component';
 
 const routes: Routes = [
   {path : 'home' , component : HomeComponent},
@@ -18,8 +21,11 @@ const routes: Routes = [
   {path : 'profile' , component : ProfileComponent},
   {path : 'college' , component : CollegeComponent},
   {path : 'admin/home' , component : HomeAdminComponent},
-  {path : 'admin/college' , component : CollegeAdminComponent},
-  {path : 'admin/department' , component : DepartmentComponent}
+  {path : 'admin/college' , component : CollegComponent},
+  {path : 'admin/department' , component : DepartmentComponent},
+  {path : 'admin/student' , component : StudentComponent},
+  {path : 'admin/professor' , component : ProfessorComponent},
+  {path : 'admin/course' , component : CourseComponent}
 ];
 
 @NgModule({

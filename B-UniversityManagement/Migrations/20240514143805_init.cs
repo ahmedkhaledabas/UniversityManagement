@@ -29,13 +29,12 @@ namespace B_UniversityManagement.Migrations
                 name: "Colleges",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Img = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Img = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -71,7 +70,7 @@ namespace B_UniversityManagement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CollegeId = table.Column<int>(type: "int", nullable: false),
+                    CollegeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -95,7 +94,7 @@ namespace B_UniversityManagement.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Img = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CollegeId = table.Column<int>(type: "int", nullable: false),
+                    CollegeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -128,7 +127,7 @@ namespace B_UniversityManagement.Migrations
                     Img = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmpSalary = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    CollegeId = table.Column<int>(type: "int", nullable: true),
+                    CollegeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Specialist = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DepartmentId = table.Column<int>(type: "int", nullable: true),
@@ -277,7 +276,7 @@ namespace B_UniversityManagement.Migrations
                 name: "CollegeProfessors",
                 columns: table => new
                 {
-                    CollegeId = table.Column<int>(type: "int", nullable: false),
+                    CollegeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProfessorsId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProfessorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Rank = table.Column<int>(type: "int", nullable: false)

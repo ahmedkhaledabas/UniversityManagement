@@ -9,7 +9,7 @@ namespace B_UniversityManagement.Services
             {
                 return new DepartmentDTO()
                 {
-                    //Id = department.Id,
+                    Id = department.Id,
                     Name = department.Name,
                     Description = department.Description,
                     CollegeId = department.CollegeId
@@ -30,7 +30,7 @@ namespace B_UniversityManagement.Services
             {
                 return new Department()
                 {
-                    //Id = departmentDto.Id,
+                    Id = departmentDto.Id,
                     Name = departmentDto.Name,
                     Description = departmentDto.Description,
                     CollegeId = departmentDto.CollegeId

@@ -6,7 +6,7 @@
         public string? Description { get; set; }
         public List<Course> Courses { get; set; } = new List<Course> { };
         public List<Student> Students { get; set; } = new List<Student> { };
-        public int CollegeId { get; set; }
+        public string CollegeId { get; set; }
         public College College { get; set; } = null!;
     }
 }

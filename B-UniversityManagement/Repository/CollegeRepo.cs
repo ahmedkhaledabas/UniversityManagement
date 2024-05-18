@@ -25,7 +25,7 @@ namespace B_UniversityManagement.Repository
 
         public List<College> GetAll() => context.Colleges.ToList();
 
-        public College GetById(int id)
+        public College GetById(string id)
         {
             var collegeFinded = context.Colleges.Find(id);
             if (collegeFinded != null)

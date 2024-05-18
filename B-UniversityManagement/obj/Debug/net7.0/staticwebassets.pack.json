@@ -1,16 +1,36 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\5cad74b4-20cd-4d76-991b-65ecf54a164f.png",
-      "PackagePath": "staticwebassets\\Uploads\\5cad74b4-20cd-4d76-991b-65ecf54a164f.png"
+      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Colleges\\aaaaaa\\image.png",
+      "PackagePath": "staticwebassets\\Uploads\\Colleges\\aaaaaa\\image.png"
     },
     {
-      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Colleges\\8c7815a8-7b48-4ca1-824b-eadc9cbbce78.png",
-      "PackagePath": "staticwebassets\\Uploads\\Colleges\\8c7815a8-7b48-4ca1-824b-eadc9cbbce78.png"
+      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Colleges\\bbbbbb\\image.png",
+      "PackagePath": "staticwebassets\\Uploads\\Colleges\\bbbbbb\\image.png"
     },
     {
-      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\d5c5af0d-af1e-4d58-9d02-4d5394ed15b2.jpg",
-      "PackagePath": "staticwebassets\\Uploads\\d5c5af0d-af1e-4d58-9d02-4d5394ed15b2.jpg"
+      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Colleges\\cccccccc\\image.png",
+      "PackagePath": "staticwebassets\\Uploads\\Colleges\\cccccccc\\image.png"
+    },
+    {
+      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Colleges\\ddddddd\\image.png",
+      "PackagePath": "staticwebassets\\Uploads\\Colleges\\ddddddd\\image.png"
+    },
+    {
+      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Colleges\\first college\\image.png",
+      "PackagePath": "staticwebassets\\Uploads\\Colleges\\first college\\image.png"
+    },
+    {
+      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Colleges\\second college\\image.png",
+      "PackagePath": "staticwebassets\\Uploads\\Colleges\\second college\\image.png"
+    },
+    {
+      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Colleges\\third college\\image.png",
+      "PackagePath": "staticwebassets\\Uploads\\Colleges\\third college\\image.png"
+    },
+    {
+      "Id": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Common\\default.png",
+      "PackagePath": "staticwebassets\\Uploads\\Common\\default.png"
     },
     {
       "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.B-UniversityManagement.Microsoft.AspNetCore.StaticWebAssets.props",

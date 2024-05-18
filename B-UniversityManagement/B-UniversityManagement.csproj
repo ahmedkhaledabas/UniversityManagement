@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Uploads\5cad74b4-20cd-4d76-991b-65ecf54a164f.png" />
-    <Content Include="Uploads\d5c5af0d-af1e-4d58-9d02-4d5394ed15b2.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.18" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.18" />
@@ -26,9 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Uploads\Colleges\" />
-    <Folder Include="Uploads\Common\" />
-    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\Uploads\Colleges\" />
+    <Folder Include="wwwroot\Uploads\Common\" />
   </ItemGroup>
 
 </Project>

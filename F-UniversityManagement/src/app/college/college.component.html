@@ -22,13 +22,14 @@
 
       <div class="row">
 
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="" data-aos-delay="100">
+          <div *ngFor="let college of filterColleges" class="col-lg-4 col-md-6 d-flex align-items-stretch"  data-aos="" data-aos-delay="100">
               <div class="course-item">
-                <img src="assets/img/course-1.jpg" class="img-fluid" alt="...">
+                <img [src]="college.img" class="img-fluid" style="height: 20rem;" alt="...">
                 <div class="course-content">
           
-                  <h3><a href="course-details.html">Computer & Information</a></h3>
-                  <p class="description">Et architecto provident deleniti facere repellat nobis iste. Id facere quia quae dolores dolorem tempore.</p>
+                  <h3><a href="course-details.html">{{college.name}}</a></h3>
+                  <p class="description">{{college.description}}</p>
+                  <!--professor-->
                   <div class="trainer d-flex justify-content-between align-items-center">
                     <div class="trainer-profile d-flex align-items-center">
                       <img src="assets/img/trainers/trainer-1-2.jpg" class="img-fluid" alt="">
