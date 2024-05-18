@@ -1,26 +1,36 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { College } from 'src/app/Models/college-model';
 import { environment } from 'src/environments/environment.development';
+import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CollegeService {
 
-  url : string = environment.apiBaseUrl + 'College';
-  colleges : College[] = []
+  url : string = environment.apiBaseUrl + '/College';
+  
+  formSubmited : boolean = false
+  constructor(private http : HttpClient , private toastr : ToastrService) { }
 
-  constructor(private http : HttpClient) { }
+  getColleges(): Observable<any> {
+    return this.http.get<any>(this.url);
+}
 
-  getColleges(){
-    this.http.get(this.url).subscribe({
-     next : response =>{
-       this.colleges = response as College[]
-     },
-     error : err => {
-       console.log(err)
-     }
-    });
-   }
+
+updateCollege(data : FormData ) : Observable<any>{
+     return this.http.put(this.url + '/' + data.get('Id') , data)
+ }
+
+ createCollege(data : FormData) : Observable<any>{
+     return this.http.post(this.url,data)
+ }
+
+ deleteCollege(id : string) : Observable<any>{
+   return this.http.delete(this.url + '/' + id)
+ }
+
+
 }

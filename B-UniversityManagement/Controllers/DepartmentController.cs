@@ -1,5 +1,6 @@
 ﻿using B_UniversityManagement.DTOs;
 using B_UniversityManagement.IRepository;
+using B_UniversityManagement.Models;
 using B_UniversityManagement.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,21 @@ namespace B_UniversityManagement.Controllers
                 return Ok(departmentDTO);
             }
             return BadRequest();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            departmentRepo.Delete(id);
+            return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult Update(DepartmentDTO departmentDTO)
+        {
+            Department department = TransferDepartment.TransferDtoToDepartment(departmentDTO);
+            departmentRepo.Update(department);
+            return Ok();
         }
     }
 }

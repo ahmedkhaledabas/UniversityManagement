@@ -48,8 +48,9 @@ namespace B_UniversityManagement
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
+
 
             app.UseCors(MyAllowSpecificOrigins);
 

@@ -1,5 +1,7 @@
 export interface Department{
+    id : number,
     name: string,
     description: string,
-    collegeId: number
+    collegeId: number,
+    isEdite:boolean ,
 }

@@ -11,10 +11,10 @@
       </li><!-- End Dashboard Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link collapsed" data-bs-target="#college-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-menu-button-wide"></i><span>College</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <ul id="college-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a routerLink="/admin/college">
               <i class="bi bi-circle"></i><span>New College</span>
@@ -22,10 +22,10 @@
           </li>
         </ul>
 
-        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link collapsed" data-bs-target="#dept-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-menu-button-wide"></i><span>Department</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <ul id="dept-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a routerLink="/admin/department">
               <i class="bi bi-circle"></i><span>New Department</span>
@@ -33,10 +33,10 @@
           </li>
         </ul>
 
-        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link collapsed" data-bs-target="#student-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-menu-button-wide"></i><span>Student</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <ul id="student-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a routerLink="/admin/student">
               <i class="bi bi-circle"></i><span>New Student</span>
@@ -49,11 +49,24 @@
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="">
+            <a routerLink="/admin/professor">
               <i class="bi bi-circle"></i><span>New Professor</span>
             </a>
           </li>
         </ul>
+
+
+        <a class="nav-link collapsed" data-bs-target="#course-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Course</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="course-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a routerLink="/admin/course">
+              <i class="bi bi-circle"></i><span>New Course</span>
+            </a>
+          </li>
+        </ul>
+
       </li><!-- End Components Nav -->
 
 

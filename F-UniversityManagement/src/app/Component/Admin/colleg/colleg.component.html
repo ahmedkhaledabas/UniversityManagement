@@ -1,1 +1,115 @@
-<p>colleg works!</p>
+<main id="main" class="main">
+  <div class="container">
+    <div class="row justify-content-between mb-2">
+      <div class="col-11">
+          <input class=" form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" #filter (keyup)="filterData(filter.value)">
+      </div>
+      <div class="col-1">
+          <select class="form-select" aria-label="Default select example" #pageSize (change)="changePageSize(pageSize.value)">
+              <option *ngFor="let size of pageSizes" [value]="size">{{size}}</option>
+          </select>
+      </div>
+     
+  </div>
+    <table class="table">
+        <thead>
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Name</th>
+          <th scope="col">Describtion</th>
+          <th scope="col">Image</th>
+          <th>
+            <button
+              type="button" title="Add New" class="btn btn-primary" (click)="addNew()">
+              <i class="bi bi-plus"></i>
+            </button>
+          </th>
+        </tr>
+      </thead>
+
+            <tbody>
+        <ng-container *ngFor="let college of filterColleges; let i = index">
+          <tr *ngIf="selected != college" (click)="select(college)">
+            <td>{{ i + 1}}</td>
+            <td>{{ college.name }}</td>
+            <td>{{ college.description }}</td>
+            <td>
+              <img [src]="college.img" alt="" style="width: 70px; height: 70px;">
+            </td>
+            <td>
+              <button
+                class="btn btn-danger btn-sm mx-1" title="Delete User" type="button" (click)="openModal(college.id)" >
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="selected == college" class="table-primary">
+            <td>{{ i + 1 }}
+            
+            </td>
+
+            <input type="hidden"[(ngModel)]="college.id" >
+            <td>
+              <input type="text" class="form-control" [(ngModel)]="college.name" title="College Name" placeholder="Name">
+            </td>
+            <td>
+              <input type="text" class="form-control" [(ngModel)]="college.description" title="College Describtion" placeholder="Describtion">
+            </td>
+            <td>
+             <input type="file" class="form-control" [(ngModel)]="college.img" (change)="handleImageChange($event)">
+            </td>
+            <td>             
+              <button
+                  class="btn btn-primary btn-sm mx-1"
+                  title="update" (click)="update(college)">
+                  <i class="bi bi-lightning"></i>
+                </button>
+      
+                <button
+                  class="btn btn-danger btn-sm mx-1"
+                  title="Cancel Changes"
+                  type="button" (click)="cancel()"
+                >
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-center">
+      <ul class="pagination">
+        <li class="page-item">
+          <button (click)="previousPage()" class="page-link" href="" >Previous</button>
+        </li>
+        <li class="page-item" [class.active]="i+1 == currentPage" *ngFor="let pageNumber of pageNumbers(); let i = index" ><button (click)="changePageNumber(i+1)"  class="page-link" >{{i + 1}}</button></li>
+        <li class="page-item">
+          <button (click)="nextPage()" class="page-link" href="" >Next</button>
+        </li>
+      </ul>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="exampleModal" >
+  <div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+    </div>
+    <div class="modal-body">
+      Are you sure !?
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="closeModal()" data-bs-dismiss="modal">No</button>
+      <button type="button" class="btn btn-success" [disabled]="!selectToDelete" (click)="onDelete(selectToDelete)">Yes</button>
+    </div>
+  </div>
+  </div>
+  </div>
+
+
+  </main><!-- End #main -->

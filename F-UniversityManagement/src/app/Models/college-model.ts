@@ -1,7 +1,6 @@
 export interface College{
-    id: number ,
+    id: string ,
     name: string ,
     description: string ,
     img:string ,
-    imageFile:File
 }

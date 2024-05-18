@@ -6,7 +6,7 @@ namespace B_UniversityManagement.IRepository
     {
         void Create(Department department);
         void Update(Department department);
-        void Delete(Department department);
+        void Delete(int id);
         List<Department> GetAll();
         Department GetById(int id);
     }

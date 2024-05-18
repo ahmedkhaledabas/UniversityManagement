@@ -1,0 +1,176 @@
+<main id="main" class="main">
+  <div class="row justify-content-between mb-2">
+    <div class="col-11">
+        <input class=" form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" #filter (keyup)="filterData(filter.value)">
+    </div>
+    <div class="col-1">
+        <select class="form-select" aria-label="Default select example" #pageSize (change)="changePageSize(pageSize.value)">
+            <option *ngFor="let size of pageSizes" [value]="size">{{size}}</option>
+        </select>
+    </div>
+   
+</div>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">NO</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Password</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Date Of Birth</th>
+        <th scope="col">Gender</th>
+        <th scope="col">Image</th>
+        <th scope="col">Address</th>
+        <th scope="col">Department</th>
+        <th scope="col">Level </th>
+        <th>
+            <button
+              type="button" title="Add New" class="btn btn-primary" (click)="addNew()">
+              <i class="bi bi-plus"></i>
+            </button>
+          </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>Ahmed</td>
+        <td>Shalby</td>
+        <td>ahmed@yahoo</td>
+        <td>1234</td>
+        <td>01284338087</td>
+        <td>01/01/1997</td>
+        <td>Male</td>
+        <td>image</td>
+        <td>giza,egy</td>
+        <td>Computer</td>
+        <td>1</td>
+      </tr>
+      <ng-container *ngFor="let student of filterStudent; let i = index">
+        <tr *ngIf="selected != student" (click)="Selecte(student)">
+            <th scope="row">{{i + 1}}</th>
+            <td>{{student.fName}}</td>
+            <td>{{student.lName}}</td>
+            <td>{{student.email}}</td>
+            <td>{{student.password}}</td>
+            <td>{{student.phone}}</td>
+            <td>{{student.dateOfBirth}}</td>
+            <td>{{student.gender}}</td>
+            <td><img [src]="student.img" alt=""></td>
+            <td>{{student.address}}</td>
+            <td>{{student.departmentId}}</td>
+            <td>{{student.levelYear}}</td>
+            <td>
+                <button class="btn btn-danger btn-sm mx-1" title="Delete" type="button" (click)="openModal(student.id)">
+                    <i class=" bi bi-trash"></i>
+                  </button>
+            </td>
+        </tr>
+        
+        <tr *ngIf="selected == student" class="table-primary">
+        <td>{{i+1}}</td>
+        <td>
+            <input type="text" class="form-control" [(ngModel)]="student.fName" placeholder="FNanme" title="FName">
+        </td>
+        <td>
+            <input type="text" class="form-control" [(ngModel)]="student.lName" placeholder="LNanme" title="LName">
+        </td>
+        <td>
+            <input type="email" class="form-control" [(ngModel)]="student.email" placeholder="Email" title="Email">
+        </td>
+        <td>
+            <input type="password" class="form-control" [(ngModel)]="student.password" placeholder="Password" title="Password">
+        </td>
+        <td>
+            <input type="text" class="form-control" [(ngModel)]="student.phone" placeholder="Phone" title="Phone">
+        </td>
+        <td>
+            <input type="datetime-local" class="form-control" [(ngModel)]="student.dateOfBirth" title="Date Of Birth">
+        </td>
+        <td>
+            <select class="form-select" aria-label="Default select example" [(ngModel)]="student.gender">
+                <option selected value="0">Male</option>
+                <option value="1">Female</option>
+              </select>
+        </td>
+        <td>
+            <input type="file" class="form-control" [(ngModel)]="student.img" title="Image">
+        </td>
+        <td>
+            <input type="text" class="form-control" [(ngModel)]="student.address" placeholder="Address" title="Address">
+        </td>
+        <td>
+            <select class="form-select" aria-label="Default select example" [(ngModel)]="student.departmentId">
+                <option selected>Department</option>
+                <!--list depts from depts table-->
+                <option *ngFor="let dept of departService.departments" [value]="dept.id">{{dept.name}}</option>
+                
+              </select>
+        </td>
+        <td>
+            <select class="form-select" aria-label="Default select example" [(ngModel)]="student.levelYear">
+                <option selected value="0">First</option>
+                <option value="1">Second</option>
+                <option value="2">Third</option>
+                <option value="3">Fourth</option>
+                <option value="4">Fifth</option>
+              </select>
+        </td>
+        <td>             
+            <button
+                class="btn btn-primary btn-sm mx-1"
+                title="update" (click)="update(student)">
+                <i class="bi bi-lightning"></i>
+              </button>
+    
+              <button
+                class="btn btn-danger btn-sm mx-1"
+                title="Cancel Changes"
+                type="button" (click)="cancel()"
+              >
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+<!--Pagination-->
+<div class="d-flex justify-content-center">
+  <ul class="pagination">
+    <li class="page-item">
+      <button (click)="previousPage()" class="page-link" href="" >Previous</button>
+    </li>
+    <li class="page-item" [class.active]="i+1 == currentPage" *ngFor="let pageNumber of pageNumbers(); let i = index" ><button (click)="changePageNumber(i+1)"  class="page-link" >{{i + 1}}</button></li>
+    <li class="page-item">
+      <button (click)="nextPage()" class="page-link" href="" >Next</button>
+    </li>
+  </ul>
+</div>
+<!--End Pagination-->
+
+
+  <!-- Modal -->
+<div class="modal" id="exampleModal" >
+    <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure !?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closeModal()" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-success" [disabled]="!selectToDelete" (click)="onDelete(selectToDelete)">Yes</button>
+      </div>
+    </div>
+    </div>
+    </div>
+    <!--End Modal -->
+
+</main>

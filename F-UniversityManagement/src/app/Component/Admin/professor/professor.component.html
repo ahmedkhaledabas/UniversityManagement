@@ -1,0 +1,170 @@
+<main id="main" class="main">
+  <div class="row justify-content-between mb-2">
+    <div class="col-11">
+        <input class=" form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" #filter (keyup)="filterData(filter.value)">
+    </div>
+    <div class="col-1">
+        <select class="form-select" aria-label="Default select example" #pageSize (change)="changePageSize(pageSize.value)">
+            <option *ngFor="let size of pageSizes" [value]="size">{{size}}</option>
+        </select>
+    </div>
+   
+</div>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">NO</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Password</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Date Of Birth</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Image</th>
+            <th scope="col">Address</th>
+            <th scope="col">Specialist</th>
+            <th scope="col">Rank </th>
+            <th>
+                <button
+                  type="button" title="Add New" class="btn btn-primary" (click)="addNew()">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Ahmed</td>
+            <td>Khaled</td>
+            <td>ahmed@yahoo</td>
+            <td>123</td>
+            <td>0128433</td>
+            <td>01/01/11</td>
+            <td>Male</td>
+            <td>image</td>
+            <td>giza</td>
+            <td>is</td>
+            <td>Profeesor</td>
+          </tr>
+          <ng-container *ngFor="let prof of filterProf; let i = index">
+            <tr *ngIf="selected != prof" (click)="selecte(prof)">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{prof.fName}}</td>
+                <td>{{prof.lName}}</td>
+                <td>{{prof.email}}</td>
+                <td>{{prof.password}}</td>
+                <td>{{prof.phone}}</td>
+                <td>{{prof.dateOfBirth}}</td>
+                <td>{{prof.gender}}</td>
+                <td>
+                    <img [src]="prof.img" alt="">
+                </td>
+                <td>{{prof.address}}</td>
+                <td>{{prof.specialist}}</td>
+                <td>{{prof.rank}}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm mx-1" title="Delete" type="button" (click)="openModal(prof.id)">
+                        <i class=" bi bi-trash"></i>
+                      </button>
+                </td>
+            </tr>
+
+            <tr *ngIf="selected == prof" class="table-primary">
+                <td>{{i+1}}</td>
+                <td>
+                    <input type="text" class="form-control" [(ngModel)]="prof.fName" placeholder="FNanme" title="FName">
+                </td>
+                <td>
+                    <input type="text" class="form-control" [(ngModel)]="prof.lName" placeholder="LNanme" title="LName">
+                </td>
+                <td>
+                    <input type="email" class="form-control" [(ngModel)]="prof.email" placeholder="Email" title="Email">
+                </td>
+                <td>
+                    <input type="password" class="form-control" [(ngModel)]="prof.password" placeholder="Password" title="Password">
+                </td>
+                <td>
+                    <input type="text" class="form-control" [(ngModel)]="prof.phone" placeholder="Phone" title="Phone">
+                </td>
+                <td>
+                    <input type="datetime-local" class="form-control" [(ngModel)]="prof.dateOfBirth" title="Date Of Birth">
+                </td>
+                <td>
+                    <select class="form-select" aria-label="Default select example" [(ngModel)]="prof.gender">
+                        <option selected value="0">Male</option>
+                        <option value="1">Female</option>
+                      </select>
+                </td>
+                <td>
+                    <input type="file" class="form-control" [(ngModel)]="prof.img" title="Image">
+                </td>
+                <td>
+                    <input type="text" class="form-control" [(ngModel)]="prof.address" placeholder="Address" title="Address">
+                </td>
+                <td>
+                    <input type="text" class="form-control" [(ngModel)]="prof.specialist" placeholder="Specialist" title="Specialist">
+                </td>
+                <td>
+                    <select class="form-select" aria-label="Default select example" [(ngModel)]="prof.rank">
+                        <option selected value="0">Dean</option>
+                        <option value="1">Professor</option>
+                        <option value="2">Assistant Professor</option>
+                      </select>
+                </td>
+                <td>             
+                    <button
+                        class="btn btn-primary btn-sm mx-1"
+                        title="update" (click)="update(prof)">
+                        <i class="bi bi-lightning"></i>
+                      </button>
+            
+                      <button
+                        class="btn btn-danger btn-sm mx-1"
+                        title="Cancel Changes"
+                        type="button" (click)="cancel()"
+                      >
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </td>
+                </tr>
+        </ng-container>
+        </tbody>
+      </table>
+   
+      <!--Pagination-->
+      <div class="d-flex justify-content-center">
+        <ul class="pagination">
+          <li class="page-item">
+            <button (click)="previousPage()" class="page-link" href="" >Previous</button>
+          </li>
+          <li class="page-item" [class.active]="i+1 == currentPage" *ngFor="let pageNumber of pageNumbers(); let i = index" ><button (click)="changePageNumber(i+1)"  class="page-link" >{{i + 1}}</button></li>
+          <li class="page-item">
+            <button (click)="nextPage()" class="page-link" href="" >Next</button>
+          </li>
+        </ul>
+      </div>
+      <!--End Pagination-->
+    
+  <!-- Modal -->
+  <div class="modal" id="exampleModal" >
+    <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure !?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closeModal()" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-success" [disabled]="!selectToDelete" (click)="onDelete(selectToDelete)">Yes</button>
+      </div>
+    </div>
+    </div>
+    </div>
+    <!--End Modal -->
+
+</main>

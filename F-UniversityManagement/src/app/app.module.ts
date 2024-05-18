@@ -23,6 +23,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { CollegComponent } from './Component/Admin/colleg/colleg.component';
 import { CourseComponent } from './Component/Admin/course/course.component';
 import { DepartmentComponent } from './Component/Admin/department/department.component';
+import { PaginationComponent } from './Component/Shared/pagination/pagination.component';
+import { StudentComponent } from './Component/Admin/student/student.component';
+import { ProfessorComponent } from './Component/Admin/professor/professor.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,10 @@ import { DepartmentComponent } from './Component/Admin/department/department.com
     HomeAdminComponent,
     CollegComponent,
     CourseComponent,
-    DepartmentComponent
+    DepartmentComponent,
+    PaginationComponent,
+    StudentComponent,
+    ProfessorComponent,
   ],
   imports: [
     BrowserModule,

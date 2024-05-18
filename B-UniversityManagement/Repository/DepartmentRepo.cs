@@ -15,19 +15,20 @@ namespace B_UniversityManagement.Repository
 
         public void Create(Department department)
         {
-            context.Add(department);
+            context.Departments.Add(department);
             context.SaveChanges();
         }
 
         public void Update(Department department)
         {
-            context.Update(department);
+            context.Departments.Update(department);
             context.SaveChanges();
         }
 
-        public void Delete(Department department)
+        public void Delete(int id)
         {
-            context.Remove(department);
+            Department department = GetById(id);
+            context.Departments.Remove(department);
             context.SaveChanges();
         }
 
@@ -35,7 +36,12 @@ namespace B_UniversityManagement.Repository
 
         public Department GetById(int id)
         {
-            return context.Departments.Find(id);
+            Department department = context.Departments.Find(id);
+            if(department != null)
+            {
+                return department;
+            }
+            throw new NullReferenceException();
         }
     }
 }
