@@ -1,13 +1,21 @@
-﻿using B_UniversityManagement.IRepository;
+﻿using B_UniversityManagement.Data;
+using B_UniversityManagement.IRepository;
 using B_UniversityManagement.Models;
 
 namespace B_UniversityManagement.Repository
 {
     public class StudentRepo : IStudentRepo
     {
+        private readonly UniversityDbContext context;
+
+        public StudentRepo(UniversityDbContext context)
+        {
+            this.context = context;
+        }
         public void Create(Student student)
         {
-            throw new NotImplementedException();
+            context.Users.Add(student);
+            context.SaveChanges();
         }
 
         public void Delete(Student student)
@@ -20,7 +28,7 @@ namespace B_UniversityManagement.Repository
             throw new NotImplementedException();
         }
 
-        public Student GetById(int id)
+        public Student GetById(string id)
         {
             throw new NotImplementedException();
         }

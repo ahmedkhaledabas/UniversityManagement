@@ -13,7 +13,7 @@ export class CollegeService {
   url : string = environment.apiBaseUrl + '/College';
   
   formSubmited : boolean = false
-  constructor(private http : HttpClient , private toastr : ToastrService) { }
+  constructor(private http : HttpClient) { }
 
   getColleges(): Observable<any> {
     return this.http.get<any>(this.url);

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "6DhH1r8s9m1D9WKgTGpoa7NUaPPV1BxxDQUKsTCk5EM=",
+  "Hash": "H0BKCJyRNgS4lu4qk2sKhHSVW3ekbJhezkmTn61A2XE=",
   "Source": "B-UniversityManagement",
   "BasePath": "_content/B-UniversityManagement",
   "Mode": "Default",
@@ -72,6 +72,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Uploads\\Colleges\\cccccccc\\image.png"
+    },
+    {
+      "Identity": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Colleges\\Computer Since\\image.png",
+      "SourceId": "B-UniversityManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\",
+      "BasePath": "_content/B-UniversityManagement",
+      "RelativePath": "Uploads/Colleges/Computer Since/image.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\Colleges\\Computer Since\\image.png"
     },
     {
       "Identity": "C:\\Users\\Num 1\\Desktop\\AngularProject\\UniversityManagement\\B-UniversityManagement\\wwwroot\\Uploads\\Colleges\\ddddddd\\image.png",

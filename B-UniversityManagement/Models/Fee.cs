@@ -4,7 +4,7 @@
     {
         public bool Pay { get; set; } = false;
 
-        public Guid StudentId { get; set; } 
+        public string StudentId { get; set; } = null!;
         public Student Student { get; set; } = null!;
     }
 }

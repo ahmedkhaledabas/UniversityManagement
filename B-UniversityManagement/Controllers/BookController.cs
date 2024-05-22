@@ -34,7 +34,7 @@ namespace B_UniversityManagement.Controllers
 
         // GET: api/Book/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> GetBook(int id)
+        public async Task<ActionResult<Book>> GetBook(string id)
         {
           if (_context.Books == null)
           {
@@ -53,7 +53,7 @@ namespace B_UniversityManagement.Controllers
         // PUT: api/Book/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBook(int id, Book book)
+        public async Task<IActionResult> PutBook(string id, Book book)
         {
             if (id != book.Id)
             {
@@ -116,7 +116,7 @@ namespace B_UniversityManagement.Controllers
             return NoContent();
         }
 
-        private bool BookExists(int id)
+        private bool BookExists(string id)
         {
             return (_context.Books?.Any(e => e.Id == id)).GetValueOrDefault();
         }

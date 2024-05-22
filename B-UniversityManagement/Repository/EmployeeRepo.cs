@@ -27,7 +27,7 @@ namespace B_UniversityManagement.Repository
             throw new NotImplementedException();
         }
 
-        public Employee GetById(int id)
+        public Employee GetById(string id)
         {
             throw new NotImplementedException();
         }

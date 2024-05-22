@@ -8,6 +8,6 @@ namespace B_UniversityManagement.IRepository
         void Update(Student student);
         void Delete(Student student);
         List<Student> GetAll();
-        Student GetById(int id);
+        Student GetById(string id);
     }
 }

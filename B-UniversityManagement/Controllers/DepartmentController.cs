@@ -40,7 +40,7 @@ namespace B_UniversityManagement.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(string id)
         {
             departmentRepo.Delete(id);
             return Ok();

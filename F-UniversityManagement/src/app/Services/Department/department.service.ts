@@ -27,7 +27,7 @@ export class DepartmentService {
   }
 
 
-deleteDepartment(id : number){
+deleteDepartment(id : string){
   this.http.delete(this.url + '/' + id ).subscribe({
     next : response =>{
       this.tostar.warning('Department Removed' , 'Success')

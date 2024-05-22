@@ -10,9 +10,9 @@ namespace B_UniversityManagement.Models
         public string? Description { get; set; }
         public string? Img { get; set; }
         public List<Student> Students { get; set; } = null!;
-        public string ProfessorId { get; set; }
+        public string ProfessorId { get; set; } = null!;
         public Professor Professor { get; set; } = null!;
-        public int DepartmentId { get; set; } 
+        public string DepartmentId { get; set; } = null!; 
         public Department? Department {  get; set; }
     }
 }

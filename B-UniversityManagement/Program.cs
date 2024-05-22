@@ -1,7 +1,9 @@
 
 using B_UniversityManagement.Data;
 using B_UniversityManagement.IRepository;
+using B_UniversityManagement.Models;
 using B_UniversityManagement.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace B_UniversityManagement
@@ -39,6 +41,7 @@ namespace B_UniversityManagement
             builder.Services.AddScoped<ICourseRepo, CourseRepo>();
             builder.Services.AddScoped<IDepartmentRepo , DepartmentRepo>();
             builder.Services.AddTransient<IFileService , FileService>();
+            builder.Services.AddIdentity<Student, IdentityRole>().AddEntityFrameworkStores<UniversityDbContext>();
 
             var app = builder.Build();
 

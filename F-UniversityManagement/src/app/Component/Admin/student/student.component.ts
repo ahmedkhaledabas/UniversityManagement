@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Department } from 'src/app/Models/department-model';
 import { Student } from 'src/app/Models/student-model';
 import { DepartmentService } from 'src/app/Services/Department/department.service';
+import { StudentService } from 'src/app/Services/Student/student.service';
 
 @Component({
   selector: 'student',
@@ -18,11 +20,22 @@ export class StudentComponent implements OnInit {
   lengthDepts : number = 0
   pageSizes : Array<number> = [ 5 , 10 , 20]
   pageSize : number = this.pageSizes[0]
-
-  constructor(public departService : DepartmentService) {}
+  imgFile! : any
+  constructor(public departService : DepartmentService, public studentService : StudentService , private toastr : ToastrService) {}
 
   ngOnInit(): void {
     this.departService.getDepartments()
+    this.getData()
+  }
+
+  getData(){
+    this.studentService.getStudents().subscribe(
+      (students : Student[]) => {
+        this.filterStudent = students
+      },
+      (error)=>{
+        console.error("Error Fetching Students" , error)
+      })
   }
 
   addNew(){
@@ -33,12 +46,12 @@ export class StudentComponent implements OnInit {
       email : '',
       password:'',
       phone : '',
-      dateOfBirth:'',
+      birthDate:new Date(),
     address : '',
     gender : 0,
     img : '',
     levelYear : 0,
-    departmentId : 0
+    departmentId : ''
     } as Student);
     this.selected = this.filterStudent[0]
   }
@@ -81,12 +94,38 @@ export class StudentComponent implements OnInit {
     //})
   }
 
-  update(Student : Student){
+  generateRandomString(length : number){
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let random = ''
+    const characterLength = chars.length
+    for(let i = 0 ; i < length ; i++){
+      random+= chars.charAt(Math.floor(Math.random() * characterLength))
+    }
+    return random
+  }
+
+
+  handleImageChange(event: any) {
+    this.imgFile = event.target.files[0]
+   }
+
+  update(student : Student){
+   //console.log(student)
     //add new
       const formData = new FormData()
-      //formData.append('Name' , college.name)
-      //formData.append('Description' , college.description)
-      //formData.append( 'image', this.imgFile)
+      formData.append('userName' , student.fName + '_' + student.lName)
+      formData.append('id' , this.generateRandomString(4))
+      formData.append('fName' , student.fName)
+      formData.append('lName' , student.lName)
+      formData.append('email' , student.email)
+      formData.append('passwordHash' , student.password)
+      formData.append('phone' , student.phone)
+     // formData.append('birthDate' , student.birthDate)
+      formData.append('address' , student.address)
+      //formData.append('gender' , student.gender)
+      formData.append('departmentId' , student.departmentId)
+      //formData.append('levelYear' , student.levelYear)
+      formData.append('img' , this.imgFile)
     //if(!this.isEditing){
       //formData.append('Id' , this.generateRandomString(4))
       //this.service.createCollege(formData).subscribe({

@@ -122,7 +122,7 @@ validateForm(dept : Department){
   }else return false
 }
 
-openModal(id : number){
+openModal(id : string){
   this.selecteDeptId = id;
   const modal = document.getElementById('exampleModal');
   if(modal != null){
@@ -144,15 +144,27 @@ openModal(id : number){
   this.filterDepartments.unshift(newDept)
  }
 
+ generateRandomString(length : number){
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let random = ''
+  const characterLength = chars.length
+  for(let i = 0 ; i < length ; i++){
+    random+= chars.charAt(Math.floor(Math.random() * characterLength))
+  }
+  return random
+}
+
  onUpdate(dept : Department){
   if(dept.id != null){
     this.service.updateDepartment(dept)
   }else{
+    dept.id = this.generateRandomString(4)
+    //console.log(dept)
     this.service.createDepartment(dept)
   }
  }
 
-  onDelete(deptId : number){
+  onDelete(deptId : string){
     this.service.deleteDepartment(deptId);
    }
 }

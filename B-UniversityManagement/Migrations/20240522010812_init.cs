@@ -66,8 +66,7 @@ namespace B_UniversityManagement.Migrations
                 name: "Departments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CollegeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -89,8 +88,7 @@ namespace B_UniversityManagement.Migrations
                 name: "Libraries",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Img = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -129,8 +127,9 @@ namespace B_UniversityManagement.Migrations
                     EmpSalary = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     CollegeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Specialist = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DepartmentId = table.Column<int>(type: "int", nullable: true),
+                    Rank = table.Column<int>(type: "int", nullable: true),
+                    levelYear = table.Column<int>(type: "int", nullable: true),
+                    DepartmentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -166,13 +165,12 @@ namespace B_UniversityManagement.Migrations
                 name: "Books",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AuthorName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Img = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LibraryId = table.Column<int>(type: "int", nullable: false),
+                    LibraryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -277,16 +275,15 @@ namespace B_UniversityManagement.Migrations
                 columns: table => new
                 {
                     CollegeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProfessorsId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProfessorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProfessorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Rank = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CollegeProfessors", x => new { x.CollegeId, x.ProfessorsId });
+                    table.PrimaryKey("PK_CollegeProfessors", x => new { x.CollegeId, x.ProfessorId });
                     table.ForeignKey(
-                        name: "FK_CollegeProfessors_AspNetUsers_ProfessorsId",
-                        column: x => x.ProfessorsId,
+                        name: "FK_CollegeProfessors_AspNetUsers_ProfessorId",
+                        column: x => x.ProfessorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -302,14 +299,13 @@ namespace B_UniversityManagement.Migrations
                 name: "Courses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LevelYear = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Img = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProfessorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProfessorId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    ProfessorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DepartmentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -317,27 +313,26 @@ namespace B_UniversityManagement.Migrations
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_AspNetUsers_ProfessorId1",
-                        column: x => x.ProfessorId1,
+                        name: "FK_Courses_AspNetUsers_ProfessorId",
+                        column: x => x.ProfessorId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Courses_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Fees",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Pay = table.Column<bool>(type: "bit", nullable: false),
-                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StudentId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -345,28 +340,26 @@ namespace B_UniversityManagement.Migrations
                 {
                     table.PrimaryKey("PK_Fees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Fees_AspNetUsers_StudentId1",
-                        column: x => x.StudentId1,
+                        name: "FK_Fees_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "StudentBooks",
                 columns: table => new
                 {
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    StudentsId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    End = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BookId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentBooks", x => new { x.BookId, x.StudentsId });
+                    table.PrimaryKey("PK_StudentBooks", x => new { x.BookId, x.StudentId });
                     table.ForeignKey(
-                        name: "FK_StudentBooks_AspNetUsers_StudentsId",
-                        column: x => x.StudentsId,
+                        name: "FK_StudentBooks_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -382,13 +375,10 @@ namespace B_UniversityManagement.Migrations
                 name: "StudentCourses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CourseId = table.Column<int>(type: "int", nullable: false),
-                    Level = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Degree = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    StudentsId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -396,8 +386,8 @@ namespace B_UniversityManagement.Migrations
                 {
                     table.PrimaryKey("PK_StudentCourses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StudentCourses_AspNetUsers_StudentsId",
-                        column: x => x.StudentsId,
+                        name: "FK_StudentCourses_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -464,9 +454,9 @@ namespace B_UniversityManagement.Migrations
                 column: "LibraryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CollegeProfessors_ProfessorsId",
+                name: "IX_CollegeProfessors_ProfessorId",
                 table: "CollegeProfessors",
-                column: "ProfessorsId");
+                column: "ProfessorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_DepartmentId",
@@ -474,9 +464,9 @@ namespace B_UniversityManagement.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_ProfessorId1",
+                name: "IX_Courses_ProfessorId",
                 table: "Courses",
-                column: "ProfessorId1");
+                column: "ProfessorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Departments_CollegeId",
@@ -484,9 +474,9 @@ namespace B_UniversityManagement.Migrations
                 column: "CollegeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Fees_StudentId1",
+                name: "IX_Fees_StudentId",
                 table: "Fees",
-                column: "StudentId1");
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Libraries_CollegeId",
@@ -495,9 +485,9 @@ namespace B_UniversityManagement.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentBooks_StudentsId",
+                name: "IX_StudentBooks_StudentId",
                 table: "StudentBooks",
-                column: "StudentsId");
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentCourses_CourseId",
@@ -505,9 +495,9 @@ namespace B_UniversityManagement.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentCourses_StudentsId",
+                name: "IX_StudentCourses_StudentId",
                 table: "StudentCourses",
-                column: "StudentsId");
+                column: "StudentId");
         }
 
         /// <inheritdoc />

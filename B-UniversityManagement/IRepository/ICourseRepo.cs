@@ -8,6 +8,6 @@ namespace B_UniversityManagement.IRepository
         void Update(Course course);
         void Delete(Course course);
         List<Course> GetAll();
-        Course GetById(int id);
+        Course GetById(string id);
     }
 }
