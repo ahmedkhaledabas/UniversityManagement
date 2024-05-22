@@ -4,7 +4,7 @@ namespace B_UniversityManagement.Models
 {
     public class College 
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public string Name { get; set; } = null!;

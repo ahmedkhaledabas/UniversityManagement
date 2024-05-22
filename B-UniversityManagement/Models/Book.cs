@@ -8,7 +8,7 @@ namespace B_UniversityManagement.Models
         public string? Description { get; set; }
         public string? AuthorName { get; set; }
         public string? Img { get; set; }
-        public int LibraryId { get; set; } 
+        public string LibraryId { get; set; } = null!;
         public Library Library { get; set; } = null!;
         public List<Student>? Students { get; set; }
             

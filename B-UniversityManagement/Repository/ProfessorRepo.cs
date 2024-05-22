@@ -20,7 +20,7 @@ namespace B_UniversityManagement.Repository
             throw new NotImplementedException();
         }
 
-        public Professor GetById(int id)
+        public Professor GetById(string id)
         {
             throw new NotImplementedException();
         }

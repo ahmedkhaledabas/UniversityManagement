@@ -5,10 +5,11 @@ export interface Student{
     email : string,
     password : string,
     phone : string,
-    dateOfBirth : string,
+    birthDate : Date,
     address : string,
     gender : number,
     img : string,
     levelYear : number,
-    departmentId : number
+    departmentId : string,
+    userName : string
 }

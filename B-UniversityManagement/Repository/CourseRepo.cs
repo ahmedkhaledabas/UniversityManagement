@@ -26,7 +26,7 @@ namespace B_UniversityManagement.Repository
 
         public List<Course> GetAll() => context.Courses.ToList();
 
-        public Course GetById(int id)
+        public Course GetById(string id)
         {
             var course = context.Courses.Find(id);
             if(course != null)

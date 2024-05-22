@@ -6,9 +6,9 @@ namespace B_UniversityManagement.Models
 {
     public class StudentCourse : BaseProperties
     {
-        public Guid StudentId { get; set; }
-        public int CourseId { get; set; }
-        public LevelYear Level { get; set; } = LevelYear.First;
+        public string StudentId { get; set; } = null!;
+        public string CourseId { get; set; } = null!;
+        //public LevelYear Level { get; set; } = LevelYear.First;
         public decimal? Degree { get; set; }
         
     }

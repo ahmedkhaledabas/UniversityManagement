@@ -20,7 +20,7 @@ namespace B_UniversityManagement.Repository
             throw new NotImplementedException();
         }
 
-        public Book GetById(int id)
+        public Book GetById(string id)
         {
             throw new NotImplementedException();
         }

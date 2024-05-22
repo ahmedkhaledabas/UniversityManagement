@@ -25,7 +25,7 @@ namespace B_UniversityManagement.Repository
             context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(string id)
         {
             Department department = GetById(id);
             context.Departments.Remove(department);
@@ -34,7 +34,7 @@ namespace B_UniversityManagement.Repository
 
         public List<Department> GetAll() => context.Departments.ToList();
 
-        public Department GetById(int id)
+        public Department GetById(string id)
         {
             Department department = context.Departments.Find(id);
             if(department != null)

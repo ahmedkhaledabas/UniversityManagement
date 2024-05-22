@@ -12,7 +12,7 @@ namespace B_UniversityManagement.DTOs
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string Phone { get; set; } = null!;
-        public DateTime DateOfBirth { get; set; }
+        public DateTime BirthDate { get; set; }
         public string? Address { get; set; }
         public Gender Gender { get; set; }
         public string? Img { get; set; }

@@ -6,7 +6,7 @@
         public string? Description { get; set; }
         public string? Img { get; set; }
         public List<Book>? Books {  get; set; }
-        public string CollegeId { get; set; }
+        public string CollegeId { get; set; } = null!;
         public College College { get; set; }=null!;
        
     }
