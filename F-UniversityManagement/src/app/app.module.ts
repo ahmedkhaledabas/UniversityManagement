@@ -26,6 +26,7 @@ import { DepartmentComponent } from './Component/Admin/department/department.com
 import { PaginationComponent } from './Component/Shared/pagination/pagination.component';
 import { StudentComponent } from './Component/Admin/student/student.component';
 import { ProfessorComponent } from './Component/Admin/professor/professor.component';
+import { EmployeeComponent } from './Component/Admin/employee/employee.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { ProfessorComponent } from './Component/Admin/professor/professor.compon
     PaginationComponent,
     StudentComponent,
     ProfessorComponent,
+    EmployeeComponent,
   ],
   imports: [
     BrowserModule,

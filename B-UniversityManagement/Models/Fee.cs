@@ -5,6 +5,6 @@
         public bool Pay { get; set; } = false;
 
         public string StudentId { get; set; } = null!;
-        public Student Student { get; set; } = null!;
+        public User Student { get; set; } = null!;
     }
 }

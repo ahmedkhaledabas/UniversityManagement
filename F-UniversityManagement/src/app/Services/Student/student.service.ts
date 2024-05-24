@@ -14,4 +14,8 @@ export class StudentService {
   getStudents():Observable<any>{
     return this.http.get<any>(this.url + '/GetStudents')
   }
+
+  rigester(data : FormData) : Observable<any>{
+    return this.http.post(this.url + '/Register' , data)
+  }
 }

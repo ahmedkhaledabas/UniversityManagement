@@ -5,27 +5,27 @@ namespace B_UniversityManagement.Repository
 {
     public class ProfessorRepo : IProfessorRepo
     {
-        public void Create(Professor professor)
+        public void Create(User professor)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Professor professor)
+        public void Delete(User professor)
         {
             throw new NotImplementedException();
         }
 
-        public List<Professor> GetAll()
+        public List<User> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Professor GetById(string id)
+        public User GetById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Professor professor)
+        public void Update(User professor)
         {
             throw new NotImplementedException();
         }

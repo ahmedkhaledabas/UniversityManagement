@@ -4,11 +4,12 @@ namespace B_UniversityManagement.DTOs
 {
     public class EmployeeDTO
     {
+
+        public string UserName { get; set; } = null!;
         public decimal? EmpSalary { get; set; }
         public string CollegeId { get; set; } = null!;
+        public string DepaertmentId { get; set; } = null!;
         public string Id { get; set; } = null!;
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public string FName { get; set; } = null!;
         public string? LName { get; set; }
         public string Email { get; set; } = null!;

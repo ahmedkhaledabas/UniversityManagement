@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Course } from 'src/app/Models/course-model';
+import { Professor } from 'src/app/Models/professor-model';
+import { CourseService } from 'src/app/Services/Course/course.service';
 import { DepartmentService } from 'src/app/Services/Department/department.service';
+import { ProfessorService } from 'src/app/Services/Professor/professor.service';
 
 @Component({
   selector: 'app-course',
@@ -17,14 +21,39 @@ export class CourseComponent implements OnInit {
   lengthDepts : number = 0
   pageSizes : Array<number> = [ 5 , 10 , 20]
   pageSize : number = this.pageSizes[0]
+  professors : any
+  imgFile : any
 
-
-  constructor(public departService : DepartmentService) {}
+  constructor(public departService : DepartmentService , public profService : ProfessorService , public courseService : CourseService , private toastr : ToastrService) {}
 
   ngOnInit(): void {
     this.departService.getDepartments()
+    this.getProfessors()
+    this.getData()
   }
 
+
+  getData(){
+    this.courseService.getCourses().subscribe(
+      (courses : Course[]) =>{
+        this.filterCourse = courses
+      },
+    (error) =>{
+      console.error("Featching Courses" , error)
+    }
+    )
+  }
+
+  getProfessors(){
+    this.profService.getProfessors().subscribe(
+      (professors : Professor[]) => {
+        this.professors = professors
+      },
+      (error) => {
+        console.error("Fetching Professors" , error)
+      }
+    )
+  }
 
   addNew(){
     this.filterCourse.unshift({
@@ -34,7 +63,7 @@ export class CourseComponent implements OnInit {
     description : '',
     img : '',
     professorId : '',
-    departmentId : 0
+    departmentId : ''
     } as Course)
     this.selected = this.filterCourse[0]
 
@@ -46,7 +75,38 @@ export class CourseComponent implements OnInit {
     }
   }
 
+  generateRandomString(length : number){
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let random = ''
+    const characterLength = chars.length
+    for(let i = 0 ; i < length ; i++){
+      random+= chars.charAt(Math.floor(Math.random() * characterLength))
+    }
+    return random
+  }
+
+  handleImageChange(event: any) {
+    this.imgFile = event.target.files[0]
+   }
+
   update(course : Course){
+    const formData = new FormData()
+    formData.append('id', this.generateRandomString(4))
+    formData.append('name' , course.name)
+    formData.append('levelYear' , String(course.levelYear))
+    formData.append('description' , course.description)
+    formData.append('departmentId' , course.departmentId)
+    formData.append('professorId' , course.professorId)
+    formData.append('img' , this.imgFile)
+    this.courseService.createCourse(formData).subscribe({
+      next : response =>{
+        this.getData()
+        this.toastr.success("Course Added" , "Success")
+      },
+      error : error =>{
+        this.toastr.error("Course Added" , "Invalid")
+      }
+    })
      // clean up
      this.selected= {} as Course;
      this.isEditing = false

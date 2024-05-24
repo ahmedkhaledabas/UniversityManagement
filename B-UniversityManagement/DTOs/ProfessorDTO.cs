@@ -6,7 +6,8 @@ namespace B_UniversityManagement.DTOs
 {
     public class ProfessorDTO
     {
-        public string Id { get; set; }
+        public string UserName { get; set; } = null!;
+        public string Id { get; set; } = null!;
         public string FName { get; set; } = null!;
         public string? LName { get; set; }
         public string Email { get; set; } = null!;
@@ -18,5 +19,7 @@ namespace B_UniversityManagement.DTOs
         public string? Img { get; set; }
         public string? Specialist { get; set; }
         public AcademicRank Rank { get; set; }
+        public string CollegeId { get; set; } = null!;
+        public string DepartmentId { get; set; } = null!;
     }
 }

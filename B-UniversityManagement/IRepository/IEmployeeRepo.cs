@@ -4,10 +4,10 @@ namespace B_UniversityManagement.IRepository
 {
     public interface IEmployeeRepo
     {
-        void Create(Employee employee);
-        void Update(Employee employee);
-        void Delete(Employee employee);
-        List<Employee> GetAll();
-        Employee GetById(string id);
+        void Create(User employee);
+        void Update(User employee);
+        void Delete(User employee);
+        List<User> GetAll();
+        User GetById(string id);
     }
 }

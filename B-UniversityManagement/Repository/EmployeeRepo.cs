@@ -12,27 +12,27 @@ namespace B_UniversityManagement.Repository
         {
             this.context = context;
         }
-        public void Create(Employee employee)
+        public void Create(User employee)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Employee employee)
+        public void Delete(User employee)
         {
             throw new NotImplementedException();
         }
 
-        public List<Employee> GetAll()
+        public List<User> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Employee GetById(string id)
+        public User GetById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Employee employee)
+        public void Update(User employee)
         {
             throw new NotImplementedException();
         }

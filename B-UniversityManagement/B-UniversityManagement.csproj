@@ -23,6 +23,9 @@
   <ItemGroup>
     <Folder Include="wwwroot\Uploads\Colleges\" />
     <Folder Include="wwwroot\Uploads\Common\" />
+    <Folder Include="wwwroot\Uploads\Courses\" />
+    <Folder Include="wwwroot\Uploads\Professors\" />
+    <Folder Include="wwwroot\Uploads\Students\" />
   </ItemGroup>
 
 </Project>
