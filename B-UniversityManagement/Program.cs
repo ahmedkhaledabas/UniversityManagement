@@ -41,7 +41,7 @@ namespace B_UniversityManagement
             builder.Services.AddScoped<ICourseRepo, CourseRepo>();
             builder.Services.AddScoped<IDepartmentRepo , DepartmentRepo>();
             builder.Services.AddTransient<IFileService , FileService>();
-            builder.Services.AddIdentity<Student, IdentityRole>().AddEntityFrameworkStores<UniversityDbContext>();
+            builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<UniversityDbContext>();
 
             var app = builder.Build();
 

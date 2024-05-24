@@ -13,9 +13,8 @@ namespace B_UniversityManagement.Models
         public string? Img { get; set; } = "http://localhost:5278//Uploads/Common/default.png";
 
         public List<Department> Departments { get; set; } = new List<Department> { };
-        public List<Employee> Employees { get; set; } = new List<Employee> { };
+        public List<User> Users { get; set; } = new List<User> { };
         public Library? Library { get; set; }
-        public List<Professor> Professors { get; set; } = new List<Professor> { };
 
         //
         // public IFormFile? ImageFile {  get; set; }

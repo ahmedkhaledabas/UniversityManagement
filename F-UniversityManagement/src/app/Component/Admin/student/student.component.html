@@ -24,6 +24,7 @@
         <th scope="col">Gender</th>
         <th scope="col">Image</th>
         <th scope="col">Address</th>
+        <th scope="col">College</th>
         <th scope="col">Department</th>
         <th scope="col">Level </th>
         <th>
@@ -45,11 +46,24 @@
             <td>***</td>
             <td>{{student.phone}}</td>
             <td>{{student.birthDate}}</td>
-            <td>{{student.gender}}</td>
-            <td><img [src]="student.img" alt=""></td>
+            <td><p *ngIf="student.gender == 0">Male</p><p *ngIf="student.gender == 1">Female</p></td>
+            <td><img [src]="student.img" alt="" style="width: 70px; height: 70px;"></td>
             <td>{{student.address}}</td>
-            <td>{{student.departmentId}}</td>
-            <td>{{student.levelYear}}</td>
+            <td>
+              <span *ngFor="let college of colleges">
+                <span *ngIf="college.id == student.collegeId">{{college.name}}</span></span>
+            </td>
+            <td>
+              <span *ngFor="let dept of departService.departments">
+              <span *ngIf="dept.id == student.departmentId">{{dept.name}}</span>
+            </span></td>
+            <td>
+              <p *ngIf="student.levelYear == 0">First</p>
+              <p *ngIf="student.levelYear == 1">Second</p>
+              <p *ngIf="student.levelYear == 2">Third</p>
+              <p *ngIf="student.levelYear == 3">Fourth</p>
+              <p *ngIf="student.levelYear == 4">Fifth</p>
+            </td>
             <td>
                 <button class="btn btn-danger btn-sm mx-1" title="Delete" type="button" (click)="openModal(student.id)">
                     <i class=" bi bi-trash"></i>
@@ -87,11 +101,17 @@
               </select>
         </td>
         <td>
-            <input type="file" class="form-control" [(ngModel)]="student.img" title="Image">
+            <input type="file" class="form-control" [(ngModel)]="student.img" title="Image" (change)="handleImageChange($event)">
         </td>
         <td>
             <input type="text" class="form-control" [(ngModel)]="student.address" placeholder="Address" title="Address">
         </td>
+        <td>
+          <select class="form-select" aria-label="Default select example" [(ngModel)]="student.collegeId">
+              <option selected>College</option>
+              <option *ngFor="let college of colleges" [value]="college.id">{{college.name}}</option>
+            </select>
+      </td>
         <td>
             <select class="form-select" aria-label="Default select example" [(ngModel)]="student.departmentId">
                 <option selected>Department</option>

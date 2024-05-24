@@ -12,28 +12,28 @@ namespace B_UniversityManagement.Repository
         {
             this.context = context;
         }
-        public void Create(Student student)
+        public void Create(User student)
         {
             context.Users.Add(student);
             context.SaveChanges();
         }
 
-        public void Delete(Student student)
+        public void Delete(User student)
         {
             throw new NotImplementedException();
         }
 
-        public List<Student> GetAll()
+        public List<User> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Student GetById(string id)
+        public User GetById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Student student)
+        public void Update(User student)
         {
             throw new NotImplementedException();
         }

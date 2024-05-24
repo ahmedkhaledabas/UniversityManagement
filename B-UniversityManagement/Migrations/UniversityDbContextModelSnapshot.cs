@@ -83,24 +83,6 @@ namespace B_UniversityManagement.Migrations
                     b.ToTable("Colleges");
                 });
 
-            modelBuilder.Entity("B_UniversityManagement.Models.CollegeProfessor", b =>
-                {
-                    b.Property<string>("CollegeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProfessorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Rank")
-                        .HasColumnType("int");
-
-                    b.HasKey("CollegeId", "ProfessorId");
-
-                    b.HasIndex("ProfessorId");
-
-                    b.ToTable("CollegeProfessors");
-                });
-
             modelBuilder.Entity("B_UniversityManagement.Models.Course", b =>
                 {
                     b.Property<string>("Id")
@@ -128,7 +110,7 @@ namespace B_UniversityManagement.Migrations
 
                     b.Property<string>("ProfessorId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -136,8 +118,6 @@ namespace B_UniversityManagement.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
-
-                    b.HasIndex("ProfessorId");
 
                     b.ToTable("Courses");
                 });
@@ -234,12 +214,16 @@ namespace B_UniversityManagement.Migrations
                     b.Property<string>("BookId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("StudentId")
+                    b.Property<string>("StudentsId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("BookId", "StudentId");
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("StudentId");
+                    b.HasKey("BookId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
 
                     b.ToTable("StudentBooks");
                 });
@@ -261,16 +245,20 @@ namespace B_UniversityManagement.Migrations
 
                     b.Property<string>("StudentId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UsersId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("UsersId");
 
                     b.ToTable("StudentCourses");
                 });
@@ -289,6 +277,10 @@ namespace B_UniversityManagement.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CollegeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -296,9 +288,9 @@ namespace B_UniversityManagement.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Discriminator")
+                    b.Property<string>("DepartmentId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -306,6 +298,9 @@ namespace B_UniversityManagement.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<decimal?>("EmpSalary")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("FName")
                         .IsRequired()
@@ -347,7 +342,13 @@ namespace B_UniversityManagement.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Rank")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Specialist")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -360,7 +361,14 @@ namespace B_UniversityManagement.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("levelYear")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CollegeId");
+
+                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -371,10 +379,6 @@ namespace B_UniversityManagement.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -510,51 +514,6 @@ namespace B_UniversityManagement.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("B_UniversityManagement.Models.Employee", b =>
-                {
-                    b.HasBaseType("B_UniversityManagement.Models.User");
-
-                    b.Property<string>("CollegeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal?>("EmpSalary")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasIndex("CollegeId");
-
-                    b.HasDiscriminator().HasValue("Employee");
-                });
-
-            modelBuilder.Entity("B_UniversityManagement.Models.Professor", b =>
-                {
-                    b.HasBaseType("B_UniversityManagement.Models.User");
-
-                    b.Property<int>("Rank")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Specialist")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("Professor");
-                });
-
-            modelBuilder.Entity("B_UniversityManagement.Models.Student", b =>
-                {
-                    b.HasBaseType("B_UniversityManagement.Models.User");
-
-                    b.Property<string>("DepartmentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("levelYear")
-                        .HasColumnType("int");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasDiscriminator().HasValue("Student");
-                });
-
             modelBuilder.Entity("B_UniversityManagement.Models.Book", b =>
                 {
                     b.HasOne("B_UniversityManagement.Models.Library", "Library")
@@ -566,21 +525,6 @@ namespace B_UniversityManagement.Migrations
                     b.Navigation("Library");
                 });
 
-            modelBuilder.Entity("B_UniversityManagement.Models.CollegeProfessor", b =>
-                {
-                    b.HasOne("B_UniversityManagement.Models.College", null)
-                        .WithMany()
-                        .HasForeignKey("CollegeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("B_UniversityManagement.Models.Professor", null)
-                        .WithMany()
-                        .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("B_UniversityManagement.Models.Course", b =>
                 {
                     b.HasOne("B_UniversityManagement.Models.Department", "Department")
@@ -589,15 +533,7 @@ namespace B_UniversityManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("B_UniversityManagement.Models.Professor", "Professor")
-                        .WithMany("Courses")
-                        .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Department");
-
-                    b.Navigation("Professor");
                 });
 
             modelBuilder.Entity("B_UniversityManagement.Models.Department", b =>
@@ -613,7 +549,7 @@ namespace B_UniversityManagement.Migrations
 
             modelBuilder.Entity("B_UniversityManagement.Models.Fee", b =>
                 {
-                    b.HasOne("B_UniversityManagement.Models.Student", "Student")
+                    b.HasOne("B_UniversityManagement.Models.User", "Student")
                         .WithMany("Fees")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -641,9 +577,9 @@ namespace B_UniversityManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("B_UniversityManagement.Models.Student", null)
+                    b.HasOne("B_UniversityManagement.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("StudentId")
+                        .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -656,11 +592,30 @@ namespace B_UniversityManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("B_UniversityManagement.Models.Student", null)
+                    b.HasOne("B_UniversityManagement.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("StudentId")
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("B_UniversityManagement.Models.User", b =>
+                {
+                    b.HasOne("B_UniversityManagement.Models.College", "College")
+                        .WithMany("Users")
+                        .HasForeignKey("CollegeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("B_UniversityManagement.Models.Department", "Department")
+                        .WithMany("Students")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("College");
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -714,35 +669,13 @@ namespace B_UniversityManagement.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("B_UniversityManagement.Models.Employee", b =>
-                {
-                    b.HasOne("B_UniversityManagement.Models.College", "College")
-                        .WithMany("Employees")
-                        .HasForeignKey("CollegeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("College");
-                });
-
-            modelBuilder.Entity("B_UniversityManagement.Models.Student", b =>
-                {
-                    b.HasOne("B_UniversityManagement.Models.Department", "Department")
-                        .WithMany("Students")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Department");
-                });
-
             modelBuilder.Entity("B_UniversityManagement.Models.College", b =>
                 {
                     b.Navigation("Departments");
 
-                    b.Navigation("Employees");
-
                     b.Navigation("Library");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("B_UniversityManagement.Models.Department", b =>
@@ -757,12 +690,7 @@ namespace B_UniversityManagement.Migrations
                     b.Navigation("Books");
                 });
 
-            modelBuilder.Entity("B_UniversityManagement.Models.Professor", b =>
-                {
-                    b.Navigation("Courses");
-                });
-
-            modelBuilder.Entity("B_UniversityManagement.Models.Student", b =>
+            modelBuilder.Entity("B_UniversityManagement.Models.User", b =>
                 {
                     b.Navigation("Fees");
                 });

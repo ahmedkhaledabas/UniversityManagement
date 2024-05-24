@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { College } from 'src/app/Models/college-model';
 import { Department } from 'src/app/Models/department-model';
 import { Student } from 'src/app/Models/student-model';
+import { CollegeService } from 'src/app/Services/College/college.service';
 import { DepartmentService } from 'src/app/Services/Department/department.service';
 import { StudentService } from 'src/app/Services/Student/student.service';
 
@@ -21,11 +23,14 @@ export class StudentComponent implements OnInit {
   pageSizes : Array<number> = [ 5 , 10 , 20]
   pageSize : number = this.pageSizes[0]
   imgFile! : any
-  constructor(public departService : DepartmentService, public studentService : StudentService , private toastr : ToastrService) {}
+  colleges : any
+
+  constructor(public departService : DepartmentService, public studentService : StudentService ,private collegeService : CollegeService, private toastr : ToastrService) {}
 
   ngOnInit(): void {
     this.departService.getDepartments()
     this.getData()
+    this.getColleges()
   }
 
   getData(){
@@ -37,6 +42,17 @@ export class StudentComponent implements OnInit {
         console.error("Error Fetching Students" , error)
       })
   }
+
+  getColleges() {
+    this.collegeService.getColleges().subscribe(
+        (colleges: College[]) => {
+            this.colleges = colleges;
+        },
+        (error) => {
+            console.error("Error fetching colleges:", error);
+        }
+    );
+}
 
   addNew(){
     this.filterStudent.unshift({
@@ -104,28 +120,37 @@ export class StudentComponent implements OnInit {
     return random
   }
 
-
   handleImageChange(event: any) {
     this.imgFile = event.target.files[0]
    }
 
   update(student : Student){
-   //console.log(student)
     //add new
+    //if(!this.isEditing){
       const formData = new FormData()
-      formData.append('userName' , student.fName + '_' + student.lName)
+      formData.append('userName' , student.fName + '_' + student.lName + '_' + this.generateRandomString(2))
       formData.append('id' , this.generateRandomString(4))
       formData.append('fName' , student.fName)
       formData.append('lName' , student.lName)
       formData.append('email' , student.email)
       formData.append('passwordHash' , student.password)
       formData.append('phone' , student.phone)
-     // formData.append('birthDate' , student.birthDate)
+      formData.append('birthDate' , String(student.birthDate))
       formData.append('address' , student.address)
-      //formData.append('gender' , student.gender)
+      formData.append('gender' , String(student.gender))
       formData.append('departmentId' , student.departmentId)
-      //formData.append('levelYear' , student.levelYear)
+      formData.append('levelYear' , String(student.levelYear))
       formData.append('img' , this.imgFile)
+      formData.append('collegeId' , student.collegeId)
+      this.studentService.rigester(formData).subscribe({
+        next : response => {
+          this.getData()
+          this.toastr.success("Student Registered" , "Success")
+        }, error : error => {
+          this.toastr.error("Student Registered" , "Invalid")
+        }
+      })
+    //}
     //if(!this.isEditing){
       //formData.append('Id' , this.generateRandomString(4))
       //this.service.createCollege(formData).subscribe({

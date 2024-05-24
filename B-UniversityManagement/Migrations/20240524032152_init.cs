@@ -116,22 +116,20 @@ namespace B_UniversityManagement.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     Img = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmpSalary = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    CollegeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CollegeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Specialist = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Rank = table.Column<int>(type: "int", nullable: true),
-                    levelYear = table.Column<int>(type: "int", nullable: true),
-                    DepartmentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Rank = table.Column<int>(type: "int", nullable: false),
+                    levelYear = table.Column<int>(type: "int", nullable: false),
+                    DepartmentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -158,7 +156,32 @@ namespace B_UniversityManagement.Migrations
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LevelYear = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Img = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfessorId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DepartmentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Courses_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -271,62 +294,6 @@ namespace B_UniversityManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CollegeProfessors",
-                columns: table => new
-                {
-                    CollegeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProfessorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Rank = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CollegeProfessors", x => new { x.CollegeId, x.ProfessorId });
-                    table.ForeignKey(
-                        name: "FK_CollegeProfessors_AspNetUsers_ProfessorId",
-                        column: x => x.ProfessorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CollegeProfessors_Colleges_CollegeId",
-                        column: x => x.CollegeId,
-                        principalTable: "Colleges",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LevelYear = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Img = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProfessorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DepartmentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Courses_AspNetUsers_ProfessorId",
-                        column: x => x.ProfessorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Courses_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Fees",
                 columns: table => new
                 {
@@ -348,37 +315,14 @@ namespace B_UniversityManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StudentBooks",
-                columns: table => new
-                {
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BookId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StudentBooks", x => new { x.BookId, x.StudentId });
-                    table.ForeignKey(
-                        name: "FK_StudentBooks_AspNetUsers_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_StudentBooks_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "StudentCourses",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Degree = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    UsersId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -386,8 +330,8 @@ namespace B_UniversityManagement.Migrations
                 {
                     table.PrimaryKey("PK_StudentCourses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StudentCourses_AspNetUsers_StudentId",
-                        column: x => x.StudentId,
+                        name: "FK_StudentCourses_AspNetUsers_UsersId",
+                        column: x => x.UsersId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -396,7 +340,32 @@ namespace B_UniversityManagement.Migrations
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudentBooks",
+                columns: table => new
+                {
+                    BookId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentsId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentBooks", x => new { x.BookId, x.StudentsId });
+                    table.ForeignKey(
+                        name: "FK_StudentBooks_AspNetUsers_StudentsId",
+                        column: x => x.StudentsId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentBooks_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
@@ -454,19 +423,9 @@ namespace B_UniversityManagement.Migrations
                 column: "LibraryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CollegeProfessors_ProfessorId",
-                table: "CollegeProfessors",
-                column: "ProfessorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Courses_DepartmentId",
                 table: "Courses",
                 column: "DepartmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Courses_ProfessorId",
-                table: "Courses",
-                column: "ProfessorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Departments_CollegeId",
@@ -485,9 +444,9 @@ namespace B_UniversityManagement.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentBooks_StudentId",
+                name: "IX_StudentBooks_StudentsId",
                 table: "StudentBooks",
-                column: "StudentId");
+                column: "StudentsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentCourses_CourseId",
@@ -495,9 +454,9 @@ namespace B_UniversityManagement.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentCourses_StudentId",
+                name: "IX_StudentCourses_UsersId",
                 table: "StudentCourses",
-                column: "StudentId");
+                column: "UsersId");
         }
 
         /// <inheritdoc />
@@ -519,9 +478,6 @@ namespace B_UniversityManagement.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CollegeProfessors");
-
-            migrationBuilder.DropTable(
                 name: "Fees");
 
             migrationBuilder.DropTable(
@@ -537,13 +493,13 @@ namespace B_UniversityManagement.Migrations
                 name: "Books");
 
             migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "Courses");
 
             migrationBuilder.DropTable(
                 name: "Libraries");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Departments");

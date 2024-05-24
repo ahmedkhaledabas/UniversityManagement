@@ -12,13 +12,15 @@ namespace B_UniversityManagement.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
-        private readonly UserManager<Student> userManager;
-        private readonly SignInManager<Student> signInManager;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
-        public StudentController(UserManager<Student> userManager ,SignInManager<Student> signInManager)
+        public StudentController(UserManager<User> userManager ,SignInManager<User> signInManager, IWebHostEnvironment webHostEnvironment)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet("GetStudents")]
@@ -31,10 +33,12 @@ namespace B_UniversityManagement.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Registeration(StudentDTO studentDTO)
+        public async Task<IActionResult> Registeration([FromForm]StudentDTO studentDTO)
         {
             if (ModelState.IsValid)
             {
+                UploadImage(studentDTO.UserName);
+                studentDTO.Img = GetImageCollege(studentDTO.UserName);
                 var student = TransferStudent.TransferDTOToStudent(studentDTO);
                 
                 var created = await userManager.CreateAsync(student, studentDTO.PasswordHash);
@@ -85,7 +89,67 @@ namespace B_UniversityManagement.Controllers
             return Ok();
         }
 
-       
+        [HttpPost("UploadImage")]
+        public async Task<IActionResult> UploadImage(string name)
+        {
+            bool result = false;
+            try
+            {
+                var uploadFiles = Request.Form.Files;
+                foreach (IFormFile source in uploadFiles)
+                {
+                    //string originalFileName = source.FileName;
+                    string filePath = GetFilePath(name);
+                    //var fileExtension = Path.GetExtension(originalFileName);
+                    if (!System.IO.Directory.Exists(filePath))
+                    {
+                        System.IO.Directory.CreateDirectory(filePath);
+                    }
+                    string imagePath = filePath + "\\image.png";
+
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                    using (FileStream stream = System.IO.File.Create(imagePath))
+                    {
+                        await source.CopyToAsync(stream);
+                        result = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Ok(result);
+
+        }
+
+        [NonAction]
+        private string GetFilePath(string collegeName)
+        {
+            return this.webHostEnvironment.WebRootPath + "\\Uploads\\Students\\" + collegeName;
+        }
+
+        [NonAction]
+        private string GetImageCollege(string collegeName)
+        {
+            string imageUrl = string.Empty;
+            string hostUrl = "http://localhost:5278/";
+            string filePath = GetFilePath(collegeName);
+            string imagePath = filePath + "\\image.png";
+            if (Directory.Exists(imagePath))
+            {
+                imageUrl = hostUrl + "/Uploads/Students/" + collegeName + "/image.png";
+            }
+            else
+            {
+                imageUrl = hostUrl + "/Uploads/Students/" + collegeName + "/image.png";
+                //imageUrl = hostUrl + "/Uploads/Common/default.png";
+            }
+            return imageUrl;
+        }
 
     }
 }

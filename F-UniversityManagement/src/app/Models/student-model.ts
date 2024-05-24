@@ -11,5 +11,6 @@ export interface Student{
     img : string,
     levelYear : number,
     departmentId : string,
-    userName : string
+    userName : string,
+    collegeId : string
 }

@@ -16,6 +16,7 @@
             <th scope="col">NO</th>
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
+            <th scope="col">User Name</th>
             <th scope="col">Email</th>
             <th scope="col">Password</th>
             <th scope="col">Phone</th>
@@ -23,6 +24,8 @@
             <th scope="col">Gender</th>
             <th scope="col">Image</th>
             <th scope="col">Address</th>
+            <th scope="col">College</th>
+            <th scope="col">Department</th>
             <th scope="col">Specialist</th>
             <th scope="col">Rank </th>
             <th>
@@ -34,36 +37,36 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Ahmed</td>
-            <td>Khaled</td>
-            <td>ahmed@yahoo</td>
-            <td>123</td>
-            <td>0128433</td>
-            <td>01/01/11</td>
-            <td>Male</td>
-            <td>image</td>
-            <td>giza</td>
-            <td>is</td>
-            <td>Profeesor</td>
-          </tr>
+          
           <ng-container *ngFor="let prof of filterProf; let i = index">
             <tr *ngIf="selected != prof" (click)="selecte(prof)">
                 <th scope="row">{{ i + 1 }}</th>
                 <td>{{prof.fName}}</td>
                 <td>{{prof.lName}}</td>
+                <td>{{prof.userName}}</td>
                 <td>{{prof.email}}</td>
-                <td>{{prof.password}}</td>
+                <td>*****</td>
                 <td>{{prof.phone}}</td>
-                <td>{{prof.dateOfBirth}}</td>
-                <td>{{prof.gender}}</td>
+                <td>{{prof.birthDate}}</td>
+                <td><p *ngIf="prof.gender == 0">Male</p><p *ngIf="prof.gender == 1">Female</p></td>
                 <td>
-                    <img [src]="prof.img" alt="">
+                    <img [src]="prof.img" alt="" style="width: 70px; height: 70px;" >
                 </td>
                 <td>{{prof.address}}</td>
+                <td>
+                  <span *ngFor="let college of colleges">
+                    <span *ngIf="college.id == prof.collegeId">{{college.name}}</span></span>
+                </td>
+                <td>
+                  <span *ngFor="let dept of departService.departments">
+                    <span *ngIf="dept.id == prof.departmentId">{{dept.name}}</span></span>
+                </td>
                 <td>{{prof.specialist}}</td>
-                <td>{{prof.rank}}</td>
+                <td>
+                  <p *ngIf="prof.rank == 0">Dean</p>
+                  <p *ngIf="prof.rank == 1">Professor</p>
+                  <p *ngIf="prof.rank == 2">Assistant Professor</p>
+                </td>
                 <td>
                     <button class="btn btn-danger btn-sm mx-1" title="Delete" type="button" (click)="openModal(prof.id)">
                         <i class=" bi bi-trash"></i>
@@ -80,6 +83,9 @@
                     <input type="text" class="form-control" [(ngModel)]="prof.lName" placeholder="LNanme" title="LName">
                 </td>
                 <td>
+                  
+              </td>
+                <td>
                     <input type="email" class="form-control" [(ngModel)]="prof.email" placeholder="Email" title="Email">
                 </td>
                 <td>
@@ -89,7 +95,7 @@
                     <input type="text" class="form-control" [(ngModel)]="prof.phone" placeholder="Phone" title="Phone">
                 </td>
                 <td>
-                    <input type="datetime-local" class="form-control" [(ngModel)]="prof.dateOfBirth" title="Date Of Birth">
+                    <input type="datetime-local" class="form-control" [(ngModel)]="prof.birthDate" title="Date Of Birth">
                 </td>
                 <td>
                     <select class="form-select" aria-label="Default select example" [(ngModel)]="prof.gender">
@@ -98,11 +104,25 @@
                       </select>
                 </td>
                 <td>
-                    <input type="file" class="form-control" [(ngModel)]="prof.img" title="Image">
+                    <input type="file" class="form-control" [(ngModel)]="prof.img" title="Image" (change)="handleImageChange($event)">
                 </td>
                 <td>
                     <input type="text" class="form-control" [(ngModel)]="prof.address" placeholder="Address" title="Address">
                 </td>
+                <td>
+                  <select class="form-select" aria-label="Default select example" [(ngModel)]="prof.collegeId">
+                    <!--list depts from depts table-->
+                    <option *ngFor="let college of colleges" [value]="college.id">{{college.name}}</option>
+                    
+                  </select>
+              </td>
+              <td>
+                <select class="form-select" aria-label="Default select example" [(ngModel)]="prof.departmentId">
+                  <!--list depts from depts table-->
+                  <option *ngFor="let dept of departService.departments" [value]="dept.id">{{dept.name}}</option>
+                  
+                </select>
+              </td>
                 <td>
                     <input type="text" class="form-control" [(ngModel)]="prof.specialist" placeholder="Specialist" title="Specialist">
                 </td>

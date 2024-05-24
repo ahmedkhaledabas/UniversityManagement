@@ -20,5 +20,6 @@ namespace B_UniversityManagement.DTOs
         public string? Img { get; set; }
         public LevelYear levelYear { get; set; } = LevelYear.First;
         public string DepartmentId { get; set; } = null!;
+        public string CollegeId { get; set; } = null!;
     }
 }

@@ -12,6 +12,7 @@ import { CollegComponent } from './Component/Admin/colleg/colleg.component';
 import { StudentComponent } from './Component/Admin/student/student.component';
 import { ProfessorComponent } from './Component/Admin/professor/professor.component';
 import { CourseComponent } from './Component/Admin/course/course.component';
+import { EmployeeComponent } from './Component/Admin/employee/employee.component';
 
 const routes: Routes = [
   {path : 'home' , component : HomeComponent},
@@ -25,7 +26,8 @@ const routes: Routes = [
   {path : 'admin/department' , component : DepartmentComponent},
   {path : 'admin/student' , component : StudentComponent},
   {path : 'admin/professor' , component : ProfessorComponent},
-  {path : 'admin/course' , component : CourseComponent}
+  {path : 'admin/course' , component : CourseComponent},
+  {path : 'admin/employee' , component : EmployeeComponent}
 ];
 
 @NgModule({

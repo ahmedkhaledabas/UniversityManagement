@@ -10,13 +10,13 @@ namespace B_UniversityManagement.Data
         public DbSet<Book> Books { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Department> Departments { get; set; }
-        public DbSet<Employee> Employees { get; set; }
+        //public DbSet<Employee> Employees { get; set; }
         public DbSet<Fee> Fees { get; set; }
         public DbSet<Library> Libraries { get; set; }
-        public DbSet<Professor> Professors {  get; set; }
-        public DbSet<Student> Students { get; set; }
+        //public DbSet<Professor> Professors {  get; set; }
+        //public DbSet<Student> Students { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<StudentCourse> StudentCourses {  get; set; }
-        public DbSet<CollegeProfessor> CollegeProfessors { get; set; }
         public DbSet<StudentBook> StudentBooks {  get; set; }
 
         public UniversityDbContext(DbContextOptions<UniversityDbContext> options) : base() { }
@@ -31,9 +31,13 @@ namespace B_UniversityManagement.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<College>().HasMany(c => c.Professors).WithMany(p => p.Colleges).UsingEntity<CollegeProfessor>();
-            modelBuilder.Entity<Student>().HasMany(s=>s.Books).WithMany(b=>b.Students).UsingEntity<StudentBook>();
-            modelBuilder.Entity<Student>().HasMany(s => s.Courses).WithMany(c => c.Students).UsingEntity<StudentCourse>();
+            modelBuilder.Entity<Department>().HasMany(c => c.Courses).WithOne(c => c.Department).HasForeignKey(d => d.DepartmentId).IsRequired();
+            modelBuilder.Entity<College>().HasMany(c => c.Departments).WithOne(d => d.College).HasForeignKey(d => d.CollegeId).IsRequired();
+            modelBuilder.Entity<College>().HasMany(c => c.Users).WithOne(u => u.College).HasForeignKey(u => u.CollegeId).IsRequired();
+            modelBuilder.Entity<User>().HasMany(s=>s.Books).WithMany(b=>b.Students).UsingEntity<StudentBook>();
+            modelBuilder.Entity<User>().HasMany(student => student.Courses).WithMany(c => c.Users).UsingEntity<StudentCourse>();
+            modelBuilder.Entity<User>().HasMany(student=>student.Fees).WithOne(f=>f.Student).HasForeignKey(f=>f.StudentId).IsRequired();
+            modelBuilder.Entity<Department>().HasMany(d => d.Students).WithOne(student => student.Department).HasForeignKey(student => student.DepartmentId).IsRequired();
 
         }
     }

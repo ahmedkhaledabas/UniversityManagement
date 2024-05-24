@@ -5,10 +5,11 @@ namespace B_UniversityManagement.Services
 {
     public static class TransferStudent
     {
-        public static StudentDTO TransferStudentToDTO(Student student)
+        public static StudentDTO TransferStudentToDTO(User student)
         {
             return new StudentDTO
             {
+                CollegeId = student.CollegeId,
                 UserName = student.UserName,
                 Id = student.Id,
                 FName = student.FName,
@@ -25,10 +26,11 @@ namespace B_UniversityManagement.Services
             };
         }
 
-        public static Student TransferDTOToStudent(StudentDTO studentDTO)
+        public static User TransferDTOToStudent(StudentDTO studentDTO)
         {
-            return new Student
+            return new User
             {
+                CollegeId = studentDTO.CollegeId,
                 UserName = studentDTO.UserName,
                 Id = studentDTO.Id,
                 FName = studentDTO.FName,
@@ -45,7 +47,7 @@ namespace B_UniversityManagement.Services
             };
         }
 
-        public static List<StudentDTO> ListOfStudentToDTOs (List<Student> students)
+        public static List<StudentDTO> ListOfStudentToDTOs (List<User> students)
         {
             List<StudentDTO> studentDTOs = new List<StudentDTO>();
             foreach(var  student in students)

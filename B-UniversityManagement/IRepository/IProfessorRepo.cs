@@ -4,10 +4,10 @@ namespace B_UniversityManagement.IRepository
 {
     public interface IProfessorRepo
     {
-        void Create(Professor professor);
-        void Update(Professor professor);
-        void Delete(Professor professor);
-        List<Professor> GetAll();
-        Professor GetById(string id);
+        void Create(User professor);
+        void Update(User professor);
+        void Delete(User professor);
+        List<User> GetAll();
+        User GetById(string id);
     }
 }
