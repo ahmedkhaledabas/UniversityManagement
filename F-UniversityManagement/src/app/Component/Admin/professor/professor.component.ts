@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { College } from 'src/app/Models/college-model';
+import { Department } from 'src/app/Models/department-model';
 import { Professor } from 'src/app/Models/professor-model';
 import { CollegeService } from 'src/app/Services/College/college.service';
 import { DepartmentService } from 'src/app/Services/Department/department.service';
 import { ProfessorService } from 'src/app/Services/Professor/professor.service';
+import { UserService } from 'src/app/Services/User/user.service';
 
 @Component({
   selector: 'app-professor',
@@ -14,6 +16,7 @@ import { ProfessorService } from 'src/app/Services/Professor/professor.service';
 export class ProfessorComponent implements OnInit {
 
   filterProf : Professor[] = []
+  profs : Professor[] = []
   selected : Professor = {} as Professor
   isEditing : boolean = false
   selectToDelete! : string
@@ -23,10 +26,14 @@ export class ProfessorComponent implements OnInit {
   pageSize : number = this.pageSizes[0]
   imgFile! : any
   colleges : any
+  role = sessionStorage.getItem('role')
+  userName = sessionStorage.getItem('userName') as string
+  user!:any
 
-  constructor(private professorService : ProfessorService , private toastr : ToastrService , public departService : DepartmentService , private collegeService : CollegeService) {}
+  constructor(private professorService : ProfessorService ,private userService : UserService, private toastr : ToastrService , public departService : DepartmentService , private collegeService : CollegeService) {}
 
-  ngOnInit(): void {
+  async ngOnInit(){
+    this.user = await this.getUser()
     this.departService.getDepartments()
     this.getData()
     this.getColleges()
@@ -35,7 +42,20 @@ export class ProfessorComponent implements OnInit {
   getData(){
     this.professorService.getProfessors().subscribe(
       (professors : Professor[]) => {
-        this.filterProf = professors
+        if(this.role == 'Admin'){
+          this.filterProf = professors
+          this.profs = professors
+        }else{
+          for(const prof of professors){
+            if(prof.collegeId == this.user.collegeId){
+              this.profs.push(prof)
+              this.filterProf.push(prof)
+            }else{
+              continue
+            }
+          }
+        }
+       
       },
       (error) =>{
         console.error("Error Fetching Professors" , error)
@@ -44,7 +64,11 @@ export class ProfessorComponent implements OnInit {
     
   }
 
-  
+  async getUser(): Promise<any> {
+    const response = await this.userService.getUser(this.userName).toPromise();
+    return response;
+  }
+
   getColleges() {
     this.collegeService.getColleges().subscribe(
         (colleges: College[]) => {
@@ -55,6 +79,10 @@ export class ProfessorComponent implements OnInit {
         }
     );
 }
+  
+  filterDepts(collegeId : string):Department[]{
+  return this.departService.departments.filter(dep => dep.collegeId === collegeId)
+  }
 
   generateRandomString(length : number){
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -71,12 +99,9 @@ export class ProfessorComponent implements OnInit {
    }
 
   update(professor : Professor){
-   //console.log(student)
     //add new
-    //if(!this.isEditing){
       const formData = new FormData()
-      formData.append('userName' , professor.fName + '_' + professor.lName + '_' + this.generateRandomString(2))
-      formData.append('id' , this.generateRandomString(4))
+     
       formData.append('fName' , professor.fName)
       formData.append('lName' , professor.lName)
       formData.append('email' , professor.email)
@@ -87,9 +112,17 @@ export class ProfessorComponent implements OnInit {
       formData.append('gender' , String(professor.gender))
       formData.append('specialist' , professor.specialist)
       formData.append('rank' , String(professor.rank))
-      formData.append('collegeId' , professor.collegeId)
+      if(this.role == 'Admin'){
+        formData.append('collegeId' , professor.collegeId)
+      }else{
+        formData.append('collegeId' , this.user.collegeId)
+      }
       formData.append('departmentId' , professor.departmentId)
       formData.append('img' , this.imgFile)
+      
+    if(!this.isEditing){
+      formData.append('userName' , professor.fName + '_' + professor.lName + '_' + this.generateRandomString(2))
+      formData.append('id' , this.generateRandomString(4))
       this.professorService.register(formData).subscribe({
         next : response => {
           this.getData()
@@ -98,6 +131,20 @@ export class ProfessorComponent implements OnInit {
           this.toastr.error("Professor Registered" , "Invalid")
         }
       })
+    }
+    else{
+      formData.append('userName' , professor.userName)
+      formData.append('id' , professor.id)
+      this.professorService.update(formData).subscribe({
+        next : response => {
+          this.getData()
+          this.toastr.success("Professor Updated" , "Success")
+        }, error : error => {
+          this.toastr.error("Professor Updated" , "Invalid")
+        }
+      })
+    }
+      
     //}
     //if(!this.isEditing){
       //formData.append('Id' , this.generateRandomString(4))
@@ -176,14 +223,14 @@ export class ProfessorComponent implements OnInit {
 
    onDelete(id : string){
     this.closeModal()
-    //this.service.deleteCollege(id).subscribe({
-      //next : response =>{
-        //this.getData()
-        //this.toastr.success('College Are Deleted' , 'Success')
-      //}, error : err =>{
-       // this.toastr.error('College Are Deleted' , 'invalis')
-      //}
-    //})
+    this.userService.deletUser(id).subscribe({
+      next : response =>{
+        this.getData()
+        this.toastr.warning('Professor Are Deleted' , 'Success')
+      }, error : err =>{
+        this.toastr.error('Professor Are Deleted' , 'invalid')
+      }
+    })
   }
 
 
@@ -224,7 +271,14 @@ this.visibleData()
 }
 
 filterData(searchTerm: string) {
-
+  this.filterProf = this.profs.filter((item) => {
+    return Object.values(item).some((val) => {
+      if (typeof val === 'string') {
+        return val.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      return false;
+    });
+  });
 this.visibleData();
 }
 

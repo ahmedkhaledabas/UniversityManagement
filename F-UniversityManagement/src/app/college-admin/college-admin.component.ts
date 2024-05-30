@@ -64,7 +64,7 @@ this.service.getColleges();
     this.service.formSubmited = true;
     // updates the college selected
     if(this.form.valid){
-      if(this.collegeSelected.id != 0){
+      if(this.collegeSelected.id != null){
     this.service.updateCollege({
      id : this.collegeSelected.id,
      name : this.form.value.collegeName,

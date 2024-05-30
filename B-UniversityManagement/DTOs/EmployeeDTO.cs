@@ -6,9 +6,9 @@ namespace B_UniversityManagement.DTOs
     {
 
         public string UserName { get; set; } = null!;
-        public decimal? EmpSalary { get; set; }
+        public int? EmpSalary { get; set; }
         public string CollegeId { get; set; } = null!;
-        public string DepaertmentId { get; set; } = null!;
+        public string DepartmentId { get; set; } = null!;
         public string Id { get; set; } = null!;
         public string FName { get; set; } = null!;
         public string? LName { get; set; }

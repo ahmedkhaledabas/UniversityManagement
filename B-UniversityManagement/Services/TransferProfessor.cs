@@ -23,7 +23,7 @@ namespace B_UniversityManagement.Services
                 Specialist = professor.Specialist,
                 BirthDate = professor.BirthDate,
                 Img = professor.Img,
-                Rank = professor.Rank,
+                Rank =(Enums.AcademicRank) professor.Rank,
             };
         }
 

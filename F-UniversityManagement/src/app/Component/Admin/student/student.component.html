@@ -10,6 +10,7 @@
     </div>
    
 </div>
+<div class="table-container">
 <table class="table">
     <thead>
       <tr>
@@ -24,7 +25,7 @@
         <th scope="col">Gender</th>
         <th scope="col">Image</th>
         <th scope="col">Address</th>
-        <th scope="col">College</th>
+        <th *ngIf="role == 'Admin'" scope="col">College</th>
         <th scope="col">Department</th>
         <th scope="col">Level </th>
         <th>
@@ -45,11 +46,11 @@
             <td>{{student.email}}</td>
             <td>***</td>
             <td>{{student.phone}}</td>
-            <td>{{student.birthDate}}</td>
+            <td>{{student.birthDate | date:'yyyy/MM/dd'}}</td>
             <td><p *ngIf="student.gender == 0">Male</p><p *ngIf="student.gender == 1">Female</p></td>
             <td><img [src]="student.img" alt="" style="width: 70px; height: 70px;"></td>
             <td>{{student.address}}</td>
-            <td>
+            <td *ngIf="role == 'Admin'" >
               <span *ngFor="let college of colleges">
                 <span *ngIf="college.id == student.collegeId">{{college.name}}</span></span>
             </td>
@@ -74,13 +75,13 @@
         <tr *ngIf="selected == student" class="table-primary">
         <td>{{i+1}}</td>
         <td>
-            <input type="text" class="form-control" [(ngModel)]="student.fName" placeholder="FNanme" title="FName">
+            <input type="text" class="form-control" [(ngModel)]="student.fName" placeholder="FName" title="FName">
         </td>
         <td>
-            <input type="text" class="form-control" [(ngModel)]="student.lName" placeholder="LNanme" title="LName">
+            <input type="text" class="form-control" [(ngModel)]="student.lName" placeholder="LName" title="LName">
         </td>
         <td>
-          <input type="text" class="form-control" [(ngModel)]="student.userName" placeholder="UserName" title="UserName">
+          {{student.userName}}
       </td>
         <td>
             <input type="email" class="form-control" [(ngModel)]="student.email" placeholder="Email" title="Email">
@@ -92,7 +93,7 @@
             <input type="text" class="form-control" [(ngModel)]="student.phone" placeholder="Phone" title="Phone">
         </td>
         <td>
-            <input type="datetime-local" class="form-control" [(ngModel)]="student.birthDate" title="Date Of Birth">
+            <input type="date" class="form-control" [(ngModel)]="student.birthDate" title="Date Of Birth">
         </td>
         <td>
             <select class="form-select" aria-label="Default select example" [(ngModel)]="student.gender">
@@ -106,27 +107,32 @@
         <td>
             <input type="text" class="form-control" [(ngModel)]="student.address" placeholder="Address" title="Address">
         </td>
-        <td>
+        <td *ngIf="role == 'Admin'" >
           <select class="form-select" aria-label="Default select example" [(ngModel)]="student.collegeId">
               <option selected>College</option>
               <option *ngFor="let college of colleges" [value]="college.id">{{college.name}}</option>
             </select>
       </td>
-        <td>
-            <select class="form-select" aria-label="Default select example" [(ngModel)]="student.departmentId">
-                <option selected>Department</option>
-                <!--list depts from depts table-->
-                <option *ngFor="let dept of departService.departments" [value]="dept.id">{{dept.name}}</option>
-                
-              </select>
+
+      <td *ngIf="role == 'Admin'" >
+        <select [disabled]="!student.collegeId" class="form-select" aria-label="Default select example" [(ngModel)]="student.departmentId">
+          <!--list depts from depts table-->
+          <option *ngFor="let dept of filterDepts(student.collegeId)" [value]="dept.id">{{dept.name}}</option>
+        </select>
+      </td>
+        <td *ngIf="role == 'Employee'">
+          <select class="form-select" aria-label="Default select example" [(ngModel)]="student.departmentId">
+            <!--list depts from depts table-->
+            <option *ngFor="let dept of depts" [value]="dept.id">{{dept.name}}</option>
+          </select>
         </td>
         <td>
             <select class="form-select" aria-label="Default select example" [(ngModel)]="student.levelYear">
-                <option value="0">First</option>
-                <option value="1">Second</option>
-                <option value="2">Third</option>
-                <option value="3">Fourth</option>
-                <option value="4">Fifth</option>
+                <option value="0">1</option>
+                <option value="1">2</option>
+                <option value="2">3</option>
+                <option value="3">4</option>
+                <option value="4">5</option>
               </select>
         </td>
         <td>             
@@ -148,6 +154,7 @@
       </ng-container>
     </tbody>
   </table>
+</div>
 
 <!--Pagination-->
 <div class="d-flex justify-content-center">

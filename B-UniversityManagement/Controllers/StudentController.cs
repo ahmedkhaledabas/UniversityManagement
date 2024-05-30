@@ -15,12 +15,21 @@ namespace B_UniversityManagement.Controllers
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly ICourseRepo courseRepo;
+        private readonly IStudentCourses studentCoursesRepo;
+        private readonly IEmailSenderRepo emailSenderRepo;
+        private readonly ICollegeRepo collegeRepo;
 
-        public StudentController(UserManager<User> userManager ,SignInManager<User> signInManager, IWebHostEnvironment webHostEnvironment)
+        public StudentController(UserManager<User> userManager ,SignInManager<User> signInManager, IWebHostEnvironment webHostEnvironment,
+            ICourseRepo courseRepo, IStudentCourses studentCoursesRepo , IEmailSenderRepo emailSenderRepo, ICollegeRepo collegeRepo)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.webHostEnvironment = webHostEnvironment;
+            this.courseRepo = courseRepo;
+            this.studentCoursesRepo = studentCoursesRepo;
+            this.emailSenderRepo = emailSenderRepo;
+            this.collegeRepo = collegeRepo;
         }
 
         [HttpGet("GetStudents")]
@@ -40,10 +49,29 @@ namespace B_UniversityManagement.Controllers
                 UploadImage(studentDTO.UserName);
                 studentDTO.Img = GetImageCollege(studentDTO.UserName);
                 var student = TransferStudent.TransferDTOToStudent(studentDTO);
-                
+                //for each of courses , add course where course.level year == student.levelyear
+               
                 var created = await userManager.CreateAsync(student, studentDTO.PasswordHash);
                 if (created.Succeeded)
                 {
+                    var collegeName = collegeRepo.GetById(student.CollegeId).Name;
+                    emailSenderRepo.SendEmail(student , studentDTO.PasswordHash , collegeName);
+                    var courses = courseRepo.GetAll();
+                    foreach (var course in courses)
+                    {
+                        if (course.LevelYear == student.levelYear && course.DepartmentId == student.DepartmentId)
+                        {
+                            var studentCourse = new StudentCourse
+                            {
+                                CourseId = course.Id,
+                                StudentId = student.Id,
+                                Degree = 0,
+
+                            };
+                            studentCoursesRepo.Create(studentCourse);
+                        }
+                        else continue;
+                    }
                     var addRole = await userManager.AddToRoleAsync(student, "Student");
                     return Ok(studentDTO);
                 }
@@ -56,39 +84,55 @@ namespace B_UniversityManagement.Controllers
             return BadRequest();
         }
 
-        
-        [HttpPost]
-        [Route("Login")]
-        public async Task<IActionResult> Login(UserLoginDTO userLoginDTO)
+        [HttpPut]
+        public async Task<IActionResult> PutStudent([FromForm] StudentDTO studentDTO)
         {
             if (ModelState.IsValid)
             {
-                var user = await userManager.FindByNameAsync(userLoginDTO.UserName);
-                if (user != null)
+                var student = await userManager.FindByNameAsync(studentDTO.UserName);
+                if(Request.Form.Files.Count > 0)
                 {
-                    var checkPass = await userManager.CheckPasswordAsync(user, userLoginDTO.Password);
-                    if (checkPass)
-                    {
-                        await signInManager.SignInAsync(user, userLoginDTO.RememberMe);
-                        return Ok(userLoginDTO);
-                    }
-                    ModelState.AddModelError(string.Empty, "Invalid UserName Or Password");
+                    Random random = new Random();
+                    UploadImage(studentDTO.UserName + random);
+                    studentDTO.Img = GetImageCollege(studentDTO.UserName + random);
+                    
+                    
                 }
-                return BadRequest("Invalid UserName Or Password");
+                if (student != null)
+                {
+                    student.FName = studentDTO.FName;
+                    student.LName = studentDTO.LName;
+                    student.Email = studentDTO.Email;
+                    student.PasswordHash = studentDTO.PasswordHash;
+                    student.Gender = studentDTO.Gender;
+                    student.Phone = studentDTO.Phone;
+                    student.BirthDate = studentDTO.BirthDate;
+                    student.Img = studentDTO.Img == "undefined" ? student.Img : studentDTO.Img;
+                    student.Address = studentDTO.Address;
+                    student.CollegeId = studentDTO.CollegeId;
+                    student.DepartmentId = studentDTO.DepartmentId;
+                    student.levelYear = studentDTO.levelYear;
+                }
+                else return NotFound();
+                var result = await userManager.UpdateAsync(student);
+                if (result.Succeeded)
+                {
+                    return Ok(studentDTO);
+                }
+                else
+                {
+foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                    return BadRequest(ModelState);
+                }
+
+                
             }
-            ModelState.AddModelError(string.Empty, "Invalid UserName Or Password");
-            return BadRequest("Invalid UserName Or Password");
+            else return BadRequest(ModelState);
         }
-
-
-        [HttpGet]
-        [Route("logout")]
-        public async Task<IActionResult> Logout()
-        {
-            await signInManager.SignOutAsync();
-            return Ok();
-        }
-
+            
         [HttpPost("UploadImage")]
         public async Task<IActionResult> UploadImage(string name)
         {

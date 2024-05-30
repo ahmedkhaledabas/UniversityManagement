@@ -22,7 +22,7 @@ namespace B_UniversityManagement.Services
                 Address = student.Address,
                 Gender = student.Gender,
                 Img = student.Img,
-                levelYear = student.levelYear,
+                levelYear = (Enums.LevelYear)student.levelYear,
             };
         }
 

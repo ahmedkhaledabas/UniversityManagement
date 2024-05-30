@@ -7,9 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'UniversityManagement';
-  /**
-   *
-   */
+  role = sessionStorage.getItem('role')
   constructor( ) {
     
   }

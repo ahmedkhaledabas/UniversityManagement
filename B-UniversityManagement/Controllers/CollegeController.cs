@@ -20,13 +20,11 @@ namespace B_UniversityManagement.Controllers
     {
         private readonly ICollegeRepo collegeRepo;
         private readonly IWebHostEnvironment webHostEnvironment;
-        private readonly IFileService fileService;
 
-        public CollegeController(ICollegeRepo collegeRepo , IWebHostEnvironment webHostEnvironment , IFileService fileService)
+        public CollegeController(ICollegeRepo collegeRepo , IWebHostEnvironment webHostEnvironment)
         {
             this.collegeRepo = collegeRepo;
             this.webHostEnvironment = webHostEnvironment;
-            this.fileService = fileService;
         }
 
         // GET: api/College
@@ -64,13 +62,14 @@ namespace B_UniversityManagement.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCollege(string id , [FromForm]CollegeDTO collegeDto)
         {
+            var college = collegeRepo.GetById(id);
             if(Request.Form.Files.Count > 0)
             {
-                var college = collegeRepo.GetById(id);
                 if (college != null)
                 {
-                    UploadImage(collegeDto.Name);
-                    collegeDto.Img = GetImageCollege(collegeDto.Name);
+                    Random random = new Random();
+                    UploadImage(collegeDto.Id + random);
+                    collegeDto.Img = GetImageCollege(collegeDto.Id + random);
                     var coll = TransferCollege.TransferDtoToCollege(collegeDto);
                     collegeRepo.Update(coll);
                     return Ok(collegeDto);
@@ -82,14 +81,14 @@ namespace B_UniversityManagement.Controllers
             }
             else
             {
-                var collegeFind = collegeRepo.GetById(id);
-                  if (collegeFind != null)
+                //var collegeFind = collegeRepo.GetById(id);
+                  if (college != null)
                   {
-                  var college = TransferCollege.TransferDtoToCollege(collegeDto);
-                  collegeRepo.Update(college);
+                  var colleget = TransferCollege.TransferDtoToCollege(collegeDto);
+                  collegeRepo.Update(colleget);
                     return Ok(collegeDto);
                   }
-                  return NoContent();
+                  else return NoContent();
             }
            
         }
@@ -101,8 +100,8 @@ namespace B_UniversityManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                UploadImage(collegeDto.Name);
-                collegeDto.Img = GetImageCollege(collegeDto.Name);
+                UploadImage(collegeDto.Id);
+                collegeDto.Img = GetImageCollege(collegeDto.Id);
                 College college = TransferCollege.TransferDtoToCollege(collegeDto);
                     collegeRepo.Create(college);
                     return Ok(collegeDto);
@@ -132,12 +131,13 @@ namespace B_UniversityManagement.Controllers
             bool result = false;
             try
             {
+
                 var uploadFiles = Request.Form.Files;
                 foreach (IFormFile source in uploadFiles)
                 {
-                    //string originalFileName = source.FileName;
+                    string originalFileName = source.FileName;
                     string filePath = GetFilePath(name);
-                    //var fileExtension = Path.GetExtension(originalFileName);
+                    var fileExtension = Path.GetExtension(originalFileName);
                     if (!System.IO.Directory.Exists(filePath))
                     {
                         System.IO.Directory.CreateDirectory(filePath);

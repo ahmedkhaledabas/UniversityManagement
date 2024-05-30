@@ -1,7 +1,7 @@
 ﻿using B_UniversityManagement.DTOs;
+using B_UniversityManagement.IRepository;
 using B_UniversityManagement.Models;
 using B_UniversityManagement.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,14 +12,16 @@ namespace B_UniversityManagement.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> signInManager;
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IEmailSenderRepo emailSenderRepo;
+        private readonly ICollegeRepo collegeRepo;
 
-        public EmployeeController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment webHostEnvironment)
+        public EmployeeController(UserManager<User> userManager, IWebHostEnvironment webHostEnvironment, IEmailSenderRepo emailSenderRepo, ICollegeRepo collegeRepo)
         {
             this.userManager = userManager;
-            this.signInManager = signInManager;
             this.webHostEnvironment = webHostEnvironment;
+            this.emailSenderRepo = emailSenderRepo;
+            this.collegeRepo = collegeRepo;
         }
 
         [HttpGet]
@@ -30,18 +32,20 @@ namespace B_UniversityManagement.Controllers
             return Ok(empDTOs);
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<IActionResult> Registeration([FromForm] EmployeeDTO employeeDTO)
         {
             if (ModelState.IsValid)
             {
                 UploadImage(employeeDTO.UserName);
-                employeeDTO.Img = GetImageCollege(employeeDTO.UserName);
+                employeeDTO.Img = GetImageEmployee(employeeDTO.UserName);
                 var emp = TransferEmployee.DTOToEmployee(employeeDTO);
 
                 var created = await userManager.CreateAsync(emp, employeeDTO.Password);
                 if (created.Succeeded)
                 {
+                    var collegeName = collegeRepo.GetById(emp.CollegeId).Name;
+                    emailSenderRepo.SendEmail(emp, employeeDTO.Password, collegeName);
                     var addRole = await userManager.AddToRoleAsync(emp, "Employee");
                     return Ok(employeeDTO);
                 }
@@ -54,36 +58,55 @@ namespace B_UniversityManagement.Controllers
             return BadRequest();
         }
 
-
-        [HttpPost("Login")]
-        public async Task<IActionResult> Login(UserLoginDTO userLoginDTO)
+        [HttpPut]
+        public async Task<IActionResult> PutEmployee([FromForm] EmployeeDTO employeeDTO)
         {
             if (ModelState.IsValid)
             {
-                var user = await userManager.FindByNameAsync(userLoginDTO.UserName);
-                if (user != null)
+                var employee = await userManager.FindByNameAsync(employeeDTO.UserName);
+                if (Request.Form.Files.Count > 0)
                 {
-                    var checkPass = await userManager.CheckPasswordAsync(user, userLoginDTO.Password);
-                    if (checkPass)
-                    {
-                        await signInManager.SignInAsync(user, userLoginDTO.RememberMe);
-                        return Ok(userLoginDTO);
-                    }
-                    ModelState.AddModelError(string.Empty, "Invalid UserName Or Password");
+                    Random random = new Random();
+                    UploadImage(employeeDTO.UserName + random);
+                    employeeDTO.Img = GetImageEmployee(employeeDTO.UserName + random);
+
+
                 }
-                return BadRequest("Invalid UserName Or Password");
+                if (employee != null)
+                {
+                    employee.FName = employeeDTO.FName;
+                    employee.LName = employeeDTO.LName;
+                    employee.Email = employeeDTO.Email;
+                    employee.PasswordHash = employeeDTO.Password;
+                    employee.Gender = employeeDTO.Gender;
+                    employee.Phone = employeeDTO.Phone;
+                    employee.BirthDate = employeeDTO.BirthDate;
+                    employee.Img = employeeDTO.Img == "undefined" ? employee.Img : employeeDTO.Img;
+                    employee.Address = employeeDTO.Address;
+                    employee.CollegeId = employeeDTO.CollegeId;
+                    employee.DepartmentId = employeeDTO.DepartmentId;
+                    employee.EmpSalary = employeeDTO.EmpSalary;
+                }
+                else return NotFound();
+                var result = await userManager.UpdateAsync(employee);
+                if (result.Succeeded)
+                {
+                    return Ok(employeeDTO);
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return BadRequest(ModelState);
+                }
+
+
             }
-            ModelState.AddModelError(string.Empty, "Invalid UserName Or Password");
-            return BadRequest("Invalid UserName Or Password");
+            else return BadRequest(ModelState);
         }
 
-
-        [HttpGet("logout")]
-        public async Task<IActionResult> Logout()
-        {
-            await signInManager.SignOutAsync();
-            return Ok();
-        }
 
         [HttpPost("UploadImage")]
         public async Task<IActionResult> UploadImage(string name)
@@ -129,7 +152,7 @@ namespace B_UniversityManagement.Controllers
         }
 
         [NonAction]
-        private string GetImageCollege(string collegeName)
+        private string GetImageEmployee(string collegeName)
         {
             string imageUrl = string.Empty;
             string hostUrl = "http://localhost:5278/";

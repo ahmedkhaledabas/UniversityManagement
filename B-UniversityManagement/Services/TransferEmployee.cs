@@ -19,8 +19,8 @@ namespace B_UniversityManagement.Services
                 Phone = employee.Phone,
                 BirthDate = employee.BirthDate,
                 CollegeId = employee.CollegeId,
-                DepaertmentId = employee.DepartmentId,
-                EmpSalary = employee.EmpSalary,
+                DepartmentId = employee.DepartmentId,
+                EmpSalary = (int)employee.EmpSalary,
                 Gender = employee.Gender,
                 Img = employee.Img
             };
@@ -40,7 +40,7 @@ namespace B_UniversityManagement.Services
                 Phone = employeeDTO.Phone,
                 BirthDate = employeeDTO.BirthDate,
                 CollegeId = employeeDTO.CollegeId,
-                DepartmentId = employeeDTO.DepaertmentId,
+                DepartmentId = employeeDTO.DepartmentId,
                 EmpSalary = employeeDTO.EmpSalary,
                 Gender = employeeDTO.Gender,
                 Img = employeeDTO.Img

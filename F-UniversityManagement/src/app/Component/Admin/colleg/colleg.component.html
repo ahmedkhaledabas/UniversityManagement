@@ -28,7 +28,7 @@
       </thead>
 
             <tbody>
-        <ng-container *ngFor="let college of filterColleges; let i = index">
+        <ng-container *ngFor="let college of visibleData(); let i = index">
           <tr *ngIf="selected != college" (click)="select(college)">
             <td>{{ i + 1}}</td>
             <td>{{ college.name }}</td>
@@ -54,7 +54,7 @@
               <input type="text" class="form-control" [(ngModel)]="college.name" title="College Name" placeholder="Name">
             </td>
             <td>
-              <input type="text" class="form-control" [(ngModel)]="college.description" title="College Describtion" placeholder="Describtion">
+              <textarea class="form-control" [(ngModel)]="college.description" title="College Describtion" placeholder="Describtion"></textarea>
             </td>
             <td>
              <input type="file" class="form-control" [(ngModel)]="college.img" (change)="handleImageChange($event)">

@@ -23,15 +23,17 @@ namespace B_UniversityManagement.Models
 
         //proff
         public string? Specialist { get; set; }
-        public List<Course> Courses { get; set; } = new List<Course>();
+        public string? Course {  get; set; }
+        public ICollection<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
 
-        public AcademicRank Rank { get; set; } = AcademicRank.Professor;
+        public AcademicRank? Rank { get; set; }
 
         //student
-        public LevelYear levelYear { get; set; } = LevelYear.First;
-        public List<Book> Books { get; set; } = new List<Book>();
+        public LevelYear? levelYear { get; set; }
+        public string? Book {  get; set; }
+        public ICollection<StudentBook> StudentBooks { get; set; } = new List<StudentBook>();
         public string? DepartmentId { get; set; }
         public Department? Department { get; set; }
-        public List<Fee> Fees { get; set; } = new List<Fee>();
+        public List<Fee>? Fees { get; set; }
     }
 }

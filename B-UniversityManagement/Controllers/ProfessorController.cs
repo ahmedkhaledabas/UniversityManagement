@@ -1,5 +1,7 @@
 ﻿using B_UniversityManagement.DTOs;
+using B_UniversityManagement.IRepository;
 using B_UniversityManagement.Models;
+using B_UniversityManagement.Repository;
 using B_UniversityManagement.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,14 +14,16 @@ namespace B_UniversityManagement.Controllers
     public class ProfessorController : ControllerBase
     {
         private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> signInManager;
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IEmailSenderRepo emailSenderRepo;
+        private readonly ICollegeRepo collegeRepo;
 
-        public ProfessorController(UserManager<User> userManager , SignInManager<User> signInManager , IWebHostEnvironment webHostEnvironment)
+        public ProfessorController(UserManager<User> userManager, IWebHostEnvironment webHostEnvironment, IEmailSenderRepo emailSenderRepo, ICollegeRepo collegeRepo)
         {
             this.userManager = userManager;
-            this.signInManager = signInManager;
             this.webHostEnvironment = webHostEnvironment;
+            this.emailSenderRepo = emailSenderRepo;
+            this.collegeRepo = collegeRepo;
         }
 
         [HttpGet("GetProfessors")]
@@ -39,10 +43,12 @@ namespace B_UniversityManagement.Controllers
                 UploadImage(professorDTO.UserName);
                 professorDTO.Img = GetImageProfessor(professorDTO.UserName);
                 var professor = TransferProfessor.DTOToProfessor(professorDTO);
-
+               
                 var created = await userManager.CreateAsync(professor, professorDTO.Password);
                 if (created.Succeeded)
                 {
+                    var collegeName = collegeRepo.GetById(professor.CollegeId).Name;
+                    emailSenderRepo.SendEmail(professor, professorDTO.Password, collegeName);
                     var addRole = await userManager.AddToRoleAsync(professor, "Professor");
                     return Ok(professorDTO);
                 }
@@ -55,38 +61,56 @@ namespace B_UniversityManagement.Controllers
             return BadRequest();
         }
 
-
-        [HttpPost]
-        [Route("Login")]
-        public async Task<IActionResult> Login(UserLoginDTO userLoginDTO)
+        [HttpPut]
+        public async Task<IActionResult> PutStudent([FromForm] ProfessorDTO professorDTO)
         {
             if (ModelState.IsValid)
             {
-                var user = await userManager.FindByNameAsync(userLoginDTO.UserName);
-                if (user != null)
+                var professor = await userManager.FindByNameAsync(professorDTO.UserName);
+                if (Request.Form.Files.Count > 0)
                 {
-                    var checkPass = await userManager.CheckPasswordAsync(user, userLoginDTO.Password);
-                    if (checkPass)
-                    {
-                        await signInManager.SignInAsync(user, userLoginDTO.RememberMe);
-                        return Ok(userLoginDTO);
-                    }
-                    ModelState.AddModelError(string.Empty, "Invalid UserName Or Password");
+                    Random random = new Random();
+                    UploadImage(professorDTO.UserName + random);
+                    professorDTO.Img = GetImageProfessor(professorDTO.UserName + random);
+
+
                 }
-                return BadRequest("Invalid UserName Or Password");
+                if (professor != null)
+                {
+                    professor.FName = professorDTO.FName;
+                    professor.LName = professorDTO.LName;
+                    professor.Email = professorDTO.Email;
+                    professor.PasswordHash = professorDTO.Password;
+                    professor.Gender = professorDTO.Gender;
+                    professor.Phone = professorDTO.Phone;
+                    professor.BirthDate = professorDTO.BirthDate;
+                    professor.Img = professorDTO.Img == "undefined" ? professor.Img : professorDTO.Img;
+                    professor.Address = professorDTO.Address;
+                    professor.CollegeId = professorDTO.CollegeId;
+                    professor.DepartmentId = professorDTO.DepartmentId;
+                    professor.Rank = professorDTO.Rank;
+                    professor.Specialist = professorDTO.Specialist;
+                }
+                else return NotFound();
+                var result = await userManager.UpdateAsync(professor);
+                if (result.Succeeded)
+                {
+                    return Ok(professorDTO);
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return BadRequest(ModelState);
+                }
+
+
             }
-            ModelState.AddModelError(string.Empty, "Invalid UserName Or Password");
-            return BadRequest("Invalid UserName Or Password");
+            else return BadRequest(ModelState);
         }
 
-
-        [HttpGet]
-        [Route("logout")]
-        public async Task<IActionResult> Logout()
-        {
-            await signInManager.SignOutAsync();
-            return Ok();
-        }
 
         [HttpPost("UploadImage")]
         public async Task<IActionResult> UploadImage(string name)
