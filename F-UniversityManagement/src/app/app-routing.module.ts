@@ -13,8 +13,10 @@ import { StudentComponent } from './Component/Admin/student/student.component';
 import { ProfessorComponent } from './Component/Admin/professor/professor.component';
 import { CourseComponent } from './Component/Admin/course/course.component';
 import { EmployeeComponent } from './Component/Admin/employee/employee.component';
+import { MyCoursesComponent } from './Component/my-courses/my-courses.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   {path : 'home' , component : HomeComponent},
   {path : 'courses' , component : CoursesComponent},
   {path : 'login' , component : LoginComponent},
@@ -27,7 +29,8 @@ const routes: Routes = [
   {path : 'admin/student' , component : StudentComponent},
   {path : 'admin/professor' , component : ProfessorComponent},
   {path : 'admin/course' , component : CourseComponent},
-  {path : 'admin/employee' , component : EmployeeComponent}
+  {path : 'admin/employee' , component : EmployeeComponent},
+  {path : 'myCourses' , component : MyCoursesComponent}
 ];
 
 @NgModule({

@@ -16,6 +16,10 @@ export class EmployeeService {
   }
 
   register(data : FormData):Observable<any>{
-    return this.http.post(this.url , data)
+    return this.http.post(this.url + '/Register' , data)
+  }
+
+  update(data : FormData){
+    return this.http.put(this.url , data)
   }
 }

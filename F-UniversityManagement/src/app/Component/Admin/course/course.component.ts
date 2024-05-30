@@ -1,10 +1,13 @@
+
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Course } from 'src/app/Models/course-model';
+import { Department } from 'src/app/Models/department-model';
 import { Professor } from 'src/app/Models/professor-model';
 import { CourseService } from 'src/app/Services/Course/course.service';
 import { DepartmentService } from 'src/app/Services/Department/department.service';
 import { ProfessorService } from 'src/app/Services/Professor/professor.service';
+import { UserService } from 'src/app/Services/User/user.service';
 
 @Component({
   selector: 'app-course',
@@ -14,6 +17,7 @@ import { ProfessorService } from 'src/app/Services/Professor/professor.service';
 export class CourseComponent implements OnInit {
 
   filterCourse : Course[] = []
+  courses : Course[] = []
   selected : Course = {} as Course
   isEditing : boolean = false
   selectToDelete! : string
@@ -21,22 +25,54 @@ export class CourseComponent implements OnInit {
   lengthDepts : number = 0
   pageSizes : Array<number> = [ 5 , 10 , 20]
   pageSize : number = this.pageSizes[0]
-  professors : any
+  professors : Professor[] = []
   imgFile : any
 
-  constructor(public departService : DepartmentService , public profService : ProfessorService , public courseService : CourseService , private toastr : ToastrService) {}
+  constructor(public departService : DepartmentService,private userService : UserService , public profService : ProfessorService , public courseService : CourseService , private toastr : ToastrService) {}
 
-  ngOnInit(): void {
+  role = sessionStorage.getItem('role')
+  userName = sessionStorage.getItem('userName') as string
+  user! : any
+  depts : Department[] =[]
+
+    async ngOnInit(){
+    this.user = await this.getUser()
     this.departService.getDepartments()
     this.getProfessors()
     this.getData()
   }
 
+  
+  async getUser(): Promise<any> {
+    const response = await this.userService.getUser(this.userName).toPromise();
+    return response;
+  }
 
   getData(){
     this.courseService.getCourses().subscribe(
       (courses : Course[]) =>{
-        this.filterCourse = courses
+        if(this.role == 'Admin'){
+          this.courses = courses
+          this.filterCourse = courses
+          this.depts = this.departService.departments
+        }else{
+          for(const dept of this.departService.departments){
+            if(dept.collegeId == this.user.collegeId){
+              this.depts.push(dept)
+              for(const course of courses){
+                if(course.departmentId == dept.id){
+                  this.courses.push(course)
+                  this.filterCourse.push(course)
+                }else{
+                  continue
+                }
+              }
+            }else{
+              continue
+            }
+          }
+        }
+        
       },
     (error) =>{
       console.error("Featching Courses" , error)
@@ -47,12 +83,18 @@ export class CourseComponent implements OnInit {
   getProfessors(){
     this.profService.getProfessors().subscribe(
       (professors : Professor[]) => {
-        this.professors = professors
+          this.professors = professors
+        
       },
       (error) => {
         console.error("Fetching Professors" , error)
       }
     )
+  }
+
+
+  filterProf(departmentId : string):Professor[]{
+    return this.professors.filter(prof => prof.departmentId === departmentId)
   }
 
   addNew(){
@@ -68,6 +110,7 @@ export class CourseComponent implements OnInit {
     this.selected = this.filterCourse[0]
 
   }
+
   selecte(course : Course){
     if(Object.keys(this.selected).length === 0 ){
       this.selected = course
@@ -91,14 +134,15 @@ export class CourseComponent implements OnInit {
 
   update(course : Course){
     const formData = new FormData()
-    formData.append('id', this.generateRandomString(4))
     formData.append('name' , course.name)
     formData.append('levelYear' , String(course.levelYear))
     formData.append('description' , course.description)
     formData.append('departmentId' , course.departmentId)
     formData.append('professorId' , course.professorId)
     formData.append('img' , this.imgFile)
-    this.courseService.createCourse(formData).subscribe({
+    if(!this.isEditing){
+    formData.append('id', this.generateRandomString(4))
+      this.courseService.createCourse(formData).subscribe({
       next : response =>{
         this.getData()
         this.toastr.success("Course Added" , "Success")
@@ -107,6 +151,20 @@ export class CourseComponent implements OnInit {
         this.toastr.error("Course Added" , "Invalid")
       }
     })
+    }else{
+      formData.append('id' , course.id)
+      this.courseService.updateCourse(course.id , formData).subscribe({
+        next : response => {
+          this.getData()
+          this.toastr.success("Course Updated" , "Success")
+        },
+        error : error =>{
+          this.toastr.error("Course Updated" , "Invalid")
+        }
+      })
+    }
+    
+
      // clean up
      this.selected= {} as Course;
      this.isEditing = false
@@ -139,14 +197,14 @@ openModal(id : string){
 
  onDelete(id : string){
   this.closeModal()
-  //this.service.deleteCollege(id).subscribe({
-    //next : response =>{
-      //this.getData()
-      //this.toastr.success('College Are Deleted' , 'Success')
-    //}, error : err =>{
-     // this.toastr.error('College Are Deleted' , 'invalis')
-    //}
-  //})
+  this.courseService.deleteCourse(id).subscribe({
+    next : response =>{
+      this.getData()
+      this.toastr.warning('Course Are Deleted' , 'Success')
+    }, error : err =>{
+      this.toastr.error('Course Are Deleted' , 'invalid')
+    }
+  })
 }
 
 
@@ -179,7 +237,15 @@ this.visibleData()
 }
 
 filterData(searchTerm: string) {
-
+  
+  this.filterCourse = this.courses.filter((item) => {
+    return Object.values(item).some((val) => {
+      if (typeof val === 'string') {
+        return val.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      return false;
+    });
+  });
 this.visibleData();
 }
 

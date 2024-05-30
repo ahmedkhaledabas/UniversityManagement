@@ -2,3 +2,6 @@
 form.submited input.ng-invalid{
     border-color: red;
 }
+body{
+    overflow-x: hidden;
+}

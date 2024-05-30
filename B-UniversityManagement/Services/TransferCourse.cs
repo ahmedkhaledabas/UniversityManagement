@@ -15,7 +15,7 @@ namespace B_UniversityManagement.Services
                 DepartmentId = courseDTO.DepartmentId,
                 Img = courseDTO.Img,
                 LevelYear = courseDTO.LevelYear,
-                ProfessorId = courseDTO.ProfessorId
+                UserId = courseDTO.ProfessorId
             };
         }
 
@@ -29,7 +29,7 @@ namespace B_UniversityManagement.Services
                 DepartmentId = course.DepartmentId,
                 Img = course.Img,
                 LevelYear = course.LevelYear,
-                ProfessorId = course.ProfessorId
+                ProfessorId = course.UserId
             };
         }
 

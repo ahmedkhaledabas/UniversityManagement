@@ -19,6 +19,9 @@ export class CollegeService {
     return this.http.get<any>(this.url);
 }
 
+getCollegeById(id : string){
+  return this.http.get(this.url + '/' + id)
+}
 
 updateCollege(data : FormData ) : Observable<any>{
      return this.http.put(this.url + '/' + data.get('Id') , data)

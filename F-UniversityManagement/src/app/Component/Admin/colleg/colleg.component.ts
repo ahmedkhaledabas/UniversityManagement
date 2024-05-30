@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { College } from 'src/app/Models/college-model';
 import { CollegeService } from 'src/app/Services/College/college.service';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
+
 
 
 @Component({
@@ -12,8 +13,12 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./colleg.component.css']
 })
 export class CollegComponent implements OnInit {
- 
+  
+  constructor(public service : CollegeService , private toastr : ToastrService) { 
+  }
+
   filterColleges : College[] = []
+  colleges : College[] = []
   selected : College = {} as College
   isEditing: boolean = false
   imgFile! : any
@@ -23,24 +28,30 @@ export class CollegComponent implements OnInit {
   pageSizes : Array<number> = [ 5 , 10 , 20]
   pageSize : number = this.pageSizes[0]
  
-  constructor(public service : CollegeService , private toastr : ToastrService) { 
-    
-  }
+
 
   ngOnInit(): void {
     this.getData()
+
   }
 
-  getData() {
+   getData() {
     this.service.getColleges().subscribe(
         (colleges: College[]) => {
             this.filterColleges = colleges;
+            this.colleges = colleges
         },
         (error) => {
             console.error("Error fetching colleges:", error);
         }
     );
-}
+  }
+
+  visibleData(){
+  let startIndex = (this.currentPage -1) * this.pageSize
+  let endIndex = startIndex + this.pageSize
+ return this.filterColleges.slice(startIndex,endIndex)
+  }
 
   select(college : College){
     if(Object.keys(this.selected).length === 0){
@@ -84,9 +95,10 @@ export class CollegComponent implements OnInit {
         next : response => {
           this.getData()
           this.toastr.success('College Are Updated', 'Success')
+          
         },
         error : err =>{
-          this.toastr.success('College Are Updated', 'Invalid')
+          this.toastr.error('College Are Updated', 'Invalid')
         }
       })
     }
@@ -130,7 +142,7 @@ export class CollegComponent implements OnInit {
   }
 
 
-openModal(id : string){
+  openModal(id : string){
   this.selectToDelete = id
   const modal = document.getElementById('exampleModal');
   if(modal != null){
@@ -147,18 +159,10 @@ openModal(id : string){
   }
  }
 
- visibleData(){
-  let startIndex = (this.currentPage -1) * this.pageSize
-  let endIndex = startIndex + this.pageSize
- return this.filterColleges.slice(startIndex,endIndex)
-}
-
-
-
-nextPage(){
+  nextPage(){
   this.currentPage++
   this.visibleData()
-}
+  }
 
 previousPage(){
   this.currentPage--
@@ -178,7 +182,15 @@ this.visibleData()
 }
 
 filterData(searchTerm: string) {
-
+  
+  this.filterColleges = this.colleges.filter((item) => {
+    return Object.values(item).some((val) => {
+      if (typeof val === 'string') {
+        return val.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      return false;
+    });
+  });
 this.visibleData();
 }
 

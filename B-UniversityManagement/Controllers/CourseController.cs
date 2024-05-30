@@ -4,6 +4,7 @@ using B_UniversityManagement.Models;
 using B_UniversityManagement.Repository;
 using B_UniversityManagement.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace B_UniversityManagement.Controllers
@@ -14,11 +15,15 @@ namespace B_UniversityManagement.Controllers
     {
         private readonly ICourseRepo courseRepo;
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IStudentCourses studentCoursesRepo;
+        private readonly UserManager<User> userManager;
 
-        public CourseController(ICourseRepo courseRepo , IWebHostEnvironment webHostEnvironment)
+        public CourseController(ICourseRepo courseRepo, IWebHostEnvironment webHostEnvironment , IStudentCourses studentCoursesRepo, UserManager<User> userManager)
         {
             this.courseRepo = courseRepo;
             this.webHostEnvironment = webHostEnvironment;
+            this.studentCoursesRepo = studentCoursesRepo;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -37,6 +42,26 @@ namespace B_UniversityManagement.Controllers
 
         }
 
+        [HttpGet("userName")]
+        public async Task<ActionResult<List<CourseDTO>>> GetMyCourses(string userName)
+        {
+            var user =  await userManager.FindByNameAsync(userName);
+            var courseDTOs = new List<CourseDTO>();
+            var studentCourses = studentCoursesRepo.GetAll();
+           
+            foreach (var item in studentCourses)
+            {
+                if (item.StudentId == user.Id)
+                {
+                    var course = courseRepo.GetById(item.CourseId);
+                    var courseDTO = TransferCourse.CourseToDTO(course);
+                    courseDTOs.Add(courseDTO);
+                }
+                else continue;
+            }
+            return courseDTOs;
+        }
+
         [HttpPost]
         public async Task<ActionResult<Course>> PostCourse([FromForm] CourseDTO courseDTO)
         {
@@ -46,11 +71,66 @@ namespace B_UniversityManagement.Controllers
                 courseDTO.Img = GetImageCollege(courseDTO.Name);
                 Course course = TransferCourse.DTOToCourse(courseDTO);
                 courseRepo.Create(course);
+                        var studentCourse = new StudentCourse
+                        {
+                            CourseId = course.Id,
+                            StudentId = course.UserId,
+                            Degree = 0,
+
+                        };
+                        studentCoursesRepo.Create(studentCourse);
+                    
                 return Ok(courseDTO);
 
             }
             return BadRequest();
 
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCourse(string id, [FromForm] CourseDTO courseDTO)
+        {
+            var course = courseRepo.GetById(id);
+            if (Request.Form.Files.Count > 0)
+            {
+                if (course != null)
+                {
+                    Random random = new Random();
+                    UploadImage(courseDTO.Id + random);
+                    courseDTO.Img = GetImageCollege(courseDTO.Id + random);
+                    var courss = TransferCourse.DTOToCourse(courseDTO);
+                    courseRepo.Update(courss);
+                    return Ok(courseDTO);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            else
+            {
+                //var collegeFind = collegeRepo.GetById(id);
+                if (course != null)
+                {
+                    var courss = TransferCourse.DTOToCourse(courseDTO);
+                    courseRepo.Update(courss);
+                    return Ok(courseDTO);
+                }
+                else return NoContent();
+            }
+
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCourse(string id)
+        {
+            var courseFind = courseRepo.GetById(id);
+            if (courseFind != null)
+            {
+                courseRepo.Delete(courseFind);
+                return Ok(courseFind);
+            }
+            return NoContent();
         }
 
 

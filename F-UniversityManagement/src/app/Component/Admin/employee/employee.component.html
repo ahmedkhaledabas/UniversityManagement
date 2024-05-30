@@ -10,6 +10,7 @@
       </div>
      
   </div>
+  <div class="table-container"> 
       <table class="table">
           <thead>
             <tr>
@@ -37,7 +38,7 @@
           </thead>
           <tbody>
             
-            <ng-container *ngFor="let emp of filterEmps; let i = index">
+            <ng-container *ngFor="let emp of visibleData(); let i = index">
               <tr *ngIf="selected != emp" (click)="selecte(emp)">
                   <th scope="row">{{ i + 1 }}</th>
                   <td>{{emp.fName}}</td>
@@ -46,7 +47,7 @@
                   <td>{{emp.email}}</td>
                   <td>*****</td>
                   <td>{{emp.phone}}</td>
-                  <td>{{emp.birthDate}}</td>
+                  <td>{{emp.birthDate | date:'yyyy/MM/dd'}}</td>
                   <td><p *ngIf="emp.gender == 0">Male</p><p *ngIf="emp.gender == 1">Female</p></td>
                   <td>
                       <img [src]="emp.img" alt="" style="width: 70px; height: 70px;" >
@@ -88,7 +89,7 @@
                       <input type="text" class="form-control" [(ngModel)]="emp.phone" placeholder="Phone" title="Phone">
                   </td>
                   <td>
-                      <input type="datetime-local" class="form-control" [(ngModel)]="emp.birthDate" title="Date Of Birth">
+                      <input type="date" class="form-control" [(ngModel)]="emp.birthDate" title="Date Of Birth">
                   </td>
                   <td>
                       <select class="form-select" aria-label="Default select example" [(ngModel)]="emp.gender">
@@ -109,10 +110,9 @@
                     </select>
                 </td>
                 <td>
-                <select class="form-select" aria-label="Default select example" [(ngModel)]="emp.departmentId">
+                <select [hidden]="!emp.collegeId" class="form-select" aria-label="Default select example" [(ngModel)]="emp.departmentId">
                   <!--list depts from depts table-->
-                  <option *ngFor="let dept of departService.departments" [value]="dept.id">{{dept.name}}</option>
-                  
+                  <option *ngFor="let dept of filterDepts(emp.collegeId)" [value]="dept.id">{{dept.name}}</option>
                 </select>
               </td>
                   <td>
@@ -138,7 +138,7 @@
           </ng-container>
           </tbody>
         </table>
-     
+     </div>
         <!--Pagination-->
         <div class="d-flex justify-content-center">
           <ul class="pagination">

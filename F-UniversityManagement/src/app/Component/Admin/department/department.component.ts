@@ -4,6 +4,8 @@ import { Department } from 'src/app/Models/department-model';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CollegeService } from 'src/app/Services/College/college.service';
 import { College } from 'src/app/Shared/college-detail-model';
+import { ToastrService } from 'ngx-toastr';
+import { UserService } from 'src/app/Services/User/user.service';
 
 @Component({
   selector: 'app-department',
@@ -12,7 +14,7 @@ import { College } from 'src/app/Shared/college-detail-model';
 })
 export class DepartmentComponent implements OnInit {
  
-  constructor(public service: DepartmentService ,public collegeService : CollegeService, private fb : FormBuilder ) {}
+  constructor(public service: DepartmentService,private userService : UserService ,public collegeService : CollegeService, private fb : FormBuilder,private toastr : ToastrService ) {}
 
   filterDepartments: Department[] =  []
   colleges : College[] = []
@@ -23,18 +25,44 @@ export class DepartmentComponent implements OnInit {
   oldDepartment : any
   selecteDeptId : any
 
+    user! : any 
+     role = sessionStorage.getItem('role')
+  userName = sessionStorage.getItem('userName') as string
+
  async ngOnInit() {
+    
+    this.getColleges() 
+    this.user = await this.getUser();
     this.getData()
-    this.getColleges()
   }
+
   getColleges(){
     this.collegeService.getColleges().subscribe(
       (c : College[]) => {
-      this.colleges = c
+          this.colleges = c
     })
+
   }
+
+  async getUser(): Promise<any> {
+    const response = await this.userService.getUser(this.userName).toPromise();
+    return response;
+  }
+
   async getData() {
-    return this.filterDepartments = await this.service.getDepartments()
+    if(this.role === 'Admin'){
+      return this.filterDepartments = await this.service.getDepartments()
+    }else{
+      for(const dept of await this.service.getDepartments()){
+        if(dept.collegeId === this.user.collegeId){
+          this.filterDepartments.push(dept)
+        }else{
+          continue
+        }
+        
+      }return this.filterDepartments
+    }
+    
   }
 
   visibleData(){
@@ -53,14 +81,13 @@ export class DepartmentComponent implements OnInit {
     this.visibleData()
   }
 
-
  pageNumbers(){
     let totalPage = Math.ceil(this.filterDepartments.length / this.pageSize)
     let pageNumArray = new Array(totalPage)
     return pageNumArray
   }
 
-changePageNumber(pageNumber : number){
+  changePageNumber(pageNumber : number){
   this.currentPage = pageNumber
   this.visibleData()
 }
@@ -159,12 +186,14 @@ openModal(id : string){
     this.service.updateDepartment(dept)
   }else{
     dept.id = this.generateRandomString(4)
-    //console.log(dept)
     this.service.createDepartment(dept)
+    this.getColleges()
+
   }
  }
 
-  onDelete(deptId : string){
-    this.service.deleteDepartment(deptId);
+  onDelete(){
+    //console.log(this.selecteDeptId``)
+    this.service.deleteDepartment(this.selecteDeptId);
    }
 }

@@ -1,3 +1,4 @@
+import { UserService } from 'src/app/Services/User/user.service';
 import { Component, OnInit } from '@angular/core';
 import { Employee } from 'src/app/Models/employee-model';
 import { EmployeeService } from 'src/app/Services/Employee/employee.service';
@@ -5,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CollegeService } from 'src/app/Services/College/college.service';
 import { DepartmentService } from 'src/app/Services/Department/department.service';
 import { College } from 'src/app/Models/college-model';
+import { Department } from 'src/app/Models/department-model';
 
 
 @Component({
@@ -15,6 +17,7 @@ import { College } from 'src/app/Models/college-model';
 export class EmployeeComponent implements OnInit {
 
   filterEmps : Employee[] = []
+  emps : Employee[] = []
   selected : Employee = {} as Employee
   isEditing : boolean = false
   selectToDelete! : string
@@ -25,7 +28,7 @@ export class EmployeeComponent implements OnInit {
   imgFile! : any
   colleges : any
 
-  constructor(private empService : EmployeeService ,public departService : DepartmentService ,private toastr : ToastrService , private collegeService : CollegeService) {
+  constructor(private empService : EmployeeService ,public departService : DepartmentService ,private toastr : ToastrService , private collegeService : CollegeService , private userService : UserService) {
   }
   ngOnInit(): void {
     this.departService.getDepartments()
@@ -38,6 +41,7 @@ export class EmployeeComponent implements OnInit {
     this.empService.getEmps().subscribe(
       (emps : Employee[]) => {
         this.filterEmps = emps
+        this.emps = emps
       },
       (error) =>{
         console.error("Error Fetching Professors" , error)
@@ -72,13 +76,14 @@ export class EmployeeComponent implements OnInit {
     this.imgFile = event.target.files[0]
    }
 
+   filterDepts(collegeId : string):Department[]{
+    return this.departService.departments.filter(dep => dep.collegeId === collegeId)
+   }
+
   update(emp : Employee){
-   //console.log(student)
     //add new
-    //if(!this.isEditing){
+    
       const formData = new FormData()
-      formData.append('userName' , emp.fName + '_' + emp.lName + '_' + this.generateRandomString(2))
-      formData.append('id' , this.generateRandomString(4))
       formData.append('fName' , emp.fName)
       formData.append('lName' , emp.lName)
       formData.append('email' , emp.email)
@@ -91,39 +96,30 @@ export class EmployeeComponent implements OnInit {
       formData.append('departmentId' , emp.departmentId)
       formData.append('empSalary' , String(emp.empSalary))
       formData.append('img' , this.imgFile)
+      if(!this.isEditing){
+        formData.append('userName' , emp.fName + '_' + emp.lName + '_' + this.generateRandomString(2))
+      formData.append('id' , this.generateRandomString(4))
       this.empService.register(formData).subscribe({
         next : response => {
           this.getData()
-          this.toastr.success("Professor Registered" , "Success")
+          this.toastr.success("Employee Registered" , "Success")
         }, error : error => {
-          this.toastr.error("Professor Registered" , "Invalid")
+          this.toastr.error("Employee Registered" , "Invalid")
         }
       })
-    //}
-    //if(!this.isEditing){
-      //formData.append('Id' , this.generateRandomString(4))
-      //this.service.createCollege(formData).subscribe({
-       // next : response =>{
-         // this.getData()
-          //this.toastr.success('College Are Added' , 'Success')
-        //}, error : err =>{
-         // this.toastr.error('College Are Added' , 'Invalid')
-       // }
-      //})
-   // }
-    //update
-   // else{
-     // formData.append('Id' , college.id)
-      //this.service.updateCollege(formData).subscribe({
-        //next : response => {
-          //this.getData()
-          //this.toastr.success('College Are Updated', 'Success')
-        //},
-        //error : err =>{
-          //this.toastr.success('College Are Updated', 'Invalid')
-        //}
-      //})
-    //}
+      }
+      else{
+        formData.append('userName' , emp.userName)
+      formData.append('id' , emp.id)
+      this.empService.update(formData).subscribe({
+        next : response => {
+          this.getData()
+          this.toastr.success("Employee Updated" , "Success")
+        }, error : error => {
+          this.toastr.error("Employee Updated" , "Invalid")
+        }
+      })
+    }
      // clean up
      this.selected= {} as Employee;
      this.isEditing = false
@@ -176,14 +172,14 @@ export class EmployeeComponent implements OnInit {
 
    onDelete(id : string){
     this.closeModal()
-    //this.service.deleteCollege(id).subscribe({
-      //next : response =>{
-        //this.getData()
-        //this.toastr.success('College Are Deleted' , 'Success')
-      //}, error : err =>{
-       // this.toastr.error('College Are Deleted' , 'invalis')
-      //}
-    //})
+     this.userService.deletUser(id).subscribe({
+      next : response =>{
+        this.getData()
+        this.toastr.warning('Employee Are Deleted' , 'Success')
+      }, error : err =>{
+        this.toastr.error('Employee Are Deleted' , 'invalid')
+      }
+    })
   }
 
 
@@ -224,7 +220,14 @@ this.visibleData()
 }
 
 filterData(searchTerm: string) {
-
+  this.filterEmps = this.emps.filter((item) => {
+    return Object.values(item).some((val) => {
+      if (typeof val === 'string') {
+        return val.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      return false;
+    });
+  });
 this.visibleData();
 }
 

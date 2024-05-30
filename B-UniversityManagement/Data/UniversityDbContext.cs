@@ -34,8 +34,15 @@ namespace B_UniversityManagement.Data
             modelBuilder.Entity<Department>().HasMany(c => c.Courses).WithOne(c => c.Department).HasForeignKey(d => d.DepartmentId).IsRequired();
             modelBuilder.Entity<College>().HasMany(c => c.Departments).WithOne(d => d.College).HasForeignKey(d => d.CollegeId).IsRequired();
             modelBuilder.Entity<College>().HasMany(c => c.Users).WithOne(u => u.College).HasForeignKey(u => u.CollegeId).IsRequired();
-            modelBuilder.Entity<User>().HasMany(s=>s.Books).WithMany(b=>b.Students).UsingEntity<StudentBook>();
-            modelBuilder.Entity<User>().HasMany(student => student.Courses).WithMany(c => c.Users).UsingEntity<StudentCourse>();
+            //modelBuilder.Entity<User>().HasMany(s=>s.Books).WithMany(b=>b.Students).UsingEntity<StudentBook>();
+            //modelBuilder.Entity<User>().HasMany(student => student.Courses).WithMany(c => c.Users).UsingEntity<StudentCourse>();
+            modelBuilder.Entity<StudentCourse>().HasKey(c => new {c.CourseId , c.StudentId});
+            modelBuilder.Entity<StudentCourse>().HasOne(u => u.User).WithMany(u => u.StudentCourses).HasForeignKey(u => u.StudentId);
+            modelBuilder.Entity<StudentCourse>().HasOne(u => u.Course).WithMany(u => u.StudentCourses).HasForeignKey(u => u.CourseId);
+            modelBuilder.Entity<StudentBook>().HasKey(s => new { s.BookId, s.StudentId });
+            modelBuilder.Entity<StudentBook>().HasOne(s => s.User).WithMany(b => b.StudentBooks).HasForeignKey(s => s.StudentId);
+            modelBuilder.Entity<StudentBook>().HasOne(b => b.Book).WithMany(s => s.StudentBooks).HasForeignKey(b => b.BookId);
+
             modelBuilder.Entity<User>().HasMany(student=>student.Fees).WithOne(f=>f.Student).HasForeignKey(f=>f.StudentId).IsRequired();
             modelBuilder.Entity<Department>().HasMany(d => d.Students).WithOne(student => student.Department).HasForeignKey(student => student.DepartmentId).IsRequired();
 

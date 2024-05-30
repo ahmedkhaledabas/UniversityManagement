@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.18" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.18" />
@@ -17,6 +18,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.12" />
+    <PackageReference Include="MimeKit" Version="4.6.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
@@ -24,6 +26,7 @@
     <Folder Include="wwwroot\Uploads\Colleges\" />
     <Folder Include="wwwroot\Uploads\Common\" />
     <Folder Include="wwwroot\Uploads\Courses\" />
+    <Folder Include="wwwroot\Uploads\Employees\" />
     <Folder Include="wwwroot\Uploads\Professors\" />
     <Folder Include="wwwroot\Uploads\Students\" />
   </ItemGroup>

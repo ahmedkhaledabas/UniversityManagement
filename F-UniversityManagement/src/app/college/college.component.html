@@ -32,8 +32,12 @@
                   <!--professor-->
                   <div class="trainer d-flex justify-content-between align-items-center">
                     <div class="trainer-profile d-flex align-items-center">
-                      <img src="assets/img/trainers/trainer-1-2.jpg" class="img-fluid" alt="">
-                      <a href="" class="trainer-link">Antonio</a>
+                      <span *ngFor="let prof of profs">
+                        <span *ngIf="prof.collegeId == college.id && prof.rank == 0 ">
+                          <img [src]="prof.img" class="img-fluid" alt="">
+                        <a href="" class="trainer-link">{{prof.fName + ' ' + prof.lName}}</a>
+                        </span>
+                        </span>
                     </div>
                     <div class="trainer-rank d-flex align-items-center">
                       <i class="bi bi-person user-icon"></i>&nbsp;50

@@ -6,6 +6,7 @@ import { Student } from 'src/app/Models/student-model';
 import { CollegeService } from 'src/app/Services/College/college.service';
 import { DepartmentService } from 'src/app/Services/Department/department.service';
 import { StudentService } from 'src/app/Services/Student/student.service';
+import { UserService } from 'src/app/Services/User/user.service';
 
 @Component({
   selector: 'student',
@@ -15,6 +16,8 @@ import { StudentService } from 'src/app/Services/Student/student.service';
 export class StudentComponent implements OnInit {
 
   filterStudent : Student[] = []
+  students : Student[] = []
+  depts : Department[] =  []
   selected : Student = {} as Student
   isEditing : boolean = false
   selectToDelete! : string
@@ -25,18 +28,41 @@ export class StudentComponent implements OnInit {
   imgFile! : any
   colleges : any
 
-  constructor(public departService : DepartmentService, public studentService : StudentService ,private collegeService : CollegeService, private toastr : ToastrService) {}
+  constructor(public departService : DepartmentService ,private userService : UserService, public studentService : StudentService ,private collegeService : CollegeService, private toastr : ToastrService) {}
 
-  ngOnInit(): void {
-    this.departService.getDepartments()
+  role = sessionStorage.getItem('role')
+  userName = sessionStorage.getItem('userName') as string
+  user!:any
+
+  async ngOnInit(){
+    this.user = await this.getUser()
     this.getData()
     this.getColleges()
+    this.getDepts()
+  }
+
+  async getUser(): Promise<any> {
+    const response = await this.userService.getUser(this.userName).toPromise();
+    return response;
   }
 
   getData(){
     this.studentService.getStudents().subscribe(
       (students : Student[]) => {
-        this.filterStudent = students
+        if(this.role == 'Admin'){
+           this.filterStudent = students
+           this.students = students
+        }else{
+          for(const student of students){
+            if(student.collegeId == this.user.collegeId ){
+              this.students.push(student)
+              this.filterStudent.push(student)
+            }else{
+              continue
+            }
+          }
+        }
+       
       },
       (error)=>{
         console.error("Error Fetching Students" , error)
@@ -100,14 +126,14 @@ export class StudentComponent implements OnInit {
 
    onDelete(id : string){
     this.closeModal()
-    //this.service.deleteCollege(id).subscribe({
-      //next : response =>{
-        //this.getData()
-        //this.toastr.success('College Are Deleted' , 'Success')
-      //}, error : err =>{
-       // this.toastr.error('College Are Deleted' , 'invalis')
-      //}
-    //})
+    this.userService.deletUser(id).subscribe({
+      next : response =>{
+        this.getData()
+        this.toastr.warning('College Are Deleted' , 'Success')
+      }, error : err =>{
+        this.toastr.error('College Are Deleted' , 'invalid')
+      }
+    })
   }
 
   generateRandomString(length : number){
@@ -120,16 +146,33 @@ export class StudentComponent implements OnInit {
     return random
   }
 
+  
+  async getDepts(){
+    if(this.role === 'Admin'){
+      return this.depts = await this.departService.getDepartments()
+    }else{
+      for(const dept of await this.departService.getDepartments()){
+        if(dept.collegeId === this.user.collegeId){
+          this.depts.push(dept)
+        }else{
+          continue
+        }
+        
+      }return this.depts
+    }
+  }
+
+  filterDepts(collegeId : string){
+    return this.depts.filter(dep => dep.collegeId == collegeId)
+  }
+
   handleImageChange(event: any) {
     this.imgFile = event.target.files[0]
    }
 
   update(student : Student){
     //add new
-    //if(!this.isEditing){
       const formData = new FormData()
-      formData.append('userName' , student.fName + '_' + student.lName + '_' + this.generateRandomString(2))
-      formData.append('id' , this.generateRandomString(4))
       formData.append('fName' , student.fName)
       formData.append('lName' , student.lName)
       formData.append('email' , student.email)
@@ -142,14 +185,30 @@ export class StudentComponent implements OnInit {
       formData.append('levelYear' , String(student.levelYear))
       formData.append('img' , this.imgFile)
       formData.append('collegeId' , student.collegeId)
-      this.studentService.rigester(formData).subscribe({
-        next : response => {
-          this.getData()
-          this.toastr.success("Student Registered" , "Success")
-        }, error : error => {
-          this.toastr.error("Student Registered" , "Invalid")
-        }
-      })
+      if(this.isEditing){
+        formData.append('userName' , student.userName)
+        formData.append('id' , student.id)
+        this.studentService.update(formData).subscribe({
+          next : response => {
+            this.getData()
+            this.toastr.success("Student Updated" , "Success")
+          }, error : error => {
+            this.toastr.error("Student Updated" , "Invalid")
+          }
+        })
+      }else{
+        formData.append('userName' , student.fName + '_' + student.lName + '_' + this.generateRandomString(2))
+        formData.append('id' , this.generateRandomString(4))
+        this.studentService.rigester(formData).subscribe({
+          next : response => {
+            this.getData()
+            this.toastr.success("Student Registered" , "Success")
+          }, error : error => {
+            this.toastr.error("Student Registered" , "Invalid")
+          }
+        })
+      }
+      
     //}
     //if(!this.isEditing){
       //formData.append('Id' , this.generateRandomString(4))
@@ -218,6 +277,14 @@ this.visibleData()
 
 filterData(searchTerm: string) {
 
+  this.filterStudent = this.students.filter((item) => {
+    return Object.values(item).some((val) => {
+      if (typeof val === 'string') {
+        return val.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      return false;
+    });
+  });
 this.visibleData();
 }
 

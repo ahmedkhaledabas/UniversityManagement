@@ -40,12 +40,12 @@ namespace B_UniversityManagement.Repository
             var collegeFind = GetById(college.Id);
             if(collegeFind != null)
             {
-                collegeFind.Img = college.Img;
+                collegeFind.Img = (college.Img != null) ? college.Img : collegeFind.Img;
                 collegeFind.Name = college.Name;
                 collegeFind.Description = college.Description;
                 context.SaveChanges();
             }
-            throw new NullReferenceException();
+            else throw new NullReferenceException();
         }
     }
 }

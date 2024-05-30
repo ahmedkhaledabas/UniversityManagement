@@ -38,7 +38,18 @@ namespace B_UniversityManagement.Repository
 
         public void Update(Course course)
         {
-            throw new NotImplementedException();
+            var getCourse = GetById(course.Id);
+            if (getCourse != null)
+            {
+                getCourse.Img = course.Img != null ? course.Img : getCourse.Img;
+                getCourse.Name = course.Name;
+                getCourse.DepartmentId = course.DepartmentId;
+                getCourse.Description = course.Description;
+                getCourse.LevelYear = course.LevelYear;
+                getCourse.UserId = course.UserId;
+                context.SaveChanges();
+            }
+            else throw new NullReferenceException();
         }
     }
 }

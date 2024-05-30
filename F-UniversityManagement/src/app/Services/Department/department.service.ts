@@ -54,6 +54,7 @@ createDepartment(dept : Department){
   this.http.post(this.url , dept).subscribe({
     next : response =>{
       this.tostar.success('Department Added' , 'Success')
+      this.getDepartments()
     },
     error : err =>{
       this.tostar.error('Department Added' , 'Invalid')

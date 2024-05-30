@@ -1,4 +1,4 @@
 <app-header></app-header>
-
+<sidebar *ngIf="role === 'Employee' || role === 'Admin'"></sidebar>
 <router-outlet></router-outlet>
 <app-footer></app-footer>

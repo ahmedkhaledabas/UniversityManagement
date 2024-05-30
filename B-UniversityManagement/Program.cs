@@ -40,6 +40,8 @@ namespace B_UniversityManagement
             builder.Services.AddScoped<ICollegeRepo , CollegeRepo>();
             builder.Services.AddScoped<ICourseRepo, CourseRepo>();
             builder.Services.AddScoped<IDepartmentRepo , DepartmentRepo>();
+            builder.Services.AddScoped<IStudentCourses, StudentCoursesRepo>();
+            builder.Services.AddScoped<IEmailSenderRepo, EmailSenderRepo>();
             builder.Services.AddTransient<IFileService , FileService>();
             builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<UniversityDbContext>();
 

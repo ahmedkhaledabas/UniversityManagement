@@ -19,8 +19,8 @@
             <th scope="col">Describtion</th>
             <th scope="col">Image</th>
             <th scope="col">Level</th>
-            <th scope="col">Professor</th>
             <th scope="col">Department</th>
+            <th scope="col">Professor</th>
             <th>
                 <button
                   type="button" title="Add New" class="btn btn-primary" (click)="addNew()">
@@ -30,7 +30,7 @@
           </tr>
         </thead>
         <tbody>
-            <ng-container *ngFor="let course of filterCourse; let i = index">
+            <ng-container *ngFor="let course of visibleData(); let i = index">
             <tr *ngIf="selected != course" (click)="selecte(course)">
                 <td>{{i+1}}</td>
                 <td>{{course.name}}</td>
@@ -46,13 +46,13 @@
                   <p *ngIf="course.levelYear == 4">Fifth</p>
                 </td>
                 <td>
-                  <span *ngFor="let prof of professors">
-                  <span *ngIf="prof.id == course.professorId">{{prof.fName + ' ' + prof.lName}}</span>
-                  </span>
-                </td>
-                <td>
                   <span *ngFor="let dept of departService.departments">
                   <span *ngIf="dept.id == course.departmentId">{{dept.name}}</span>
+                  </span>
+                </td> 
+                <td>
+                  <span *ngFor="let prof of professors">
+                  <span *ngIf="prof.id == course.professorId">{{prof.fName + ' ' + prof.lName}}</span>
                   </span>
                 </td>
                 <td>
@@ -83,16 +83,16 @@
                       </select>
                 </td>
                 <td>
-                    <select class="form-select" aria-label="Default select example" [(ngModel)]="course.professorId">\
-                        <!--list proff table-->
-                        <option *ngFor="let prof of professors" [value]="prof.id">{{prof.fName + ' ' + prof.lName}}</option>
-                      </select>
-                </td>
-                <td>
                     <select class="form-select" aria-label="Default select example" [(ngModel)]="course.departmentId">
                         <!--list depts from depts table-->
-                        <option *ngFor="let dept of departService.departments" [value]="dept.id">{{dept.name}}</option>
+                        <option *ngFor="let dept of depts" [value]="dept.id">{{dept.name}}</option>
                         
+                      </select>
+                </td> 
+                <td>
+                    <select *ngIf="course.departmentId" class="form-select" aria-label="Default select example" [(ngModel)]="course.professorId">\
+                        <!--list proff table-->
+                        <option *ngFor="let prof of filterProf(course.departmentId)" [value]="prof.id">{{prof.fName + ' ' + prof.lName}}</option>
                       </select>
                 </td>
                 <td>             
