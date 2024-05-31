@@ -15,6 +15,10 @@ export class CourseService {
     return this.http.get<any>(this.url)
   }
 
+  getCoursesForUser(userName : string):Observable<any>{
+    return this.http.get(this.url + '/getForUser?userName=' + userName)
+  }
+
   createCourse(data : FormData):Observable<any>{
     return this.http.post(this.url ,data)
   }

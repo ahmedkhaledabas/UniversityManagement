@@ -23,7 +23,9 @@ export class MyCoursesComponent implements OnInit {
     this.getProfessors()
   }
 
-  
+  enroll(id : string){
+    console.log('aaaaaaa')
+  }
   getMyCourses(){
     const nameUser = sessionStorage.getItem('userName') as string
     this.courseService.getMyCourse(nameUser).subscribe(

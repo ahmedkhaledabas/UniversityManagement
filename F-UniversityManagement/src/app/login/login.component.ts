@@ -28,13 +28,13 @@ export class LoginComponent implements OnInit{
         localStorage.clear()
         sessionStorage.setItem('role' , response.role)
         sessionStorage.setItem('userName' , response.userName)
-        this.toastr.success(response.message , "Success")
+        this.toastr.success("Login" , "Success")
         this.router.navigate(['home']).then(() => {
           window.location.reload();}
         )
       },
       error : error =>{
-        this.toastr.error(error.message , "Invalid")
+        this.toastr.error("UserName Or Password" , "Invalid")
       }
     })
   }

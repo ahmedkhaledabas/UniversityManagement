@@ -92,6 +92,10 @@ export class CourseComponent implements OnInit {
     )
   }
 
+  filterDepts():Department[]{
+    const collegeId = this.user.collegeId
+    return this.departService.departments.filter(dep => dep.collegeId === collegeId)
+   }
 
   filterProf(departmentId : string):Professor[]{
     return this.professors.filter(prof => prof.departmentId === departmentId)
@@ -144,7 +148,7 @@ export class CourseComponent implements OnInit {
     formData.append('id', this.generateRandomString(4))
       this.courseService.createCourse(formData).subscribe({
       next : response =>{
-        this.getData()
+        this.visibleData()
         this.toastr.success("Course Added" , "Success")
       },
       error : error =>{
@@ -155,7 +159,7 @@ export class CourseComponent implements OnInit {
       formData.append('id' , course.id)
       this.courseService.updateCourse(course.id , formData).subscribe({
         next : response => {
-          this.getData()
+          this.visibleData()
           this.toastr.success("Course Updated" , "Success")
         },
         error : error =>{

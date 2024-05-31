@@ -193,7 +193,7 @@ openModal(id : string){
  }
 
   onDelete(){
-    //console.log(this.selecteDeptId``)
     this.service.deleteDepartment(this.selecteDeptId);
+    this.closeModal()
    }
 }

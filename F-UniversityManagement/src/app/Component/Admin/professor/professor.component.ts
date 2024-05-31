@@ -123,6 +123,7 @@ export class ProfessorComponent implements OnInit {
     if(!this.isEditing){
       formData.append('userName' , professor.fName + '_' + professor.lName + '_' + this.generateRandomString(2))
       formData.append('id' , this.generateRandomString(4))
+      console.log(formData.getAll)
       this.professorService.register(formData).subscribe({
         next : response => {
           this.getData()
