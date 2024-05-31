@@ -1,6 +1,7 @@
 ﻿using B_UniversityManagement.Data;
 using B_UniversityManagement.IRepository;
 using B_UniversityManagement.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace B_UniversityManagement.Repository
 {
@@ -20,5 +21,13 @@ namespace B_UniversityManagement.Repository
         }
 
         public List<StudentCourse> GetAll() => context.StudentCourses.ToList();
+
+        public List<StudentCourse> GetAllForStudent(string studentId)
+        {
+            var studentCourses = context.StudentCourses.Where(s => s.StudentId == studentId).ToList();
+ 
+                return studentCourses;
+           
+        }
     }
 }

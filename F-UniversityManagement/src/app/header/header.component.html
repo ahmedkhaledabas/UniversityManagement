@@ -3,7 +3,7 @@
 
       <a routerLink="/home" class="logo d-flex align-items-center me-auto">
         <h1 *ngIf="role == 'Admin' || !role" class="">University</h1>
-        <h2 style="color: #5fcf80;" *ngIf="role != 'Admin'">{{college.name}}</h2>
+        <h4 style="color: #5fcf80;" *ngIf="role != 'Admin'">{{college.name}}</h4>
       </a>
 
       <nav id="navmenu" class="navmenu">
@@ -12,6 +12,10 @@
           <li *ngIf="role != 'Employee' && role != 'Admin'"><a href="about.html">About</a></li>
           <li *ngIf="role != 'Employee' && role != 'Admin'"><a routerLink="/courses">Courses</a></li>
           <li *ngIf="role == 'Student' || role == 'Professor'"><a routerLink="/myCourses">My Courses</a></li>
+          <li *ngIf="role == 'Professor'"><a routerLink="/quiz">Add Quiz</a></li>
+          <li *ngIf="role == 'Student'"><a routerLink="/quiz">Quiz</a></li>
+
+
           <li *ngIf="!role"><a routerLink="/college">Colleges</a></li>
 
           <li *ngIf="role == 'Student' || role == 'Professor'" class="nav-item dropdown">

@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit{
   login(user : User){
     this.userService.login(user).subscribe({
       next : response =>{
+        localStorage.clear()
         sessionStorage.setItem('role' , response.role)
         sessionStorage.setItem('userName' , response.userName)
         this.toastr.success(response.message , "Success")

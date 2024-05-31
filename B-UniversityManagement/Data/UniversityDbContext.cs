@@ -9,6 +9,7 @@ namespace B_UniversityManagement.Data
         public DbSet<College> Colleges { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Question> Questions {  get; set; }
         public DbSet<Department> Departments { get; set; }
         //public DbSet<Employee> Employees { get; set; }
         public DbSet<Fee> Fees { get; set; }

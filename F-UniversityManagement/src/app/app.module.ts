@@ -28,6 +28,8 @@ import { StudentComponent } from './Component/Admin/student/student.component';
 import { ProfessorComponent } from './Component/Admin/professor/professor.component';
 import { EmployeeComponent } from './Component/Admin/employee/employee.component';
 import { MyCoursesComponent } from './Component/my-courses/my-courses.component';
+import { QuizComponent } from './Component/quiz/quiz.component';
+import { ResultComponent } from './Component/result/result.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +55,8 @@ import { MyCoursesComponent } from './Component/my-courses/my-courses.component'
     ProfessorComponent,
     EmployeeComponent,
     MyCoursesComponent,
+    QuizComponent,
+    ResultComponent,
   ],
   imports: [
     BrowserModule,

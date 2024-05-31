@@ -38,6 +38,7 @@ logout(){
   this.userService.logout().subscribe({
     next : response =>{
       this.toastr.success("User Logout" , "Success")
+      localStorage.clear()
       sessionStorage.clear()
       this.router.navigate(['home']).then(() => {
         window.location.reload();}
