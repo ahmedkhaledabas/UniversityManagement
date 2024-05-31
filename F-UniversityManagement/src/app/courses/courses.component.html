@@ -17,18 +17,17 @@
 
     <!-- Courses List Section -->
     <section id="courses-list" class="section courses-list">
-
       <div class="container">
-
+<ng-container >
         <div class="row">
 
-            <div *ngFor="let course of courses" class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="" data-aos-delay="100">
+            <div *ngFor="let course of courses" class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="" data-aos-delay="">
                 <div class="course-item">
                   <img [src]="course.img" class="img-fluid" alt="...">
                   <div class="course-content">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                       <p class="category">{{course.name}}</p>
-                      <p class="price">$169</p>
+                      <a class="btn btn-success" (click)="enroll()">Enroll</a>
                     </div>
             
                     <h3><a href="course-details.html">{{course.name}}</a></h3>
@@ -53,7 +52,7 @@
               </div> <!-- End Course Item-->
 
         </div>
-
+</ng-container>
       </div>
 
     </section><!-- /Courses List Section -->

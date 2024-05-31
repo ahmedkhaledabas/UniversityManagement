@@ -33,4 +33,8 @@ export class CoursesComponent implements OnInit {
         this.profs = listProf
     )
   }
+
+  enroll(){
+    console.log('aaaaaaa')
+  }
 }

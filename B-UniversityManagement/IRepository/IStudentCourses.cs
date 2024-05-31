@@ -7,5 +7,7 @@ namespace B_UniversityManagement.IRepository
         void Create(StudentCourse studentCourse);
 
         List<StudentCourse> GetAll();
+
+        List<StudentCourse> GetAllForStudent(string studentId);
     }
 }
