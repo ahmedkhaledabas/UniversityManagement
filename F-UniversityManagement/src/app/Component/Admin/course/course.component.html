@@ -85,7 +85,7 @@
                 <td>
                     <select class="form-select" aria-label="Default select example" [(ngModel)]="course.departmentId">
                         <!--list depts from depts table-->
-                        <option *ngFor="let dept of depts" [value]="dept.id">{{dept.name}}</option>
+                        <option *ngFor="let dept of filterDepts()" [value]="dept.id">{{dept.name}}</option>
                         
                       </select>
                 </td> 

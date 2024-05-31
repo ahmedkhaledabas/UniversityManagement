@@ -8,6 +8,7 @@ import { UserService } from '../Services/User/user.service';
 })
 export class ProfileComponent implements OnInit{
   
+  role = sessionStorage.getItem('role')
   user! : any
   constructor(private userService : UserService) {}
 

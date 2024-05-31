@@ -23,6 +23,10 @@ getCollegeById(id : string){
   return this.http.get(this.url + '/' + id)
 }
 
+getCollegeByDeptId(deptId : string):Observable<any>{
+  return this.http.get(this.url + '/getCollegeByDept?deptId=' + deptId)
+}
+
 updateCollege(data : FormData ) : Observable<any>{
      return this.http.put(this.url + '/' + data.get('Id') , data)
  }

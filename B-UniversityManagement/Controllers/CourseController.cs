@@ -62,6 +62,24 @@ namespace B_UniversityManagement.Controllers
             return courseDTOs;
         }
 
+        [HttpGet]
+        [Route("getForUser")]
+        public async Task<ActionResult<List<CourseDTO>>> GetCoursesForUser(string userName)
+        {
+            List<Course> courses = courseRepo.GetAll();
+            var user = await userManager.FindByNameAsync(userName);
+            var hisCourses = studentCoursesRepo.GetAllForStudent(user.Id);
+            foreach (var item in hisCourses)
+            {
+                var course = courseRepo.GetById(item.CourseId);
+                courses.Remove(course);
+            }
+            var dtos = TransferCourse.ListCourseToDTOs(courses);
+            return Ok(dtos);
+
+
+        }
+
         [HttpPost]
         public async Task<ActionResult<Course>> PostCourse([FromForm] CourseDTO courseDTO)
         {
@@ -113,6 +131,7 @@ namespace B_UniversityManagement.Controllers
                 if (course != null)
                 {
                     var courss = TransferCourse.DTOToCourse(courseDTO);
+                    courss.Img = course.Img;
                     courseRepo.Update(courss);
                     return Ok(courseDTO);
                 }

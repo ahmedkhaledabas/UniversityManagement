@@ -36,6 +36,8 @@ namespace B_UniversityManagement.Repository
             throw new NullReferenceException();
         }
 
+        
+
         public void Update(Course course)
         {
             var getCourse = GetById(course.Id);

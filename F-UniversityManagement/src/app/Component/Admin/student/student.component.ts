@@ -184,13 +184,13 @@ export class StudentComponent implements OnInit {
       formData.append('departmentId' , student.departmentId)
       formData.append('levelYear' , String(student.levelYear))
       formData.append('img' , this.imgFile)
-      formData.append('collegeId' , student.collegeId)
+      formData.append('collegeId' , this.user.collegeId)
       if(this.isEditing){
         formData.append('userName' , student.userName)
         formData.append('id' , student.id)
         this.studentService.update(formData).subscribe({
           next : response => {
-            this.getData()
+            this.visibleData()
             this.toastr.success("Student Updated" , "Success")
           }, error : error => {
             this.toastr.error("Student Updated" , "Invalid")
@@ -201,7 +201,7 @@ export class StudentComponent implements OnInit {
         formData.append('id' , this.generateRandomString(4))
         this.studentService.rigester(formData).subscribe({
           next : response => {
-            this.getData()
+            this.visibleData()
             this.toastr.success("Student Registered" , "Success")
           }, error : error => {
             this.toastr.error("Student Registered" , "Invalid")

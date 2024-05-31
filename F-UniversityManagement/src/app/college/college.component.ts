@@ -4,6 +4,8 @@ import { CollegeService } from 'src/app/Services/College/college.service';
 import { College } from '../Models/college-model';
 import { Professor } from '../Models/professor-model';
 import { ProfessorService } from '../Services/Professor/professor.service';
+import { DepartmentService } from '../Services/Department/department.service';
+import { Department } from '../Models/department-model';
 
 @Component({
   selector: 'college',
@@ -15,13 +17,18 @@ export class CollegeComponent implements OnInit {
   filterColleges : College[] = []
   profs : Professor[] =[]
 
-  constructor(public service : CollegeService , private toastr : ToastrService, private profService : ProfessorService) { 
+  constructor(public departService : DepartmentService ,public service : CollegeService , private toastr : ToastrService, private profService : ProfessorService) { 
     
   }
 
   ngOnInit(): void {
     this.getData()
     this.getProfessors()
+    this.departService.getDepartments()
+  }
+
+  getDepts(collegeId : string){
+    return this.departService.departments.filter(d=>d.collegeId == collegeId)
   }
 
   getProfessors(){

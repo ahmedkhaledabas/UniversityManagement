@@ -20,11 +20,13 @@ namespace B_UniversityManagement.Controllers
     {
         private readonly ICollegeRepo collegeRepo;
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IDepartmentRepo departmentRepo;
 
-        public CollegeController(ICollegeRepo collegeRepo , IWebHostEnvironment webHostEnvironment)
+        public CollegeController(ICollegeRepo collegeRepo , IWebHostEnvironment webHostEnvironment , IDepartmentRepo departmentRepo)
         {
             this.collegeRepo = collegeRepo;
             this.webHostEnvironment = webHostEnvironment;
+            this.departmentRepo = departmentRepo;
         }
 
         // GET: api/College
@@ -57,6 +59,21 @@ namespace B_UniversityManagement.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        [Route("getCollegeByDept")]
+        public async Task<ActionResult<CollegeDTO>> GetCollegeByDeptId(string deptId)
+        {
+            var department = departmentRepo.GetById(deptId);
+            var college = collegeRepo.GetById(department.CollegeId);
+            if (college != null)
+            {
+                var collegeDto = TransferCollege.TransferCollegeToDto(college);
+                return Ok(collegeDto);
+            }
+            return NotFound();
+        }
+
+
         // PUT: api/College/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -85,6 +102,7 @@ namespace B_UniversityManagement.Controllers
                   if (college != null)
                   {
                   var colleget = TransferCollege.TransferDtoToCollege(collegeDto);
+                    colleget.Img = college.Img;
                   collegeRepo.Update(colleget);
                     return Ok(collegeDto);
                   }

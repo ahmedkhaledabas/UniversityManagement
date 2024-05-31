@@ -11,11 +11,8 @@ namespace B_UniversityManagement.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<Question> Questions {  get; set; }
         public DbSet<Department> Departments { get; set; }
-        //public DbSet<Employee> Employees { get; set; }
         public DbSet<Fee> Fees { get; set; }
         public DbSet<Library> Libraries { get; set; }
-        //public DbSet<Professor> Professors {  get; set; }
-        //public DbSet<Student> Students { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<StudentCourse> StudentCourses {  get; set; }
         public DbSet<StudentBook> StudentBooks {  get; set; }
