@@ -15,11 +15,15 @@ export class QuizService {
   url = environment.apiBaseUrl + '/Quiz'
   constructor(private http : HttpClient) { }
 
-  getQuestions(userName : string){
-    return this.http.get(this.url + '/' + userName)
+  getQuiz(userName : string){
+    return this.http.get(this.url + '?userName=' + userName)
   }
 
-  creatQuestion(data : Quiz){
+  creatQuiz(data : Quiz){
     return this.http.post(this.url , data)
+  }
+
+  submitAnswer(qId : string){
+   // this.http.get(this.url + '/' + qId)
   }
 }

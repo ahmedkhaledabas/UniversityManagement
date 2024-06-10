@@ -5,5 +5,6 @@ export interface Course{
     description : string,
     img : string,
     professorId : string,
-    departmentId : string
+    departmentId : string,
+    price : number
 }

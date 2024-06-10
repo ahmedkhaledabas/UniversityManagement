@@ -45,7 +45,7 @@ namespace B_UniversityManagement.Controllers
                 if (created.Succeeded)
                 {
                     var collegeName = collegeRepo.GetById(emp.CollegeId).Name;
-                    emailSenderRepo.SendEmail(emp, employeeDTO.Password, collegeName);
+                    //emailSenderRepo.SendEmail(emp, employeeDTO.Password, collegeName);
                     var addRole = await userManager.AddToRoleAsync(emp, "Employee");
                     return Ok(employeeDTO);
                 }

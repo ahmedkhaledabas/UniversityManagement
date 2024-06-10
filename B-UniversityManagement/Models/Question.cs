@@ -1,4 +1,6 @@
-﻿namespace B_UniversityManagement.Models
+﻿using B_UniversityManagement.Enums;
+
+namespace B_UniversityManagement.Models
 {
     public class Question
     {
@@ -10,9 +12,11 @@
         public string Opt3 { get; set; }
         public string Opt4 { get; set; }
 
-        public string ProfessorId {  get; set; }
-        public string CourseId { get; set; }
+        public Quiz Quiz { get; set; }
+        public string QuizId { get; set; }
 
+        //quiz
+     
 
 
     }

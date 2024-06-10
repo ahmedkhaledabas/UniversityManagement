@@ -6,9 +6,13 @@ namespace B_UniversityManagement.IRepository
     {
         void Create(Question question);
 
+        Question GetById(string id);
+
+        void ChangeStatus(string questionId);
+
         List<Question> GetQuestions(string profId);
 
-        List<Question> GetAllByCourseId(string courseId);
+        List<Question> GetAllByQuizId(string quizId);
         
 
     }

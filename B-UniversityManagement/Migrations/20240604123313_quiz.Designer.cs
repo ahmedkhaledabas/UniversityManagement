@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace B_UniversityManagement.Migrations
 {
     [DbContext(typeof(UniversityDbContext))]
-    [Migration("20240531031007_init")]
-    partial class init
+    [Migration("20240604123313_quiz")]
+    partial class quiz
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,6 +111,9 @@ namespace B_UniversityManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -159,11 +162,18 @@ namespace B_UniversityManagement.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("CourseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Pay")
                         .HasColumnType("bit");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("StudentId")
                         .IsRequired()
@@ -221,10 +231,6 @@ namespace B_UniversityManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CourseId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Opt1")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -241,17 +247,46 @@ namespace B_UniversityManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProfessorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Ques")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("QuizId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("QuizId");
+
                     b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("B_UniversityManagement.Models.Quiz", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CourseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Quizzes");
                 });
 
             modelBuilder.Entity("B_UniversityManagement.Models.StudentBook", b =>
@@ -285,6 +320,9 @@ namespace B_UniversityManagement.Migrations
 
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -608,6 +646,28 @@ namespace B_UniversityManagement.Migrations
                     b.Navigation("College");
                 });
 
+            modelBuilder.Entity("B_UniversityManagement.Models.Question", b =>
+                {
+                    b.HasOne("B_UniversityManagement.Models.Quiz", "Quiz")
+                        .WithMany("Questions")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+                });
+
+            modelBuilder.Entity("B_UniversityManagement.Models.Quiz", b =>
+                {
+                    b.HasOne("B_UniversityManagement.Models.Course", "Course")
+                        .WithMany("Quizzes")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("B_UniversityManagement.Models.StudentBook", b =>
                 {
                     b.HasOne("B_UniversityManagement.Models.Book", "Book")
@@ -732,6 +792,8 @@ namespace B_UniversityManagement.Migrations
 
             modelBuilder.Entity("B_UniversityManagement.Models.Course", b =>
                 {
+                    b.Navigation("Quizzes");
+
                     b.Navigation("StudentCourses");
                 });
 
@@ -745,6 +807,11 @@ namespace B_UniversityManagement.Migrations
             modelBuilder.Entity("B_UniversityManagement.Models.Library", b =>
                 {
                     b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("B_UniversityManagement.Models.Quiz", b =>
+                {
+                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("B_UniversityManagement.Models.User", b =>

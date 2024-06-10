@@ -12,5 +12,6 @@ namespace B_UniversityManagement.DTOs
         public string? Img { get; set; }
         public string ProfessorId { get; set; } = null!;
         public string DepartmentId { get; set; } = null!;
+        public decimal Price { get; set; }
     }
 }

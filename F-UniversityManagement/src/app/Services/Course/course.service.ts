@@ -15,6 +15,10 @@ export class CourseService {
     return this.http.get<any>(this.url)
   }
 
+  getCourseById(courseId : string):Observable<any>{
+    return this.http.get(this.url + '/id?id=' + courseId)
+  }
+
   getCoursesForUser(userName : string):Observable<any>{
     return this.http.get(this.url + '/getForUser?userName=' + userName)
   }

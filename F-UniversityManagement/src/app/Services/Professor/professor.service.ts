@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
@@ -21,5 +22,9 @@ export class ProfessorService {
 
   update(data : FormData){
     return this.http.put(this.url , data)
+  }
+
+  getProf(profId : string):Observable<any>{
+    return this.http.get(this.url + '/id?id=' + profId)
   }
 }

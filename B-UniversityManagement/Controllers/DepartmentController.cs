@@ -26,6 +26,13 @@ namespace B_UniversityManagement.Controllers
             return Ok(departmentDTOs);
         }
 
+        [HttpGet("id")]
+        public IActionResult GetById(string id)
+        {
+            var department = departmentRepo.GetById(id);
+            var departmentDTO = TransferDepartment.TransferDepartmentToDto(department);
+            return Ok(departmentDTO);
+        }
 
         [HttpPost]
         public IActionResult Create(DepartmentDTO departmentDTO)

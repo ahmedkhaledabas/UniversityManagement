@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../Services/User/user.service';
 import { User } from '../Models/user-model';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'login',
@@ -16,22 +16,30 @@ export class LoginComponent implements OnInit{
     password : '',
     rememberMe : true
   }
-  constructor(private userService : UserService , private toastr : ToastrService , private router :Router) {
+  constructor(private route : ActivatedRoute,private userService : UserService , private toastr : ToastrService , private router :Router) {
   }
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }
 
   login(user : User){
+    let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') 
     this.userService.login(user).subscribe({
       next : response =>{
         localStorage.clear()
         sessionStorage.setItem('role' , response.role)
         sessionStorage.setItem('userName' , response.userName)
         this.toastr.success("Login" , "Success")
-        this.router.navigate(['home']).then(() => {
+        if(returnUrl){
+          this.router.navigate([returnUrl]).then(() => {
+            window.location.reload();}
+          )
+        }else{
+          this.router.navigate(['home']).then(() => {
           window.location.reload();}
         )
+        }
+        
       },
       error : error =>{
         this.toastr.error("UserName Or Password" , "Invalid")

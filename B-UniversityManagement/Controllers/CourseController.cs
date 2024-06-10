@@ -13,13 +13,15 @@ namespace B_UniversityManagement.Controllers
     [ApiController]
     public class CourseController : ControllerBase
     {
+        private readonly IDepartmentRepo departmentRepo;
         private readonly ICourseRepo courseRepo;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IStudentCourses studentCoursesRepo;
         private readonly UserManager<User> userManager;
 
-        public CourseController(ICourseRepo courseRepo, IWebHostEnvironment webHostEnvironment , IStudentCourses studentCoursesRepo, UserManager<User> userManager)
+        public CourseController(IDepartmentRepo departmentRepo,ICourseRepo courseRepo, IWebHostEnvironment webHostEnvironment , IStudentCourses studentCoursesRepo, UserManager<User> userManager)
         {
+            this.departmentRepo = departmentRepo;
             this.courseRepo = courseRepo;
             this.webHostEnvironment = webHostEnvironment;
             this.studentCoursesRepo = studentCoursesRepo;
@@ -42,14 +44,34 @@ namespace B_UniversityManagement.Controllers
 
         }
 
+        [HttpGet("id")]
+        public async Task<ActionResult<CourseDTO>> GetCourseById(string id)
+        {
+            var course = courseRepo.GetById(id);
+            var couresDto = TransferCourse.CourseToDTO(course);
+            if (couresDto != null )
+            {
+                return Ok(couresDto);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
         [HttpGet("userName")]
         public async Task<ActionResult<List<CourseDTO>>> GetMyCourses(string userName)
         {
             var user =  await userManager.FindByNameAsync(userName);
+            var roles = userManager.GetRolesAsync(user).Result; 
             var courseDTOs = new List<CourseDTO>();
             var studentCourses = studentCoursesRepo.GetAll();
-           
-            foreach (var item in studentCourses)
+            foreach (var role in roles)
+            {
+             if(role == "Student")
+                {
+                foreach (var item in studentCourses)
             {
                 if (item.StudentId == user.Id)
                 {
@@ -59,25 +81,78 @@ namespace B_UniversityManagement.Controllers
                 }
                 else continue;
             }
+          
+                }
+                else
+                {
+                    var courses = courseRepo.GetAll();
+                    foreach (var course in courses)
+                    {
+                        if(course.UserId == user.Id)
+                        {
+                            var courseDTO = TransferCourse.CourseToDTO(course);
+                            courseDTOs.Add(courseDTO);
+                        }
+                    }
+                } 
+            }
+         
             return courseDTOs;
+            
         }
 
         [HttpGet]
         [Route("getForUser")]
         public async Task<ActionResult<List<CourseDTO>>> GetCoursesForUser(string userName)
         {
-            List<Course> courses = courseRepo.GetAll();
             var user = await userManager.FindByNameAsync(userName);
-            var hisCourses = studentCoursesRepo.GetAllForStudent(user.Id);
-            foreach (var item in hisCourses)
+            List<Department> depts = departmentRepo.GetAllInCollege(user.CollegeId);
+            List<Course> courses = new List<Course>();
+            foreach (var dept in depts)
             {
+               var cours = courseRepo.GetByDeptId(dept.Id);
+                foreach (var item in cours)
+                {
+                    courses.Add(item);
+                }
+                
+            }
+            
+            var roles = userManager.GetRolesAsync(user).Result;
+            if (roles.Count > 0)
+            {
+            foreach (var role in roles)
+            {
+                if(role == "Student")
+                {
+                var hisCourses = studentCoursesRepo.GetAllForStudent(user.Id);
+                foreach (var item in hisCourses)
+                {
                 var course = courseRepo.GetById(item.CourseId);
                 courses.Remove(course);
+                }
+                    var dtos = TransferCourse.ListCourseToDTOs(courses);
+                    return Ok(dtos);
+                }
+                else
+                {
+
+                    List<Course> listCourses = new List<Course>();
+                    foreach(var course in courses)
+                    {
+                        if (course.UserId == user.Id) continue;
+                        else listCourses.Add(course);
+                       
+                    }
+                    var dtos = TransferCourse.ListCourseToDTOs(listCourses);
+                    return Ok(dtos);
+                }
             }
-            var dtos = TransferCourse.ListCourseToDTOs(courses);
-            return Ok(dtos);
+            
+            }
+            else return BadRequest();
 
-
+            return BadRequest();
         }
 
         [HttpPost]

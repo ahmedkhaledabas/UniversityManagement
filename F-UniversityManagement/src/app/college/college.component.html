@@ -35,7 +35,7 @@
                       <span *ngFor="let prof of profs">
                         <span *ngIf="prof.collegeId == college.id && prof.rank == 0 ">
                           <img [src]="prof.img" class="img-fluid" alt="">
-                        <a href="" class="trainer-link">{{prof.fName + ' ' + prof.lName}}</a>
+                          <a style="pointer-events: auto;" [routerLink]="['/professor-courses', prof.id]" class="trainer-link">{{prof.fName + ' ' + prof.lName}}</a>
                         </span>
                         </span>
                     </div>

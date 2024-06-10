@@ -10,6 +10,7 @@ namespace B_UniversityManagement.Data
         public DbSet<Book> Books { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Question> Questions {  get; set; }
+        public DbSet<Quiz> Quizzes {  get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Fee> Fees { get; set; }
         public DbSet<Library> Libraries { get; set; }
@@ -43,7 +44,8 @@ namespace B_UniversityManagement.Data
 
             modelBuilder.Entity<User>().HasMany(student=>student.Fees).WithOne(f=>f.Student).HasForeignKey(f=>f.StudentId).IsRequired();
             modelBuilder.Entity<Department>().HasMany(d => d.Students).WithOne(student => student.Department).HasForeignKey(student => student.DepartmentId).IsRequired();
-
+            modelBuilder.Entity<Quiz>().HasMany(quiz => quiz.Questions).WithOne(qus => qus.Quiz).HasForeignKey(qus => qus.QuizId).IsRequired();
+            modelBuilder.Entity<Course>().HasMany(c => c.Quizzes).WithOne(q => q.Course).HasForeignKey(q => q.CourseId).IsRequired();
         }
     }
 }

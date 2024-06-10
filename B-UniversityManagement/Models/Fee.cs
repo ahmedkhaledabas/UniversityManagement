@@ -6,5 +6,8 @@
 
         public string StudentId { get; set; } = null!;
         public User Student { get; set; } = null!;
+
+        public string CourseId { get; set; } = null!;
+        public decimal Price { get; set; }
     }
 }

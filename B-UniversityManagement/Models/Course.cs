@@ -14,7 +14,9 @@ namespace B_UniversityManagement.Models
         //public User Professor { get; set; } = null!;
         public string DepartmentId { get; set; } = null!;
         public Department? Department { get; set; }
-
+        public decimal Price { get; set; }
         public ICollection<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
+
+        public List<Quiz> Quizzes { get; set; }
     }
 }

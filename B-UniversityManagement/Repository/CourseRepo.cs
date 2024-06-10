@@ -26,6 +26,7 @@ namespace B_UniversityManagement.Repository
 
         public List<Course> GetAll() => context.Courses.ToList();
 
+
         public Course GetById(string id)
         {
             var course = context.Courses.Find(id);
@@ -53,5 +54,13 @@ namespace B_UniversityManagement.Repository
             }
             else throw new NullReferenceException();
         }
+
+        List<Course> ICourseRepo.GetByDeptId(string id)
+        {
+            var courses = context.Courses.Where(c => c.DepartmentId == id).ToList();
+            return courses;
+
+        }
+
     }
 }
