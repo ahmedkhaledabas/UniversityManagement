@@ -15,7 +15,6 @@ import { ProfileComponent } from './profile/profile.component';
 import { CollegeComponent } from './college/college.component';
 import { CollegeAdminComponent } from './college-admin/college-admin.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { HomeAdminComponent } from './home-admin/home-admin.component';
 import {HttpClientModule} from '@angular/common/http'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -30,6 +29,11 @@ import { EmployeeComponent } from './Component/Admin/employee/employee.component
 import { MyCoursesComponent } from './Component/my-courses/my-courses.component';
 import { QuizComponent } from './Component/quiz/quiz.component';
 import { ResultComponent } from './Component/result/result.component';
+import { CourseDetailComponent } from './Component/course-detail/course-detail.component';
+import { ProfessorsComponent } from './Component/professors/professors.component';
+import { ProfessorCoursesComponent } from './Component/professor-courses/professor-courses.component';
+import { FeeComponent } from './Component/fee/fee.component';
+import { ErrorNotAccessComponent } from './Component/error-not-access/error-not-access.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +50,6 @@ import { ResultComponent } from './Component/result/result.component';
     CollegeComponent,
     CollegeAdminComponent,
     SidebarComponent,
-    HomeAdminComponent,
     CollegComponent,
     CourseComponent,
     DepartmentComponent,
@@ -57,6 +60,11 @@ import { ResultComponent } from './Component/result/result.component';
     MyCoursesComponent,
     QuizComponent,
     ResultComponent,
+    CourseDetailComponent,
+    ProfessorsComponent,
+    ProfessorCoursesComponent,
+    FeeComponent,
+    ErrorNotAccessComponent,
   ],
   imports: [
     BrowserModule,

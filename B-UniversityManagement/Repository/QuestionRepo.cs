@@ -12,20 +12,29 @@ namespace B_UniversityManagement.Repository
         {
             this.context = context;
         }
+
+        public void ChangeStatus(string questionId)
+        {
+            var ques = GetById(questionId);
+            context.SaveChanges();
+        }
+
         public void Create(Question question)
         {
             context.Questions.Add(question);
             context.SaveChanges();
         }
 
-        public List<Question> GetAllByCourseId(string courseId)
+        public List<Question> GetAllByQuizId(string quizId)
         {
-            return context.Questions.Where(q => q.CourseId == courseId).ToList();
+            return context.Questions.Where(q=>q.QuizId == quizId).ToList();
         }
+
+        public Question GetById(string id) => context.Questions.Find(id);
 
         public List<Question> GetQuestions(string profId)
         {
-            var questions = context.Questions.Where(q=>q.ProfessorId == profId).ToList();
+            var questions = context.Questions.ToList();
             return questions;
         }
     }

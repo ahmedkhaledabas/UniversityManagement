@@ -55,7 +55,7 @@ namespace B_UniversityManagement.Controllers
                 if (created.Succeeded)
                 {
                     var collegeName = collegeRepo.GetById(student.CollegeId).Name;
-                    emailSenderRepo.SendEmail(student , studentDTO.PasswordHash , collegeName);
+                    //emailSenderRepo.SendEmail(student , studentDTO.PasswordHash , collegeName);
                     var courses = courseRepo.GetAll();
                     foreach (var course in courses)
                     {
@@ -63,6 +63,7 @@ namespace B_UniversityManagement.Controllers
                         {
                             var studentCourse = new StudentCourse
                             {
+                                Price = course.Price,
                                 CourseId = course.Id,
                                 StudentId = student.Id,
                                 Degree = 0,
@@ -82,6 +83,20 @@ namespace B_UniversityManagement.Controllers
                 return BadRequest(created.Errors);
             }
             return BadRequest();
+        }
+
+        [HttpGet("EnrollCourse")]
+        public async Task<IActionResult> EnrollCourse(string courseId , string userName)
+        {
+            var user = await userManager.FindByNameAsync(userName);
+            StudentCourse studentCourse = new StudentCourse
+            {
+                StudentId = user.Id,
+                CourseId = courseId,
+                Degree = 0
+            };
+            studentCoursesRepo.Create(studentCourse);
+            return Ok();
         }
 
         [HttpPut]

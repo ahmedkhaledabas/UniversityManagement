@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Department } from 'src/app/Models/department-model';
 import { environment } from 'src/environments/environment.development';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,10 @@ export class DepartmentService {
   departments : Department[] = []
   constructor(private http : HttpClient , private tostar : ToastrService) { }
 
+
+  getDepartmentById(deptId : string):Observable<any>{
+    return this.http.get(this.url + '/id?id=' + deptId)
+  }
 
   async getDepartments(): Promise<Department[]> {
     try {

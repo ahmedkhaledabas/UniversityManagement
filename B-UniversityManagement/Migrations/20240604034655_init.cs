@@ -53,7 +53,8 @@ namespace B_UniversityManagement.Migrations
                     Opt3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Opt4 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProfessorId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CourseId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CourseId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -191,6 +192,7 @@ namespace B_UniversityManagement.Migrations
                     Img = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DepartmentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -321,6 +323,8 @@ namespace B_UniversityManagement.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Pay = table.Column<bool>(type: "bit", nullable: false),
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CourseId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -342,6 +346,7 @@ namespace B_UniversityManagement.Migrations
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Degree = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)

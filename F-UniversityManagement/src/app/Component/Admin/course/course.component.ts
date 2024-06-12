@@ -1,9 +1,11 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { College } from 'src/app/Models/college-model';
 import { Course } from 'src/app/Models/course-model';
 import { Department } from 'src/app/Models/department-model';
 import { Professor } from 'src/app/Models/professor-model';
+import { CollegeService } from 'src/app/Services/College/college.service';
 import { CourseService } from 'src/app/Services/Course/course.service';
 import { DepartmentService } from 'src/app/Services/Department/department.service';
 import { ProfessorService } from 'src/app/Services/Professor/professor.service';
@@ -28,21 +30,36 @@ export class CourseComponent implements OnInit {
   professors : Professor[] = []
   imgFile : any
 
-  constructor(public departService : DepartmentService,private userService : UserService , public profService : ProfessorService , public courseService : CourseService , private toastr : ToastrService) {}
+  constructor(private collegeService : CollegeService , public departService : DepartmentService,private userService : UserService , public profService : ProfessorService , public courseService : CourseService , private toastr : ToastrService) {}
 
   role = sessionStorage.getItem('role')
   userName = sessionStorage.getItem('userName') as string
   user! : any
   depts : Department[] =[]
-
+  colleges : College [] = []
+  
     async ngOnInit(){
     this.user = await this.getUser()
     this.departService.getDepartments()
     this.getProfessors()
     this.getData()
+    this.getColleges()
   }
 
-  
+ filterCollege(deptId : string){
+  const dept = this.depts.find(d=>d.id == deptId) as Department
+  const coll = this.colleges.find(c=>c.id == dept.collegeId) as College
+  return coll.name
+ }
+
+  getColleges(){
+  this.collegeService.getColleges().subscribe({
+    next : response =>{
+      this.colleges = response
+    }
+  })
+}
+
   async getUser(): Promise<any> {
     const response = await this.userService.getUser(this.userName).toPromise();
     return response;

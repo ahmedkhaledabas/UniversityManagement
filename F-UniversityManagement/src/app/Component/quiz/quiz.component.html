@@ -1,113 +1,211 @@
 <div *ngIf="role == 'Professor'">
-
-<div class="container">
-    <div class="m-5">
-        <select class="form-select" aria-label="Default select example" [(ngModel)]="question.courseId">
-            <option selected value="">--Choose Course--</option>
-            <option *ngFor="let course of courses" [value]="course.id">{{course.name}}</option>
-          </select>
+  <div class="container">
+    <!--first add ques-->
+    <div class="mt-4 row justify-content-center"  *ngIf="questions.length == 0">
+  <a
+      class="btn btn-success"
+      (click)="newQuestion()"
+      >Add Quiz</a
+    >
+    </div>
+    <div *ngIf="questions.length > 0" class="row mt-4 justify-content-between">
+      <div class="col-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Quiz Name"
+          [(ngModel)]="quiz.name"
+        />
+      </div>
+      <div class="col-4">
+        <select class="form-select" [(ngModel)]="quiz.courseId">
+          <option selected>----Choose Course----</option>
+          <option *ngFor="let course of courses" [value]="course.id">
+            {{ course.name }}
+          </option>
+        </select>
+      </div>
+      <div class="col-4">
+        <select class="form-select" [(ngModel)]="quiz.status">
+          <option selected>----Select Status----</option>
+          <option [value]="0">ON </option>
+          <option [value]="1">OFF </option>
+        </select>
+      </div>
+      <div class="row">
+        <textarea class="form-control" [(ngModel)]="quiz.description"></textarea>
+      </div>
     </div>
 
-    <div class="card m-5">
-        <div class="card-header">
-            <div class="form-group mb-4">
-                <label for="question">Question</label>
-                <input type="text" class="form-control mt-2" id="question" [(ngModel)]="question.ques" placeholder="Enter Question">
+  
+    <div *ngIf="questions.length > 0 && quiz.courseId && quiz.name">
+      <div class="row mt-4" >
+        <div class="row">
+          <div class="col-12 mb-2">
+            <input
+              [(ngModel)]="question.ques"
+              type="text"
+              class="form-control"
+              placeholder="Enter Your Question"
+            />
+          </div>
+  
+          <div class="row">
+            <div class="col-3">
+              <input type="text" class="form-control" placeholder="Option 1"  [(ngModel)]="question.opt1" />
             </div>
-        </div>
-        <div class="card-body">
-            <div class="form-group mb-4">
-                <label for="option1">Option 1</label>
-                <input type="text" class="form-control mt-2" id="option1" [(ngModel)]="question.opt1" placeholder="Enter Option 1">
+            <div class="col-3">
+              <input type="text" class="form-control" placeholder="Option 2"  [(ngModel)]="question.opt2"/>
             </div>
-            <div class="form-group mb-4">
-                <label for="option2">Option 2</label>
-                <input type="text" class="form-control mt-2" id="option2" [(ngModel)]="question.opt2" placeholder="Enter Option 2">
+            <div class="col-3">
+              <input type="text" class="form-control" placeholder="Option 3"  [(ngModel)]="question.opt3"/>
             </div>
-            <div class="form-group mb-4">
-                <label for="option3">Option 3</label>
-                <input type="text" class="form-control mt-2" id="option3" [(ngModel)]="question.opt3" placeholder="Enter Option 3">
+            <div class="col-3">
+              <input type="text" class="form-control" placeholder="Option 4"  [(ngModel)]="question.opt4"/>
             </div>
-            <div class="form-group mb-4">
-                <label for="option4">Option 4</label>
-                <input type="text" class="form-control mt-2" id="option4" [(ngModel)]="question.opt4" placeholder="Enter Option 4">
+            <div [hidden]="!(question.ques && question.opt1 && question.opt2 && question.opt3 && question.opt4)" class="row justify-content-around">
+              <div class="col-4">
+                <h3 class="text-success font-weight-bold">Correct Answer :</h3>
+              </div>
+              <div class="col-4">
+                <select class="form-select mt-2"  [(ngModel)]="question.answer">
+                  <option [value]="question.opt1" >{{question.opt1}}</option>
+                  <option [value]="question.opt2" >{{question.opt2}}</option>
+                  <option [value]="question.opt3" >{{question.opt3}}</option>
+                  <option [value]="question.opt4" >{{question.opt4}}</option>
+                </select>
+              </div>
             </div>
-            <div class="form-group mb-4">
-                <label for="answer">Correct Answer</label>
-                <select class="form-select mt-2" [(ngModel)]="question.answer">
-                    <option [value]="question.opt1">{{question.opt1}}</option>
-                    <option [value]="question.opt2">{{question.opt2}}</option>
-                    <option [value]="question.opt3">{{question.opt3}}</option>
-                    <option [value]="question.opt4">{{question.opt4}}</option>
-                  </select>
+          </div>
+
+          <div class="row justify-content-center mt-4">
+            <div class="col-4">
+              <a class="btn btn-primary" [hidden]="!(question.answer && question.ques && question.opt1 && question.opt2 && question.opt3 && question.opt4)" (click)="addQuestion()">Add</a>
             </div>
-          <a (click)="addQuestion()" class="btn btn-primary">Add Question</a>
+          </div>
         </div>
       </div>
 
-
     </div>
+
+
+     <!--first question added-->
+     <div *ngIf="finalQuestions.length > 0">
+      <div *ngFor="let finalQues of finalQuestions; let i = index" class="row m-5 justify-content-between">
+      <h3>{{i+1}} - {{finalQues.ques}}</h3>
+      <p [ngClass]="finalQues.answer == finalQues.opt1 ? 'text-success' : '' ">1- {{finalQues.opt1}}</p>
+      <p [ngClass]="finalQues.answer == finalQues.opt2 ? 'text-success' : '' ">1- {{finalQues.opt2}}</p>
+      <p [ngClass]="finalQues.answer == finalQues.opt3 ? 'text-success' : '' ">1- {{finalQues.opt3}}</p>
+      <p [ngClass]="finalQues.answer == finalQues.opt4 ? 'text-success' : '' ">1- {{finalQues.opt4}}</p>
+      </div>
+      <div class="row justify-content-between">
+        <a class="btn btn-success" (click)="sharedService.openModal()">Submit Quiz</a>
+      </div>
+    </div>
+  </div>
+
+
+ 
+
 </div>
 
-<div *ngIf="role == 'Student'">
+ <!-- Modal -->
+ <div class="modal" id="exampleModal" >
+  <div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Submit Quiz !</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="sharedService.closeModal()"></button>
+    </div>
+    <div class="modal-body">
+     <h4 *ngIf="role == 'Professor'">Are you sure !?</h4>
+     <h4 *ngIf="role == 'Student'">{{message}}</h4>
+    </div>
+    <div class="modal-footer">
+      <button *ngIf="role == 'Professor'" type="button" class="btn btn-danger" (click)="sharedService.closeModal()" data-bs-dismiss="modal">No</button>
+      <button *ngIf="role == 'Professor'" type="button" class="btn btn-success" (click)="submitQuiz()">Yes</button>
+      <button *ngIf="role == 'Student'" type="button" class="btn btn-success" (click)="submitQuiz()">Ok</button>
+    </div>
+  </div>
+  </div>
+  </div>
 
-    <div class="container">
-        
-        <div *ngFor="let quess of quizService.qus" class="card m-5">
-            <div class="card-header">
-              {{quess.ques}}
-            </div>
-            <div class="card-body">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" [(ngModel)]="answer" value="{{quess.opt1}}" name="flexRadioDefault" id="flexRadioDefault2" >
-                    <label class="form-check-label" for="flexRadioDefault2">
-                      {{quess.opt1}}
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" [(ngModel)]="answer" value="{{quess.opt2}}" name="flexRadioDefault" id="flexRadioDefault2" >
-                    <label class="form-check-label" for="flexRadioDefault2">
-                      {{quess.opt2}}
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" [(ngModel)]="answer" value="{{quess.opt3}}" name="flexRadioDefault" id="flexRadioDefault2" >
-                    <label class="form-check-label" for="flexRadioDefault2">
-                      {{quess.opt3}}
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" [(ngModel)]="answer" value="{{quess.opt4}}" name="flexRadioDefault" id="flexRadioDefault2" >
-                    <label class="form-check-label" for="flexRadioDefault2">
-                      {{quess.opt4}}
-                    </label>
-                  </div>
-              <a class="btn btn-primary mt-2" (click)="submitAnswer(quess , quess.answer)">Submit Answer</a>
-            </div>
+
+<div class="container" *ngIf="role == 'Student'">
+  
+  
+  <div *ngIf="quizes.length > 0 && !quizStarted" class="card mt-4 " style="width: 30rem;">
+    <div class="card-header">
+      Available Quiz
+    </div>
+    <ul class="list-group list-group-flush">
+      <div class="row justify-content-around m-2" *ngFor="let quiz of quizes">
+        <h4  class=" col-4">{{quiz.name}}</h4>
+        <h5  class=" col-4">{{quiz.courseId}}</h5>
+      <a class="btn btn-primary col-4" (click)="startQuiz(quiz)">Start</a>
+      </div>
+    </ul>
+  </div>
+
+
+  <div *ngIf="quizStarted" class="m-auto mt-5" >
+    <div class="card">
+      <div class="card-header row justify-content-between m-2">
+       <h2 class="col-4">{{quizStarted.name}}</h2>
+       <a class="btn btn-success col-4" (click)="calcDegree()">Submit Quiz</a>
+      </div>
+
+      <div class="card-body">
+        <h5 class="card-title"> {{i}} - {{quizStarted.questionDTOs[i-1].ques}}</h5>
+        <div class="row justify-content-around">
+           <div class="form-check card-text col-3">
+            <input class="form-check-input"  [(ngModel)]="answer" [value]="quizStarted.questionDTOs[i-1].opt1" type="radio" name="opt" id="opt1">
+            <label class="form-check-label" for="opt1">
+              {{quizStarted.questionDTOs[i-1].opt1}}
+            </label>
           </div>
-
-          <div class="row m-5">
-          <a class="btn btn-success" (click)="openModal()">Submit Quiz</a>
+          <div class="form-check card-text col-3">
+            <input class="form-check-input"  [(ngModel)]="answer" [value]="quizStarted.questionDTOs[i-1].opt2" type="radio" name="opt" id="opt2">
+            <label class="form-check-label" for="opt2">
+              {{quizStarted.questionDTOs[i-1].opt2}}
+            </label>
           </div>
-
-            <!-- Modal -->
-<div class="modal" id="exampleModal" >
-    <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Result Quiz</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
-      </div>
-      <div class="modal-body">
-        <h2>{{message}}</h2>
-        <p>You Get {{degree}} From {{fullMark}}</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="closeModal()" data-bs-dismiss="modal">Ok</button>
-      </div>
-    </div>
-    </div>
-    </div>
-    <!--End Modal -->
+          <div class="form-check card-text col-3">
+            <input class="form-check-input" [(ngModel)]="answer" [value]="quizStarted.questionDTOs[i-1].opt3" type="radio" name="opt" id="opt3">
+            <label class="form-check-label" for="opt3">
+              {{quizStarted.questionDTOs[i-1].opt3}}
+            </label>
+          </div>
+          <div class="form-check card-text col-3">
+            <input class="form-check-input"  [(ngModel)]="answer" [value]="quizStarted.questionDTOs[i-1].opt4" type="radio" name="opt" id="opt4">
+            <label class="form-check-label" for="opt4">
+              {{quizStarted.questionDTOs[i-1].opt4}}
+            </label>
+          </div>
         </div>
+         
+          
+        <a class="btn btn-primary mt-4 d-flex justify-content-center" [class.disabled]="!answer" (click)="submitAnswer(i)">Submit</a>
+      </div>
+       <div class="card-footer">
+    <div class=" d-flex justify-content-center">
+      <ul class="pagination">
+        <li class="page-item">
+          <button [hidden]="i-1==0" (click)="prevQues()" class="page-link" href="" >Previous</button>
+        </li>
+        
+        <li class="page-item" [class.active]="j+1 == i" *ngFor="let pageNumber of pageNumbers(); let j = index" >
+          <button (click)="changePageNumber(j+1)"  class="page-link" >{{j + 1}}</button>
+        </li>
+        
+        <li class="page-item">
+          <button [hidden]="i-1 == quizStarted.questionDTOs.length - 1" (click)="nextQues()" class="page-link" href="" >Next</button>
+        </li>
+      </ul>
     </div>
+  </div>
+    </div>
+   
+
+
+</div>

@@ -23,4 +23,8 @@ export class StudentService {
     return this.http.put(this.url , data)
   }
 
+  enrollCourse(coursId : string , userName : string){
+    return this.http.get(this.url + '/EnrollCourse?courseId=' + coursId + '&userName=' + userName)
+  }
+
 }

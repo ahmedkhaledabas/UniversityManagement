@@ -34,6 +34,15 @@ namespace B_UniversityManagement.Controllers
             return Ok(professorsDTOs);
         }
 
+
+        [HttpGet("id")]
+        public async Task<ActionResult<ProfessorDTO>> GetProfessor(string id)
+        {
+            var professor = await userManager.FindByIdAsync(id);
+            var professorsDTO = TransferProfessor.ProfessorToDTO(professor);
+            return Ok(professorsDTO);
+        }
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Registeration([FromForm] ProfessorDTO professorDTO)
@@ -48,7 +57,7 @@ namespace B_UniversityManagement.Controllers
                 if (created.Succeeded)
                 {
                     var collegeName = collegeRepo.GetById(professor.CollegeId).Name;
-                    emailSenderRepo.SendEmail(professor, professorDTO.Password, collegeName);
+                    //emailSenderRepo.SendEmail(professor, professorDTO.Password, collegeName);
                     var addRole = await userManager.AddToRoleAsync(professor, "Professor");
                     return Ok(professorDTO);
                 }

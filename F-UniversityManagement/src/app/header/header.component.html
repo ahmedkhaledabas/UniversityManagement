@@ -9,21 +9,21 @@
       <nav id="navmenu" class="navmenu">
         <ul>
           <li *ngIf="role != 'Employee' && role != 'Admin'"><a routerLink="/home" class="active">Home</a></li>
-          <li *ngIf="role != 'Employee' && role != 'Admin'"><a href="about.html">About</a></li>
+          <li *ngIf="!role || role == 'Student'"><a routerLink="/professors">Professors</a></li>
           <li *ngIf="role != 'Employee' && role != 'Admin'"><a routerLink="/courses">Courses</a></li>
           <li *ngIf="role == 'Student' || role == 'Professor'"><a routerLink="/myCourses">My Courses</a></li>
           <li *ngIf="role == 'Professor'"><a routerLink="/quiz">Add Quiz</a></li>
+         
+          <li *ngIf="role == 'Student'"><a routerLink="/fee">Fees</a></li>
           <li *ngIf="role == 'Student'"><a routerLink="/quiz">Quiz</a></li>
-
-
           <li *ngIf="!role"><a routerLink="/college">Colleges</a></li>
 
-          <li *ngIf="role == 'Student' || role == 'Professor'" class="nav-item dropdown">
+       <!--   <li *ngIf="role == 'Student' || role == 'Professor'" class="nav-item dropdown">
 
             <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
               <i class="bi bi-bell"></i>
               <span class="badge bg-primary badge-number">4</span>
-            </a><!-- End Notification Icon -->
+            </a>
   
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
               <li class="dropdown-header">
@@ -89,16 +89,16 @@
                 <a href="#">Show all notifications</a>
               </li>
   
-            </ul><!-- End Notification Dropdown Items -->
+            </ul>
   
-          </li><!-- End Notification Nav -->
+          </li> End Notification Nav -->
   
-          <li *ngIf="role == 'Student' || role == 'Professor'"  class="nav-item dropdown">
+       <!--   <li *ngIf="role == 'Student' || role == 'Professor'"  class="nav-item dropdown">
   
             <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
               <i class="bi bi-chat-left-text"></i>
               <span class="badge bg-success badge-number">3</span>
-            </a><!-- End Messages Icon -->
+            </a>
   
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
               <li class="dropdown-header">
@@ -155,20 +155,20 @@
                 <a href="#">Show all messages</a>
               </li>
   
-            </ul><!-- End Messages Dropdown Items -->
+            </ul>
   
-          </li><!-- End Messages Nav -->
+          </li> End Messages Nav -->
   
           <li  *ngIf="role" class="nav-item dropdown pe-3">
   
             <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-              <img [src]="user.img" alt="Profile" class="rounded-circle" style="height: 3rem;">
-              <span class="d-none d-md-block dropdown-toggle ps-2">{{user.fName +' '+ user.lName}}</span>
+              <img [src]="user?.img" alt="Profile" class="rounded-circle" style="height: 3rem;">
+              <span class="d-none d-md-block dropdown-toggle ps-2">{{user?.fName +' '+ user?.lName}}</span>
             </a><!-- End Profile Iamge Icon -->
   
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
               <li class="dropdown-header">
-                <h6>{{user.fName +' '+ user.lName}}</h6>
+                <h6>{{user?.fName +' '+ user?.lName}}</h6>
               </li>
               <li>
                 <hr class="dropdown-divider">

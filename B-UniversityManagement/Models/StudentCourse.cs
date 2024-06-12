@@ -12,6 +12,7 @@ namespace B_UniversityManagement.Models
         public Course Course {  get; set; }
         //public LevelYear Level { get; set; } = LevelYear.First;
         public decimal? Degree { get; set; }
-        
+        public decimal Price { get; set; }
+
     }
 }

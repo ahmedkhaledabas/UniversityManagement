@@ -9,8 +9,6 @@
         public string Opt2 { get; set; }
         public string Opt3 { get; set; }
         public string Opt4 { get; set; }
-
-        public string ProfessorId { get; set; }
-        public string CourseId {  get; set; }
+        public string QuizId {  get; set; }
     }
 }

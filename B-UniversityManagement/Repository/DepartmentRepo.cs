@@ -43,5 +43,7 @@ namespace B_UniversityManagement.Repository
             }
             throw new NullReferenceException();
         }
+
+        public List<Department> GetAllInCollege(string collegeId) => context.Departments.Where(d => d.CollegeId == collegeId).ToList();
     }
 }

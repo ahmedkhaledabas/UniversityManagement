@@ -20,6 +20,7 @@
 
       <div class="container">
 
+        <h1 class="text-center text-success" *ngIf="courses.length == 0">No Courses Available</h1>
         <div class="row">
 
             <div *ngFor="let course of courses" class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="" data-aos-delay="100">
@@ -27,18 +28,17 @@
                   <img [src]="course.img" class="img-fluid" alt="...">
                   <div class="course-content">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                      <p class="category">{{course.name}}</p>
-                      
+                      <p style="pointer-events: auto; cursor: pointer;" class="category" [routerLink]="['/course-detail',course.id]">{{course.name}}</p>
+                      <p class="price">${{course.price}}</p>
                     </div>
-            
-                    <h3><a href="course-details.html">{{course.name}}</a></h3>
+                <h3 *ngFor="let item of filterDepts(course.departmentId)" >{{item.name}}</h3>
                     <p class="description">{{course.description}}</p>
                     <div class="trainer d-flex justify-content-between align-items-center">
                       <div class="trainer-profile d-flex align-items-center">
                         <span *ngFor="let prof of profs">
                           <span *ngIf="prof.id == course.professorId">
                             <img [src]="prof.img" class="img-fluid" alt="">
-                          <a href="" class="trainer-link">{{prof.fName + ' ' + prof.lName}}</a>
+                          <a style="pointer-events: auto;" [routerLink]="['/professor-courses', prof.id]" class="trainer-link">{{prof.fName + ' ' + prof.lName}}</a>
                           </span>
                           </span>
                       </div>
